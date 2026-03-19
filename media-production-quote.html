@@ -217,6 +217,8 @@
     .lb-left { display: flex; align-items: baseline; gap: 10px; }
     .lb-label { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #555; }
     .lb-total { font-size: 26px; font-weight: 800; color: #C8952A; }
+    .lb-standard { font-size: 16px; color: #555; text-decoration: line-through; }
+    .lb-savings { font-size: 13px; color: #5a9a5a; font-weight: 700; white-space: nowrap; }
     .lb-right { font-size: 14px; color: #666; }
     .lb-right strong { color: #aaa; }
 
@@ -412,8 +414,10 @@
     <div class="card">
       <div class="card-title">Content Deliverables</div>
       <div class="field">
-        <label>What gets produced and delivered <span class="sub">select all that apply</span></label>
-        <div class="deliv-grid">
+        <label>What gets produced and delivered <span class="sub">pick individually, or choose a bundle</span></label>
+
+        <div style="margin-bottom:10px;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#555;">Always Included</div>
+        <div class="deliv-grid" style="margin-bottom:18px;">
           <div class="deliv-tile always-on selected" data-key="episode" data-price="0">
             <div class="deliv-title"><span class="deliv-check" style="background:#C8952A;border-color:#C8952A;color:#111;">✓</span>Full YouTube Episode <span class="incl-badge">Always Included</span></div>
             <div class="deliv-price">Included in base</div>
@@ -424,11 +428,10 @@
             <div class="deliv-price">Included in base</div>
             <div class="deliv-desc">Copy-paste captions, story assets, premiere date + tags</div>
           </div>
-          <div class="deliv-tile" data-key="shortform" data-price="350" onclick="toggleDeliv(this)">
-            <div class="deliv-title"><span class="deliv-check">✓</span>Short-Form Package</div>
-            <div class="deliv-price">+$350</div>
-            <div class="deliv-desc">5–7 standalone clips (60–180s each) cut for social</div>
-          </div>
+        </div>
+
+        <div style="margin-bottom:10px;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#555;">Add Individually</div>
+        <div class="deliv-grid" style="margin-bottom:18px;">
           <div class="deliv-tile" data-key="reel" data-price="150" onclick="toggleDeliv(this)">
             <div class="deliv-title"><span class="deliv-check">✓</span>Instagram Reel</div>
             <div class="deliv-price">+$150</div>
@@ -449,44 +452,29 @@
             <div class="deliv-price">+$150</div>
             <div class="deliv-desc">LinkedIn + Instagram clip targeting commercial buyers</div>
           </div>
-          <div class="deliv-tile bundle-tile" data-key="bundle" data-price="650" onclick="toggleBundle(this)">
-            <div class="deliv-title"><span class="deliv-check">✓</span>Full Platform Bundle <span class="save-badge">Save $175</span></div>
-            <div class="deliv-price" style="color:#5a9a5a">+$650</div>
-            <div class="deliv-desc">All cuts for every platform — Short-Form + Reel + TikTok + Shorts + B2B</div>
+          <div class="deliv-tile" data-key="shortform" data-price="350" onclick="toggleDeliv(this)">
+            <div class="deliv-title"><span class="deliv-check">✓</span>Short-Form Package</div>
+            <div class="deliv-price">+$350</div>
+            <div class="deliv-desc">5–7 standalone clips (60–180s each) cut for social</div>
           </div>
           <div class="deliv-tile" data-key="interview" data-price="300" onclick="toggleDeliv(this)">
             <div class="deliv-title"><span class="deliv-check">✓</span>Interview Session</div>
             <div class="deliv-price">+$300</div>
-            <div class="deliv-desc">Tim + partner sit down to record reels, talking-head clips, and short-form content on location</div>
+            <div class="deliv-desc">Tim + partner record reels and talking-head clips on location</div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="card">
-      <div class="card-title">Social Media Management <span style="font-size:10px;font-weight:600;color:#555;letter-spacing:0.05em;text-transform:none;margin-left:8px;">Optional — Outsourced Team</span></div>
-      <div class="field">
-        <label>Ongoing social media management and content distribution <span class="sub">partner's channels</span></label>
-        <div class="option-tiles cols-4" id="socialTiles">
-          <div class="option-tile selected" data-price="0" data-label="None" onclick="selectSocial(this)">
-            <div class="ot-label">None</div>
-            <div class="ot-price">$0</div>
-            <div class="ot-desc">No social management</div>
+        <div style="margin-bottom:10px;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#555;">Or Choose a Bundle</div>
+        <div class="deliv-grid">
+          <div class="deliv-tile bundle-tile" data-key="bundle" data-price="650" onclick="toggleBundle(this)">
+            <div class="deliv-title"><span class="deliv-check">✓</span>Full Bundle <span class="save-badge">Save $225</span></div>
+            <div class="deliv-price" style="color:#5a9a5a">+$650</div>
+            <div class="deliv-desc">Reel + TikTok + Shorts + B2B + Short-Form Package — all platforms covered</div>
           </div>
-          <div class="option-tile" data-price="500" data-label="1 Month" onclick="selectSocial(this)">
-            <div class="ot-label">1 Month</div>
-            <div class="ot-price">$500</div>
-            <div class="ot-desc">Launch month — post scheduling, captions, engagement</div>
-          </div>
-          <div class="option-tile" data-price="1200" data-label="3 Months" onclick="selectSocial(this)">
-            <div class="ot-label">3 Months</div>
-            <div class="ot-price">$1,200</div>
-            <div class="ot-desc">Full content wave — clip rollout + analytics</div>
-          </div>
-          <div class="option-tile" data-price="2000" data-label="6 Months" onclick="selectSocial(this)">
-            <div class="ot-label">6 Months</div>
-            <div class="ot-price">$2,000</div>
-            <div class="ot-desc">Evergreen management through World Cup window</div>
+          <div class="deliv-tile bundle-tile" data-key="masterbundle" data-price="900" onclick="toggleMasterBundle(this)">
+            <div class="deliv-title"><span class="deliv-check">✓</span>Master Bundle <span class="save-badge">Save $350</span></div>
+            <div class="deliv-price" style="color:#5a9a5a">+$900</div>
+            <div class="deliv-desc">Full Bundle + Interview Session — everything produced and delivered</div>
           </div>
         </div>
       </div>
@@ -564,33 +552,63 @@
     </div>
   </div>
 
-  <!-- ─── STEP 4: CONTRIBUTION & NOTES ─── -->
+  <!-- ─── STEP 4: SOCIAL MEDIA + CONTRIBUTION ─── -->
   <div class="step-panel" id="step4">
 
     <div class="card">
-      <div class="card-title">In-Kind Contributions <span style="font-size:10px;font-weight:600;color:#555;letter-spacing:0.05em;text-transform:none;margin-left:8px;">Reduces base production cost</span></div>
+      <div class="card-title">Social Media Management</div>
       <div class="field">
-        <label>What is the partner providing? <span class="sub">select all that apply — each reduces the billable total</span></label>
-        <div class="addon-grid" id="inkindTiles">
-          <div class="addon-tile" data-key="location" data-value="250" onclick="toggleInkind(this)">
-            <div class="addon-title"><span class="addon-check">✓</span>Location Access</div>
-            <div class="addon-price">−$250</div>
-            <div class="addon-desc">Partner provides and manages shoot location — no location fee charged</div>
+        <label>Ongoing partner social management <span class="sub">GBC manages partner platforms during and after the episode launch</span></label>
+        <div class="option-tiles" style="grid-template-columns:1fr 1fr;display:grid;gap:12px;" id="socialTiles">
+          <div class="option-tile selected" data-price="0" data-label="None" onclick="selectSocial(this)" style="text-align:left;padding:18px 16px;">
+            <div class="ot-label">None</div>
+            <div class="ot-price">$0</div>
+            <div class="ot-desc">No social management included</div>
           </div>
-          <div class="addon-tile" data-key="talent" data-value="150" onclick="toggleInkind(this)">
-            <div class="addon-title"><span class="addon-check">✓</span>Talent / On-Camera Subject</div>
-            <div class="addon-price">−$150</div>
-            <div class="addon-desc">Partner provides their own on-camera talent — no talent sourcing needed</div>
+          <div class="option-tile" data-price="350" data-label="Launch Package" onclick="selectSocial(this)" style="text-align:left;padding:18px 16px;">
+            <div class="ot-label">Launch Package</div>
+            <div class="ot-price">+$350</div>
+            <div class="ot-desc" style="margin-top:10px;">
+              <strong style="color:#ccc;font-size:12px;display:block;margin-bottom:6px;">WHAT YOU GET:</strong>
+              <ul style="list-style:none;padding:0;margin:0;font-size:12px;color:#666;line-height:1.8;">
+                <li>✦ 4-week post schedule built around premiere</li>
+                <li>✦ Countdown content (T-14 through launch day)</li>
+                <li>✦ Premiere day comment engagement (30 min)</li>
+                <li>✦ ICYMI clip drops Days 2–7</li>
+                <li>✦ Partner repost kit (copy-paste captions)</li>
+              </ul>
+            </div>
           </div>
-          <div class="addon-tile" data-key="makeup" data-value="200" onclick="toggleInkind(this)">
-            <div class="addon-title"><span class="addon-check">✓</span>Makeup, Hair & Styling</div>
-            <div class="addon-price">−$200</div>
-            <div class="addon-desc">Partner handles all hair, makeup, and wardrobe for shoot day</div>
+          <div class="option-tile" data-price="750" data-label="Monthly Management" onclick="selectSocial(this)" style="text-align:left;padding:18px 16px;">
+            <div class="ot-label">Monthly Management</div>
+            <div class="ot-price">+$750/mo</div>
+            <div class="ot-desc" style="margin-top:10px;">
+              <strong style="color:#ccc;font-size:12px;display:block;margin-bottom:6px;">WHAT YOU GET:</strong>
+              <ul style="list-style:none;padding:0;margin:0;font-size:12px;color:#666;line-height:1.8;">
+                <li>✦ Monthly content calendar (8–12 posts/mo)</li>
+                <li>✦ Key events coverage — American Royal, FIFA 2026, GKCRA, Big 12</li>
+                <li>✦ Clip repurposing from MITM episode library</li>
+                <li>✦ Monthly analytics report (reach, engagement, best posts)</li>
+                <li>✦ B2B angle posts (LinkedIn + Instagram, 2×/mo)</li>
+                <li>✦ Platform: Instagram + Facebook managed</li>
+              </ul>
+            </div>
           </div>
-          <div class="addon-tile" data-key="permits" data-value="100" onclick="toggleInkind(this)">
-            <div class="addon-title"><span class="addon-check">✓</span>Permits & Releases</div>
-            <div class="addon-price">−$100</div>
-            <div class="addon-desc">Partner secures all location permits and talent release forms</div>
+          <div class="option-tile" data-price="1200" data-label="Full Service" onclick="selectSocial(this)" style="text-align:left;padding:18px 16px;">
+            <div class="ot-label" style="color:#fff;">Full Service</div>
+            <div class="ot-price">+$1,200/mo</div>
+            <div class="ot-desc" style="margin-top:10px;">
+              <strong style="color:#ccc;font-size:12px;display:block;margin-bottom:6px;">WHAT YOU GET:</strong>
+              <ul style="list-style:none;padding:0;margin:0;font-size:12px;color:#666;line-height:1.8;">
+                <li>✦ Everything in Monthly Management</li>
+                <li>✦ TikTok managed (3–4 posts/mo)</li>
+                <li>✦ Community engagement — DMs, comments, replies</li>
+                <li>✦ Story sequence design + scheduling</li>
+                <li>✦ Quarterly strategy review with Matt + Tim</li>
+                <li>✦ Competitor + partner content monitoring</li>
+                <li>✦ Bi-weekly performance check-ins</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -697,7 +715,11 @@
 <div class="live-bar" id="liveBar">
   <div class="lb-left">
     <div class="lb-label">Total Production</div>
-    <div class="lb-total" id="lbTotal">$1,400</div>
+    <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">
+      <div class="lb-standard" id="lbStandard"></div>
+      <div class="lb-total" id="lbTotal">$1,400</div>
+      <div class="lb-savings" id="lbSavings"></div>
+    </div>
   </div>
   <div class="lb-right">
     Partner: <strong id="lbPartner">$700</strong>
@@ -726,28 +748,26 @@ const S = {
   addonPrice: 0,
   socialPrice: 0,
   socialLabel: 'None',
-  inkind: {},
-  inkindDiscount: 0,
   contribPct: 50,
   notes: '',
 };
 
-const DELIV_PRICES  = { episode:0, partnerkit:0, shortform:350, reel:150, tiktok:125, shorts:100, b2b:150, bundle:650, interview:300 };
+const DELIV_PRICES  = { episode:0, partnerkit:0, shortform:350, reel:150, tiktok:125, shorts:100, b2b:150, bundle:650, interview:300, masterbundle:900 };
 const DELIV_LABELS  = {
-  episode:   'Full YouTube Episode (12–18 min)',
-  partnerkit:'Partner Social Kit',
-  shortform: 'Short-Form Package (5–7 clips)',
-  reel:      'Instagram Reel (60–90s)',
-  tiktok:    'TikTok Cut (30–60s)',
-  shorts:    'YouTube Shorts (≤60s)',
-  b2b:       'B2B Angle Clip (LinkedIn + IG)',
-  bundle:    'Full Platform Bundle (all cuts)',
-  interview: 'Interview Session (Tim + Partner)',
+  episode:      'Full YouTube Episode (12–18 min)',
+  partnerkit:   'Partner Social Kit',
+  shortform:    'Short-Form Package (5–7 clips)',
+  reel:         'Instagram Reel (60–90s)',
+  tiktok:       'TikTok Cut (30–60s)',
+  shorts:       'YouTube Shorts (≤60s)',
+  b2b:          'B2B Angle Clip (LinkedIn + IG)',
+  bundle:       'Full Bundle (all platform cuts)',
+  interview:    'Interview Session (Tim + Partner)',
+  masterbundle: 'Master Bundle (all cuts + Interview)',
 };
 const BUNDLE_KEYS    = ['shortform','reel','tiktok','shorts','b2b'];
 const ADDON_PRICES   = { music:200, motion:250, extended:350, thumbnail:0 };
 const ADDON_LABELS   = { music:'Licensed Music Track', motion:'Motion Graphics & Overlays', extended:'Extended Edit Pass', thumbnail:'Thumbnail & YouTube Metadata' };
-const INKIND_LABELS  = { location:'Location Access', talent:'Talent / On-Camera Subject', makeup:'Makeup, Hair & Styling', permits:'Permits & Releases' };
 const REL_LABELS     = { mitm:'MITM Partner', commercial:'Commercial Client' };
 const MITM_DISCOUNT  = 0.20;
 
@@ -756,13 +776,23 @@ const $ = id => document.getElementById(id);
 const fmt = n => '$' + Math.round(n).toLocaleString();
 const rawTotal = () => S.shootPrice + S.delivPrice + S.voPrice + S.addonPrice + S.socialPrice;
 const mitmDiscount = () => S.rel === 'mitm' ? Math.round(rawTotal() * MITM_DISCOUNT) : 0;
-const total = () => rawTotal() - mitmDiscount() - S.inkindDiscount;
+const total = () => rawTotal() - mitmDiscount();
 
 function livebar() {
-  const t = total(), p = t * S.contribPct / 100;
+  const raw = rawTotal(), disc = mitmDiscount(), t = total();
+  const p = t * S.contribPct / 100;
   $('lbTotal').textContent   = fmt(t);
   $('lbPartner').textContent = fmt(p);
   $('lbGbc').textContent     = fmt(t - p);
+  // Show crossed-out standard rate + savings only when MITM discount applies
+  const stdEl = $('lbStandard'), savEl = $('lbSavings');
+  if (disc > 0) {
+    stdEl.textContent = fmt(raw);
+    savEl.textContent = '↓ ' + fmt(disc) + ' MITM savings';
+  } else {
+    stdEl.textContent = '';
+    savEl.textContent = '';
+  }
 }
 
 function costSplit() {
@@ -813,6 +843,7 @@ function selectShoot(el) {
 }
 
 function calcDelivPrice() {
+  if (S.delivs.masterbundle) { S.delivPrice = 900; return; }
   if (S.delivs.bundle) { S.delivPrice = 650; return; }
   let sum = 0;
   Object.keys(S.delivs).forEach(k => {
@@ -825,18 +856,21 @@ function toggleDeliv(el) {
   const k = el.dataset.key;
   S.delivs[k] = !S.delivs[k];
   el.classList.toggle('selected', !!S.delivs[k]);
-  // deactivate bundle if individual toggled
-  if (S.delivs.bundle) {
-    S.delivs.bundle = false;
-    document.querySelector('[data-key="bundle"]').classList.remove('selected');
-  }
+  // deactivate bundles if individual toggled
+  ['bundle','masterbundle'].forEach(bk => {
+    if (S.delivs[bk]) {
+      S.delivs[bk] = false;
+      const bt = document.querySelector('[data-key="' + bk + '"]');
+      if (bt) bt.classList.remove('selected');
+    }
+  });
   calcDelivPrice(); livebar();
 }
 
 function toggleBundle(el) {
   const turning_on = !S.delivs.bundle;
-  // reset all optional delivs
-  ['shortform','reel','tiktok','shorts','b2b','bundle'].forEach(k => {
+  // reset all optional delivs including masterbundle
+  ['shortform','reel','tiktok','shorts','b2b','bundle','masterbundle','interview'].forEach(k => {
     S.delivs[k] = false;
     const tile = document.querySelector('[data-key="' + k + '"]');
     if (tile) tile.classList.remove('selected');
@@ -847,6 +881,27 @@ function toggleBundle(el) {
     BUNDLE_KEYS.forEach(k => {
       S.delivs[k] = true;
       document.querySelector('[data-key="' + k + '"]').classList.add('selected');
+    });
+  }
+  calcDelivPrice(); livebar();
+}
+
+function toggleMasterBundle(el) {
+  const turning_on = !S.delivs.masterbundle;
+  // reset all optional delivs
+  ['shortform','reel','tiktok','shorts','b2b','bundle','masterbundle','interview'].forEach(k => {
+    S.delivs[k] = false;
+    const tile = document.querySelector('[data-key="' + k + '"]');
+    if (tile) tile.classList.remove('selected');
+  });
+  if (turning_on) {
+    S.delivs.masterbundle = true;
+    el.classList.add('selected');
+    // visually select all bundle keys + interview
+    [...BUNDLE_KEYS, 'interview'].forEach(k => {
+      S.delivs[k] = true;
+      const tile = document.querySelector('[data-key="' + k + '"]');
+      if (tile) tile.classList.add('selected');
     });
   }
   calcDelivPrice(); livebar();
@@ -877,20 +932,6 @@ function selectSocial(el) {
   S.socialPrice = +el.dataset.price;
   S.socialLabel = el.dataset.label;
   livebar();
-}
-
-function toggleInkind(el) {
-  const k = el.dataset.key;
-  const v = +el.dataset.value;
-  S.inkind[k] = !S.inkind[k];
-  el.classList.toggle('selected', !!S.inkind[k]);
-  el.querySelector('.addon-check').style.background = S.inkind[k] ? '#C8952A' : '';
-  el.querySelector('.addon-check').style.borderColor = S.inkind[k] ? '#C8952A' : '';
-  el.querySelector('.addon-check').style.color = S.inkind[k] ? '#111' : '';
-  S.inkindDiscount = Object.keys(S.inkind)
-    .filter(k2 => S.inkind[k2])
-    .reduce((s, k2) => s + (+document.querySelector('[data-key="'+k2+'"]').dataset.value || 0), 0);
-  costSplit(); livebar();
 }
 
 // ─── STEP 4 ──────────────────────────────────────────────
@@ -960,17 +1001,8 @@ function renderQuote(isShared) {
 
   const raw = rawTotal();
   const disc = mitmDiscount();
-  const inkind = S.inkindDiscount;
 
-  if (disc > 0) html += `<div class="li-row"><div class="li-name" style="color:#C8952A">MITM Partner Rate (20% off)</div><div class="li-val" style="color:#C8952A">−${fmt(disc)}</div></div>`;
-  if (inkind > 0) {
-    Object.keys(S.inkind).forEach(k => {
-      if (S.inkind[k]) {
-        const v = +document.querySelector('[data-key="'+k+'"]').dataset.value;
-        html += `<div class="li-row"><div class="li-name" style="color:#5a9a5a">In-Kind: ${INKIND_LABELS[k]}</div><div class="li-val" style="color:#5a9a5a">−${fmt(v)}</div></div>`;
-      }
-    });
-  }
+  if (disc > 0) html += `<div class="li-row"><div class="li-name" style="color:#C8952A">MITM Partner Rate (20% off standard rate of ${fmt(raw)})</div><div class="li-val" style="color:#C8952A">−${fmt(disc)}</div></div>`;
 
   html += `<div class="li-row li-total"><div class="li-name">Total Production Cost</div><div class="li-val">${fmt(t)}</div></div>`;
   $('lineItems').innerHTML = html;
@@ -1006,7 +1038,6 @@ function copyLink() {
     vo: S.voPrice, vl: S.voLabel,
     a: S.addons, ap: S.addonPrice,
     sc: S.socialPrice, scl: S.socialLabel,
-    ik: S.inkind, ikd: S.inkindDiscount,
     pct: S.contribPct, n: S.notes
   };
   const enc = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
@@ -1042,8 +1073,6 @@ function loadFromHash() {
     S.addonPrice   = d.ap  || 0;
     S.socialPrice  = d.sc  || 0;
     S.socialLabel  = d.scl || 'None';
-    S.inkind       = d.ik  || {};
-    S.inkindDiscount = d.ikd || 0;
     S.contribPct   = d.pct != null ? d.pct : 50;
     S.notes       = d.n  || '';
 
