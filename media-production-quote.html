@@ -81,7 +81,7 @@
     textarea::placeholder { color: #444; }
 
     /* ── RELATIONSHIP CARDS ── */
-    .rel-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .rel-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
     @media(max-width: 580px) { .rel-cards { grid-template-columns: 1fr; } }
     .rel-card {
       border: 2px solid #2a2a2a; border-radius: 12px; padding: 18px 14px;
@@ -331,7 +331,7 @@
     <div class="step-connector"></div>
     <div class="step-col" data-step="3">
       <div class="step-dot">3</div>
-      <span>Voice Over</span>
+      <span>VO & Add-Ons</span>
     </div>
     <div class="step-connector"></div>
     <div class="step-col" data-step="4">
@@ -351,7 +351,7 @@
       <div class="card-title">Partner Details</div>
       <div class="field">
         <label>Partner / Brand Name</label>
-        <input type="text" id="partnerName" placeholder="e.g. Manny's Mexican Restaurant" />
+        <input type="text" id="partnerName" placeholder="e.g. Q39 BBQ" />
       </div>
       <div class="field">
         <label>Contact Name <span class="sub">optional</span></label>
@@ -363,17 +363,12 @@
           <div class="rel-card selected" data-rel="mitm" onclick="selectRel(this)">
             <div class="rc-icon">🎬</div>
             <div class="rc-title">MITM Partner</div>
-            <div class="rc-desc">Featured in Made in the Middle episode</div>
+            <div class="rc-desc">Featured in Made in the Middle episode — 20% partner rate applied to total</div>
           </div>
           <div class="rel-card" data-rel="commercial" onclick="selectRel(this)">
             <div class="rc-icon">🏢</div>
             <div class="rc-title">Commercial Client</div>
-            <div class="rc-desc">Branded content or commercial video production</div>
-          </div>
-          <div class="rel-card" data-rel="distributor" onclick="selectRel(this)">
-            <div class="rc-icon">🤝</div>
-            <div class="rc-title">Distributor / Reseller</div>
-            <div class="rc-desc">Production for a distribution partner's client</div>
+            <div class="rc-desc">Branded content or commercial video production — standard rate</div>
           </div>
         </div>
       </div>
@@ -459,6 +454,40 @@
             <div class="deliv-price" style="color:#5a9a5a">+$650</div>
             <div class="deliv-desc">All cuts for every platform — Short-Form + Reel + TikTok + Shorts + B2B</div>
           </div>
+          <div class="deliv-tile" data-key="interview" data-price="300" onclick="toggleDeliv(this)">
+            <div class="deliv-title"><span class="deliv-check">✓</span>Interview Session</div>
+            <div class="deliv-price">+$300</div>
+            <div class="deliv-desc">Tim + partner sit down to record reels, talking-head clips, and short-form content on location</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Social Media Management <span style="font-size:10px;font-weight:600;color:#555;letter-spacing:0.05em;text-transform:none;margin-left:8px;">Optional — Outsourced Team</span></div>
+      <div class="field">
+        <label>Ongoing social media management and content distribution <span class="sub">partner's channels</span></label>
+        <div class="option-tiles cols-4" id="socialTiles">
+          <div class="option-tile selected" data-price="0" data-label="None" onclick="selectSocial(this)">
+            <div class="ot-label">None</div>
+            <div class="ot-price">$0</div>
+            <div class="ot-desc">No social management</div>
+          </div>
+          <div class="option-tile" data-price="500" data-label="1 Month" onclick="selectSocial(this)">
+            <div class="ot-label">1 Month</div>
+            <div class="ot-price">$500</div>
+            <div class="ot-desc">Launch month — post scheduling, captions, engagement</div>
+          </div>
+          <div class="option-tile" data-price="1200" data-label="3 Months" onclick="selectSocial(this)">
+            <div class="ot-label">3 Months</div>
+            <div class="ot-price">$1,200</div>
+            <div class="ot-desc">Full content wave — clip rollout + analytics</div>
+          </div>
+          <div class="option-tile" data-price="2000" data-label="6 Months" onclick="selectSocial(this)">
+            <div class="ot-label">6 Months</div>
+            <div class="ot-price">$2,000</div>
+            <div class="ot-desc">Evergreen management through World Cup window</div>
+          </div>
         </div>
       </div>
     </div>
@@ -474,7 +503,7 @@
     <div class="card">
       <div class="card-title">Voice Over Sessions</div>
       <div class="field">
-        <label>Host narration or partner VO sessions needed</label>
+        <label>Host narration or partner VO sessions <span class="sub">Tim records VO — for reels, episode narration, and short-form content</span></label>
         <div class="option-tiles cols-4" id="voTiles">
           <div class="option-tile selected" data-price="0" data-label="None" onclick="selectVO(this)">
             <div class="ot-label">None</div>
@@ -537,6 +566,36 @@
 
   <!-- ─── STEP 4: CONTRIBUTION & NOTES ─── -->
   <div class="step-panel" id="step4">
+
+    <div class="card">
+      <div class="card-title">In-Kind Contributions <span style="font-size:10px;font-weight:600;color:#555;letter-spacing:0.05em;text-transform:none;margin-left:8px;">Reduces base production cost</span></div>
+      <div class="field">
+        <label>What is the partner providing? <span class="sub">select all that apply — each reduces the billable total</span></label>
+        <div class="addon-grid" id="inkindTiles">
+          <div class="addon-tile" data-key="location" data-value="250" onclick="toggleInkind(this)">
+            <div class="addon-title"><span class="addon-check">✓</span>Location Access</div>
+            <div class="addon-price">−$250</div>
+            <div class="addon-desc">Partner provides and manages shoot location — no location fee charged</div>
+          </div>
+          <div class="addon-tile" data-key="talent" data-value="150" onclick="toggleInkind(this)">
+            <div class="addon-title"><span class="addon-check">✓</span>Talent / On-Camera Subject</div>
+            <div class="addon-price">−$150</div>
+            <div class="addon-desc">Partner provides their own on-camera talent — no talent sourcing needed</div>
+          </div>
+          <div class="addon-tile" data-key="makeup" data-value="200" onclick="toggleInkind(this)">
+            <div class="addon-title"><span class="addon-check">✓</span>Makeup, Hair & Styling</div>
+            <div class="addon-price">−$200</div>
+            <div class="addon-desc">Partner handles all hair, makeup, and wardrobe for shoot day</div>
+          </div>
+          <div class="addon-tile" data-key="permits" data-value="100" onclick="toggleInkind(this)">
+            <div class="addon-title"><span class="addon-check">✓</span>Permits & Releases</div>
+            <div class="addon-price">−$100</div>
+            <div class="addon-desc">Partner secures all location permits and talent release forms</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="card">
       <div class="card-title">Partner Contribution</div>
       <div class="field">
@@ -665,30 +724,39 @@ const S = {
   voLabel: 'None',
   addons: {},
   addonPrice: 0,
+  socialPrice: 0,
+  socialLabel: 'None',
+  inkind: {},
+  inkindDiscount: 0,
   contribPct: 50,
   notes: '',
 };
 
-const DELIV_PRICES  = { episode:0, partnerkit:0, shortform:350, reel:150, tiktok:125, shorts:100, b2b:150, bundle:650 };
+const DELIV_PRICES  = { episode:0, partnerkit:0, shortform:350, reel:150, tiktok:125, shorts:100, b2b:150, bundle:650, interview:300 };
 const DELIV_LABELS  = {
-  episode:  'Full YouTube Episode (12–18 min)',
+  episode:   'Full YouTube Episode (12–18 min)',
   partnerkit:'Partner Social Kit',
-  shortform:'Short-Form Package (5–7 clips)',
-  reel:     'Instagram Reel (60–90s)',
-  tiktok:   'TikTok Cut (30–60s)',
-  shorts:   'YouTube Shorts (≤60s)',
-  b2b:      'B2B Angle Clip (LinkedIn + IG)',
-  bundle:   'Full Platform Bundle (all cuts)',
+  shortform: 'Short-Form Package (5–7 clips)',
+  reel:      'Instagram Reel (60–90s)',
+  tiktok:    'TikTok Cut (30–60s)',
+  shorts:    'YouTube Shorts (≤60s)',
+  b2b:       'B2B Angle Clip (LinkedIn + IG)',
+  bundle:    'Full Platform Bundle (all cuts)',
+  interview: 'Interview Session (Tim + Partner)',
 };
-const BUNDLE_KEYS   = ['shortform','reel','tiktok','shorts','b2b'];
-const ADDON_PRICES  = { music:200, motion:250, extended:350, thumbnail:0 };
-const ADDON_LABELS  = { music:'Licensed Music Track', motion:'Motion Graphics & Overlays', extended:'Extended Edit Pass', thumbnail:'Thumbnail & YouTube Metadata' };
-const REL_LABELS    = { mitm:'MITM Partner', commercial:'Commercial Client', distributor:'Distributor / Reseller' };
+const BUNDLE_KEYS    = ['shortform','reel','tiktok','shorts','b2b'];
+const ADDON_PRICES   = { music:200, motion:250, extended:350, thumbnail:0 };
+const ADDON_LABELS   = { music:'Licensed Music Track', motion:'Motion Graphics & Overlays', extended:'Extended Edit Pass', thumbnail:'Thumbnail & YouTube Metadata' };
+const INKIND_LABELS  = { location:'Location Access', talent:'Talent / On-Camera Subject', makeup:'Makeup, Hair & Styling', permits:'Permits & Releases' };
+const REL_LABELS     = { mitm:'MITM Partner', commercial:'Commercial Client' };
+const MITM_DISCOUNT  = 0.20;
 
 // ─── HELPERS ─────────────────────────────────────────────
 const $ = id => document.getElementById(id);
 const fmt = n => '$' + Math.round(n).toLocaleString();
-const total = () => S.shootPrice + S.delivPrice + S.voPrice + S.addonPrice;
+const rawTotal = () => S.shootPrice + S.delivPrice + S.voPrice + S.addonPrice + S.socialPrice;
+const mitmDiscount = () => S.rel === 'mitm' ? Math.round(rawTotal() * MITM_DISCOUNT) : 0;
+const total = () => rawTotal() - mitmDiscount() - S.inkindDiscount;
 
 function livebar() {
   const t = total(), p = t * S.contribPct / 100;
@@ -803,6 +871,28 @@ function toggleAddon(el) {
   livebar();
 }
 
+function selectSocial(el) {
+  document.querySelectorAll('#socialTiles .option-tile').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  S.socialPrice = +el.dataset.price;
+  S.socialLabel = el.dataset.label;
+  livebar();
+}
+
+function toggleInkind(el) {
+  const k = el.dataset.key;
+  const v = +el.dataset.value;
+  S.inkind[k] = !S.inkind[k];
+  el.classList.toggle('selected', !!S.inkind[k]);
+  el.querySelector('.addon-check').style.background = S.inkind[k] ? '#C8952A' : '';
+  el.querySelector('.addon-check').style.borderColor = S.inkind[k] ? '#C8952A' : '';
+  el.querySelector('.addon-check').style.color = S.inkind[k] ? '#111' : '';
+  S.inkindDiscount = Object.keys(S.inkind)
+    .filter(k2 => S.inkind[k2])
+    .reduce((s, k2) => s + (+document.querySelector('[data-key="'+k2+'"]').dataset.value || 0), 0);
+  costSplit(); livebar();
+}
+
 // ─── STEP 4 ──────────────────────────────────────────────
 function setContrib(pct) {
   S.contribPct = pct;
@@ -866,6 +956,21 @@ function renderQuote(isShared) {
       html += li(ADDON_LABELS[k], fmt(ADDON_PRICES[k]), false);
     }
   });
+  if (S.socialPrice > 0) html += li('Social Media Management — ' + S.socialLabel, fmt(S.socialPrice), false);
+
+  const raw = rawTotal();
+  const disc = mitmDiscount();
+  const inkind = S.inkindDiscount;
+
+  if (disc > 0) html += `<div class="li-row"><div class="li-name" style="color:#C8952A">MITM Partner Rate (20% off)</div><div class="li-val" style="color:#C8952A">−${fmt(disc)}</div></div>`;
+  if (inkind > 0) {
+    Object.keys(S.inkind).forEach(k => {
+      if (S.inkind[k]) {
+        const v = +document.querySelector('[data-key="'+k+'"]').dataset.value;
+        html += `<div class="li-row"><div class="li-name" style="color:#5a9a5a">In-Kind: ${INKIND_LABELS[k]}</div><div class="li-val" style="color:#5a9a5a">−${fmt(v)}</div></div>`;
+      }
+    });
+  }
 
   html += `<div class="li-row li-total"><div class="li-name">Total Production Cost</div><div class="li-val">${fmt(t)}</div></div>`;
   $('lineItems').innerHTML = html;
@@ -900,6 +1005,8 @@ function copyLink() {
     d: S.delivs, dp: S.delivPrice,
     vo: S.voPrice, vl: S.voLabel,
     a: S.addons, ap: S.addonPrice,
+    sc: S.socialPrice, scl: S.socialLabel,
+    ik: S.inkind, ikd: S.inkindDiscount,
     pct: S.contribPct, n: S.notes
   };
   const enc = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
@@ -931,9 +1038,13 @@ function loadFromHash() {
     S.delivPrice  = d.dp || 0;
     S.voPrice     = d.vo || 0;
     S.voLabel     = d.vl || 'None';
-    S.addons      = d.a  || {};
-    S.addonPrice  = d.ap || 0;
-    S.contribPct  = d.pct != null ? d.pct : 50;
+    S.addons       = d.a   || {};
+    S.addonPrice   = d.ap  || 0;
+    S.socialPrice  = d.sc  || 0;
+    S.socialLabel  = d.scl || 'None';
+    S.inkind       = d.ik  || {};
+    S.inkindDiscount = d.ikd || 0;
+    S.contribPct   = d.pct != null ? d.pct : 50;
     S.notes       = d.n  || '';
 
     $('step1').classList.remove('active');
