@@ -379,10 +379,12 @@
   <div class="calc-hero" id="calcHeader">
     <div class="calc-hero-glow"></div>
     <div class="hero-inner">
-      <div class="hero-eyebrow">Gauntt Board Company · Made in the Middle</div>
-      <div class="hero-sub-label">Media Production Quote Calculator</div>
-      <h1 class="hero-h1">Build a Custom<br>Production <span style="color:#C8952A;">Package.</span></h1>
-      <p class="hero-desc">We're documenting the kitchens, pitmasters, and craft behind Kansas City's food culture. Tell us about your company and we'll build a production package around your story.</p>
+      <div id="heroExpanded">
+        <div class="hero-eyebrow">Gauntt Board Company · Made in the Middle</div>
+        <div class="hero-sub-label">Media Production Quote Calculator</div>
+        <h1 class="hero-h1">Build a Custom<br>Production <span style="color:#C8952A;">Package.</span></h1>
+        <p class="hero-desc">We're documenting the kitchens, pitmasters, and craft behind Kansas City's food culture. Tell us about your company and we'll build a production package around your story.</p>
+      </div>
 
       <!-- Step indicators live inside the hero -->
       <div class="steps-labeled" id="stepsIndicator">
@@ -905,7 +907,15 @@ function goToStep(n) {
   $('step' + n).classList.add('active');
   updateDots();
   // Collapse hero after step 1 — keep only steps + metadata strip
-  $('calcHeader').classList.toggle('collapsed', n > 1);
+  const expanded = $('heroExpanded');
+  const hero = $('calcHeader');
+  if (n > 1) {
+    expanded.style.display = 'none';
+    hero.style.padding = '20px 48px 18px';
+  } else {
+    expanded.style.display = '';
+    hero.style.padding = '';
+  }
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
