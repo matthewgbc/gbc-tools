@@ -383,8 +383,8 @@
       <div style="padding:44px 36px 32px;background:linear-gradient(160deg,#1e1a13 0%,#161616 60%,#1c1c1c 100%);border-bottom:1px solid #2a2a2a;position:relative;">
         <div style="position:absolute;top:0;right:0;width:280px;height:100%;background:radial-gradient(ellipse at 90% 30%,rgba(200,149,42,0.07) 0%,transparent 70%);pointer-events:none;"></div>
         <div style="font-size:10px;font-weight:700;letter-spacing:0.28em;text-transform:uppercase;color:#C8952A;margin-bottom:20px;">Made in the Middle · GBC Partnership</div>
-        <h2 style="font-size:clamp(30px,5vw,46px);font-weight:800;color:#fff;line-height:1.05;margin-bottom:16px;letter-spacing:-0.02em;">Let's build<br>something<br><span style="color:#C8952A;">together.</span></h2>
-        <p style="font-size:15px;color:#777;line-height:1.7;max-width:420px;margin:0;">We're documenting the kitchens, pitmasters, and craft behind Kansas City's food culture. Tell us about your brand and we'll build a package around your story.</p>
+        <h2 style="font-size:clamp(30px,5vw,46px);font-weight:800;color:#fff;line-height:1.05;margin-bottom:16px;letter-spacing:-0.02em;">Build a Custom<br>Production<br><span style="color:#C8952A;">Package.</span></h2>
+        <p style="font-size:15px;color:#777;line-height:1.7;max-width:420px;margin:0;">We're documenting the kitchens, pitmasters, and craft behind Kansas City's food culture. Tell us about your company and we'll build a production package around your story.</p>
         <div style="margin-top:24px;padding-top:20px;border-top:1px solid #2a2a2a;display:flex;gap:24px;flex-wrap:wrap;">
           <div style="font-size:12px;color:#555;">
             <div style="font-weight:700;color:#888;margin-bottom:3px;">SERIES</div>Made in the Middle · Season 1
@@ -400,7 +400,7 @@
       <!-- Form zone -->
       <div style="padding:30px 36px 28px;">
         <div class="field">
-          <label>Brand or Restaurant Name</label>
+          <label>Company Name</label>
           <input type="text" id="partnerName" placeholder="e.g. Gauntt Board Company" />
         </div>
         <div class="field">
@@ -631,50 +631,19 @@
         <div style="position:absolute;top:0;right:0;width:260px;height:100%;background:radial-gradient(ellipse at 80% 40%,rgba(200,149,42,0.06) 0%,transparent 70%);pointer-events:none;"></div>
         <div style="font-size:10px;font-weight:700;letter-spacing:0.25em;text-transform:uppercase;color:#C8952A;margin-bottom:14px;">Partnership Model</div>
         <h3 style="font-size:clamp(22px,4vw,32px);font-weight:800;color:#fff;line-height:1.1;margin-bottom:12px;letter-spacing:-0.01em;">Is this a<br>Collaboration Campaign?</h3>
-        <p style="font-size:14px;color:#666;line-height:1.65;max-width:460px;margin:0;">When GBC and your brand co-invest in the story, everyone wins. We split the production cost — you get the content, we get the documentary. That's the collaboration model.</p>
+        <p style="font-size:14px;color:#666;line-height:1.65;max-width:460px;margin:0;">Our production partner Crystal Daisy Productions extends a preferred rate to brands featured in our series. Current GBC partners qualify — standard rate applies for all other productions.</p>
       </div>
       <div style="padding:24px 32px 28px;">
         <div class="rel-cards">
           <div class="rel-card selected" data-partner="yes" onclick="selectPartnerType(this)">
             <div class="rc-icon">🤝</div>
             <div class="rc-title">Yes — Collaboration Campaign</div>
-            <div class="rc-desc">GBC co-invests in production · 20% off total · we split the remaining cost</div>
+            <div class="rc-desc">Current GBC partner — Crystal Daisy's preferred partner rate applies to this production</div>
           </div>
           <div class="rel-card" data-partner="no" onclick="selectPartnerType(this)">
             <div class="rc-icon">📄</div>
             <div class="rc-title">Standard Production</div>
-            <div class="rc-desc">Partner commissions full production at standard rate</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card" id="partnerContribCard">
-      <div class="card-title">The Collaboration Split</div>
-      <div class="field">
-        <label>How do we divide the production investment?</label>
-        <div class="contrib-presets" id="presetBtns">
-          <button class="preset-btn" onclick="setContrib(25)">25%</button>
-          <button class="preset-btn" onclick="setContrib(33)">33%</button>
-          <button class="preset-btn active" onclick="setContrib(50)">50%</button>
-          <button class="preset-btn" onclick="setContrib(75)">75%</button>
-          <button class="preset-btn" onclick="setContrib(100)">100%</button>
-        </div>
-        <div class="slider-row">
-          <div class="slider-pct" id="sliderPct">50%</div>
-          <input type="range" id="contribSlider" min="0" max="100" value="50"
-            oninput="updateSlider(this.value)" style="--pct:50%" />
-        </div>
-        <div class="cost-split">
-          <div class="cost-box partner-box">
-            <div class="cb-label">Partner Invests</div>
-            <div class="cb-amount" id="partnerAmt">—</div>
-            <div class="cb-sub" id="partnerSub">50% of total</div>
-          </div>
-          <div class="cost-box">
-            <div class="cb-label">GBC Absorbs</div>
-            <div class="cb-amount" id="gbcAmt">—</div>
-            <div class="cb-sub" id="gbcSub">50% of total</div>
+            <div class="rc-desc">Crystal Daisy Productions standard rate — no partner discount applied</div>
           </div>
         </div>
       </div>
@@ -719,20 +688,9 @@
     </div>
 
     <div class="card">
-      <div class="card-title">Partnership Investment</div>
-      <div class="cost-split" style="margin-bottom:0">
-        <div class="cost-box partner-box">
-          <div class="cb-label">Partner Investment</div>
-          <div class="cb-amount" id="qPartnerAmt">—</div>
-          <div class="cb-sub" id="qPartnerSub">—</div>
-        </div>
-        <div class="cost-box">
-          <div class="cb-label">GBC Investment</div>
-          <div class="cb-amount" id="qGbcAmt">—</div>
-          <div class="cb-sub" id="qGbcSub">—</div>
-        </div>
-      </div>
+      <div class="card-title">Production Notes</div>
       <div class="notes-box" id="notesBox"></div>
+      <div id="qRateNote" style="font-size:13px;color:#555;line-height:1.65;margin-top:4px;"></div>
     </div>
 
     <div class="card">
@@ -757,11 +715,7 @@
       <div class="lb-savings" id="lbSavings"></div>
     </div>
   </div>
-  <div class="lb-right">
-    Partner: <strong id="lbPartner">$700</strong>
-    &nbsp;·&nbsp;
-    GBC: <strong id="lbGbc">$700</strong>
-  </div>
+  <div class="lb-right" id="lbRight"></div>
 </div>
 
 <!-- TOAST -->
@@ -814,29 +768,19 @@ const total = () => rawTotal() - mitmDiscount();
 
 function livebar() {
   const raw = rawTotal(), disc = mitmDiscount(), t = total();
-  const p = t * S.contribPct / 100;
-  $('lbTotal').textContent   = fmt(t);
-  $('lbPartner').textContent = fmt(p);
-  $('lbGbc').textContent     = fmt(t - p);
-  // Show crossed-out standard rate + savings only when MITM discount applies
+  $('lbTotal').textContent = fmt(t);
+  $('lbRight').textContent = S.isPartner ? 'Crystal Daisy partner rate' : 'Standard rate';
   const stdEl = $('lbStandard'), savEl = $('lbSavings');
   if (disc > 0) {
     stdEl.textContent = fmt(raw);
-    savEl.textContent = '↓ ' + fmt(disc) + ' MITM savings';
+    savEl.textContent = '↓ ' + fmt(disc) + ' saved';
   } else {
     stdEl.textContent = '';
     savEl.textContent = '';
   }
 }
 
-function costSplit() {
-  const t = total(), p = t * S.contribPct / 100;
-  $('partnerAmt').textContent = fmt(p);
-  $('gbcAmt').textContent     = fmt(t - p);
-  $('partnerSub').textContent = S.contribPct + '% of total';
-  $('gbcSub').textContent     = (100 - S.contribPct) + '% of total';
-  livebar();
-}
+function costSplit() { livebar(); }
 
 // ─── NAVIGATION ──────────────────────────────────────────
 function goToStep(n) {
@@ -844,7 +788,6 @@ function goToStep(n) {
   S.step = n;
   $('step' + n).classList.add('active');
   updateDots();
-  if (n === 5) costSplit();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -865,15 +808,7 @@ function selectPartnerType(el) {
   document.querySelectorAll('.rel-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
   S.isPartner = el.dataset.partner === 'yes';
-  const card = $('partnerContribCard');
-  if (S.isPartner) {
-    card.style.display = '';
-    S.contribPct = 50;
-  } else {
-    card.style.display = 'none';
-    S.contribPct = 100;
-  }
-  livebar(); costSplit();
+  livebar();
 }
 
 // ─── STEP 2 ──────────────────────────────────────────────
@@ -978,22 +913,6 @@ function selectSocial(el) {
 }
 
 // ─── STEP 4 ──────────────────────────────────────────────
-function setContrib(pct) {
-  S.contribPct = pct;
-  $('contribSlider').value = pct;
-  $('contribSlider').style.setProperty('--pct', pct + '%');
-  $('sliderPct').textContent = pct + '%';
-  document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', parseInt(b.textContent) === pct));
-  costSplit();
-}
-
-function updateSlider(v) {
-  v = +v; S.contribPct = v;
-  $('contribSlider').style.setProperty('--pct', v + '%');
-  $('sliderPct').textContent = v + '%';
-  document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', parseInt(b.textContent) === v));
-  costSplit();
-}
 
 // ─── QUOTE BUILD ─────────────────────────────────────────
 function buildAndShowQuote() {
@@ -1013,7 +932,7 @@ const SHOOT_DETAIL = {
 };
 
 function renderQuote(isShared) {
-  const t = total(), p = t * S.contribPct / 100, g = t - p;
+  const t = total();
   const today = new Date().toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' });
   const qid = 'GBC-' + Date.now().toString(36).slice(-5).toUpperCase();
 
@@ -1027,7 +946,7 @@ function renderQuote(isShared) {
   let html = '';
 
   // Partnership type + shoot
-  html += li(S.isPartner ? 'GBC Partner — 20% rate applies' : 'Standard Pricing', 'Partnership Type', false);
+  html += li(S.isPartner ? 'Collaboration Campaign — Crystal Daisy partner rate' : 'Standard Production — Crystal Daisy standard rate', 'Production Rate', false);
   html += li('Production Crew — ' + S.shootLabel, fmt(S.shootPrice), false);
   if (SHOOT_DETAIL[S.shootLabel]) html += liSub(SHOOT_DETAIL[S.shootLabel]);
 
@@ -1078,15 +997,14 @@ function renderQuote(isShared) {
 
   // MITM discount
   const raw = rawTotal(), disc = mitmDiscount();
-  if (disc > 0) html += `<div class="li-row"><div class="li-name" style="color:#C8952A">GBC Partner Rate (20% off standard ${fmt(raw)})</div><div class="li-val" style="color:#C8952A">−${fmt(disc)}</div></div>`;
+  if (disc > 0) html += `<div class="li-row"><div class="li-name" style="color:#C8952A">Crystal Daisy Partner Rate (applied to standard ${fmt(raw)})</div><div class="li-val" style="color:#C8952A">−${fmt(disc)}</div></div>`;
 
   html += `<div class="li-row li-total"><div class="li-name">Total Production Cost</div><div class="li-val">${fmt(t)}</div></div>`;
   $('lineItems').innerHTML = html;
 
-  $('qPartnerAmt').textContent = fmt(p);
-  $('qPartnerSub').textContent = S.contribPct + '% of total production cost';
-  $('qGbcAmt').textContent     = fmt(g);
-  $('qGbcSub').textContent     = (100 - S.contribPct) + '% of total production cost';
+  $('qRateNote').textContent = S.isPartner
+    ? 'Production by Crystal Daisy Productions · GBC partner rate applied · Valid 30 days from quote date.'
+    : 'Production by Crystal Daisy Productions · Standard rate · Valid 30 days from quote date.';
 
   const nb = $('notesBox');
   if (S.notes) { nb.textContent = S.notes; nb.style.display = 'block'; }
