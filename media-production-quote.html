@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GBC Media Production Quote</title>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Archivo', sans-serif;
+      background: #111;
+      color: #f0ebe3;
+      min-height: 100vh;
+      padding: 36px 20px 100px;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    .calc-wrap { max-width: 940px; margin: 0 auto; }
+
+    /* ── HEADER ── */
+    .calc-header { text-align: center; margin-bottom: 44px; }
+    .eyebrow-tag {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.22em; text-transform: uppercase; color: #C8952A; margin-bottom: 12px;
+    }
+    .calc-header h1 {
+      font-size: clamp(28px, 5vw, 44px); font-weight: 800;
+      line-height: 1.08; color: #fff; margin-bottom: 14px;
+    }
+    .calc-header p { font-size: 18px; color: #999; max-width: 560px; margin: 0 auto; line-height: 1.65; }
+
+    /* ── STEP INDICATOR ── */
+    .steps-labeled { display: flex; align-items: flex-start; justify-content: center; margin-bottom: 40px; }
+    .step-col { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .step-dot {
+      width: 34px; height: 34px; border-radius: 50%; border: 2px solid #2a2a2a;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: #444; transition: all 0.3s; background: #1a1a1a;
+    }
+    .step-dot.active { border-color: #C8952A; color: #C8952A; background: rgba(200,149,42,0.1); }
+    .step-dot.done { border-color: #C8952A; background: #C8952A; color: #111; }
+    .step-col span { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #444; text-align: center; max-width: 68px; line-height: 1.3; }
+    .step-col.active span { color: #C8952A; }
+    .step-col.done span { color: #777; }
+    .step-connector { width: 44px; height: 1px; background: #2a2a2a; margin-top: 16px; flex-shrink: 0; }
+    @media(max-width: 560px) { .step-connector { width: 18px; } .step-col span { font-size: 10px; max-width: 52px; } }
+
+    /* ── CARD ── */
+    .card {
+      background: #1c1c1c; border: 1px solid #2a2a2a;
+      border-radius: 12px; padding: 28px 30px; margin-bottom: 14px;
+    }
+    @media(max-width: 520px) { .card { padding: 20px 18px; } }
+    .card-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; color: #C8952A; margin-bottom: 22px;
+    }
+
+    /* ── FIELDS ── */
+    .field { margin-bottom: 26px; }
+    .field:last-child { margin-bottom: 0; }
+    label { display: block; font-size: 15px; font-weight: 600; color: #ccc; margin-bottom: 10px; }
+    label .sub { font-weight: 400; font-style: italic; color: #666; font-size: 14px; margin-left: 5px; }
+
+    input[type=text] {
+      width: 100%; background: #141414; border: 1px solid #333; border-radius: 8px;
+      color: #f0ebe3; font-family: 'Archivo', sans-serif; font-size: 16px;
+      padding: 14px 18px; transition: border-color 0.2s;
+    }
+    input[type=text]:focus { outline: none; border-color: #C8952A; }
+    input[type=text]::placeholder { color: #444; }
+
+    textarea {
+      width: 100%; background: #141414; border: 1px solid #333; border-radius: 8px;
+      color: #f0ebe3; font-family: 'Archivo', sans-serif; font-size: 15px;
+      padding: 14px 18px; transition: border-color 0.2s; resize: vertical; min-height: 80px;
+    }
+    textarea:focus { outline: none; border-color: #C8952A; }
+    textarea::placeholder { color: #444; }
+
+    /* ── RELATIONSHIP CARDS ── */
+    .rel-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    @media(max-width: 580px) { .rel-cards { grid-template-columns: 1fr; } }
+    .rel-card {
+      border: 2px solid #2a2a2a; border-radius: 12px; padding: 18px 14px;
+      cursor: pointer; transition: all 0.2s; background: #141414; text-align: center;
+    }
+    .rel-card:hover { border-color: #555; }
+    .rel-card.selected { border-color: #C8952A; background: rgba(200,149,42,0.08); }
+    .rel-card .rc-icon { font-size: 26px; margin-bottom: 8px; }
+    .rel-card .rc-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .rel-card.selected .rc-title { color: #C8952A; }
+    .rel-card .rc-desc { font-size: 12px; color: #666; line-height: 1.4; }
+
+    /* ── OPTION TILES (shoot days, VO) ── */
+    .option-tiles { display: grid; gap: 10px; }
+    .option-tiles.cols-4 { grid-template-columns: repeat(4, 1fr); }
+    @media(max-width: 620px) { .option-tiles.cols-4 { grid-template-columns: 1fr 1fr; } }
+    .option-tile {
+      border: 2px solid #2a2a2a; border-radius: 10px; padding: 16px 12px;
+      cursor: pointer; transition: all 0.2s; background: #141414; text-align: center;
+    }
+    .option-tile:hover { border-color: #555; }
+    .option-tile.selected { border-color: #C8952A; background: rgba(200,149,42,0.08); }
+    .option-tile .ot-label { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 5px; }
+    .option-tile.selected .ot-label { color: #C8952A; }
+    .option-tile .ot-price { font-size: 20px; font-weight: 800; color: #C8952A; margin-bottom: 4px; }
+    .option-tile .ot-desc { font-size: 12px; color: #666; line-height: 1.35; }
+
+    /* ── DELIVERABLE TILES ── */
+    .deliv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media(max-width: 560px) { .deliv-grid { grid-template-columns: 1fr; } }
+    .deliv-tile {
+      border: 2px solid #2a2a2a; border-radius: 10px; padding: 14px 16px;
+      cursor: pointer; transition: all 0.2s; background: #141414;
+    }
+    .deliv-tile:hover { border-color: #444; }
+    .deliv-tile.selected { border-color: #C8952A; background: rgba(200,149,42,0.06); }
+    .deliv-tile.always-on { cursor: default; opacity: 0.7; }
+    .deliv-tile.bundle-tile { border-color: #2a3a2a; }
+    .deliv-tile.bundle-tile.selected { border-color: #5a9a5a; background: rgba(90,154,90,0.06); }
+    .deliv-check {
+      width: 18px; height: 18px; border: 2px solid #444; border-radius: 4px;
+      display: inline-flex; align-items: center; justify-content: center;
+      margin-right: 9px; flex-shrink: 0; transition: all 0.2s; vertical-align: middle;
+      font-size: 11px; color: transparent;
+    }
+    .deliv-tile.selected .deliv-check { background: #C8952A; border-color: #C8952A; color: #111; }
+    .deliv-tile.bundle-tile.selected .deliv-check { background: #5a9a5a; border-color: #5a9a5a; color: #fff; }
+    .deliv-title { font-size: 14px; font-weight: 700; color: #fff; display: flex; align-items: center; margin-bottom: 4px; flex-wrap: wrap; gap: 4px; }
+    .deliv-price { font-size: 14px; color: #C8952A; font-weight: 600; }
+    .deliv-tile.bundle-tile .deliv-price { color: #5a9a5a; }
+    .deliv-desc { font-size: 12px; color: #666; line-height: 1.45; margin-top: 3px; }
+    .incl-badge {
+      display: inline-block; font-size: 9px; font-weight: 800; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #111; background: #C8952A;
+      border-radius: 3px; padding: 2px 6px;
+    }
+    .save-badge {
+      display: inline-block; font-size: 9px; font-weight: 800; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #fff; background: #3a7a3a;
+      border-radius: 3px; padding: 2px 6px;
+    }
+
+    /* ── ADDON TILES ── */
+    .addon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media(max-width: 560px) { .addon-grid { grid-template-columns: 1fr; } }
+    .addon-tile {
+      border: 2px solid #2a2a2a; border-radius: 10px; padding: 14px 16px;
+      cursor: pointer; transition: all 0.2s; background: #141414;
+    }
+    .addon-tile:hover { border-color: #444; }
+    .addon-tile.selected { border-color: #C8952A; background: rgba(200,149,42,0.06); }
+    .addon-tile.always-on { cursor: default; opacity: 0.7; }
+    .addon-check {
+      width: 18px; height: 18px; border: 2px solid #444; border-radius: 4px;
+      display: inline-flex; align-items: center; justify-content: center;
+      margin-right: 9px; flex-shrink: 0; transition: all 0.2s; vertical-align: middle;
+      font-size: 11px; color: transparent;
+    }
+    .addon-tile.selected .addon-check { background: #C8952A; border-color: #C8952A; color: #111; }
+    .addon-title { font-size: 14px; font-weight: 700; color: #fff; display: flex; align-items: center; margin-bottom: 4px; flex-wrap: wrap; gap: 4px; }
+    .addon-price { font-size: 14px; color: #C8952A; font-weight: 600; }
+    .addon-incl { font-size: 13px; color: #5a9a5a; font-weight: 600; }
+    .addon-desc { font-size: 12px; color: #666; line-height: 1.45; margin-top: 3px; }
+
+    /* ── CONTRIBUTION SLIDER ── */
+    .contrib-presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .preset-btn {
+      padding: 9px 16px; border: 2px solid #2a2a2a; border-radius: 8px;
+      background: #141414; color: #888; font-family: 'Archivo', sans-serif;
+      font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+    }
+    .preset-btn:hover { border-color: #555; color: #ccc; }
+    .preset-btn.active { border-color: #C8952A; color: #C8952A; background: rgba(200,149,42,0.08); }
+
+    .slider-row { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+    .slider-pct { font-size: 30px; font-weight: 800; color: #C8952A; min-width: 62px; }
+    input[type=range] {
+      flex: 1; height: 6px; border-radius: 3px; appearance: none; -webkit-appearance: none;
+      background: linear-gradient(to right, #C8952A 0%, #C8952A var(--pct,50%), #2a2a2a var(--pct,50%), #2a2a2a 100%);
+      cursor: pointer; outline: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%;
+      background: #C8952A; cursor: pointer; border: 3px solid #111; box-shadow: 0 0 0 2px rgba(200,149,42,0.3);
+    }
+    input[type=range]::-moz-range-thumb {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: #C8952A; cursor: pointer; border: 3px solid #111;
+    }
+
+    /* ── COST SPLIT ── */
+    .cost-split { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media(max-width: 480px) { .cost-split { grid-template-columns: 1fr; } }
+    .cost-box {
+      background: #141414; border: 1px solid #2a2a2a; border-radius: 10px;
+      padding: 18px 20px; text-align: center;
+    }
+    .cost-box.partner-box { border-color: #C8952A; background: rgba(200,149,42,0.05); }
+    .cb-label { font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #666; margin-bottom: 8px; }
+    .cost-box.partner-box .cb-label { color: #C8952A; }
+    .cb-amount { font-size: 28px; font-weight: 800; color: #fff; }
+    .cost-box.partner-box .cb-amount { color: #C8952A; }
+    .cb-sub { font-size: 13px; color: #555; margin-top: 4px; }
+
+    /* ── LIVE BAR ── */
+    .live-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: rgba(18,18,18,0.97); border-top: 1px solid #2a2a2a;
+      padding: 14px 24px; display: flex; align-items: center;
+      justify-content: space-between; gap: 16px; flex-wrap: wrap;
+      backdrop-filter: blur(10px); z-index: 100;
+    }
+    .lb-left { display: flex; align-items: baseline; gap: 10px; }
+    .lb-label { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #555; }
+    .lb-total { font-size: 26px; font-weight: 800; color: #C8952A; }
+    .lb-right { font-size: 14px; color: #666; }
+    .lb-right strong { color: #aaa; }
+
+    /* ── QUOTE SUMMARY ── */
+    .quote-header {
+      background: linear-gradient(135deg, #1c1c1c, #181818);
+      border: 1px solid #2a2a2a; border-radius: 12px; padding: 28px 30px; margin-bottom: 16px;
+    }
+    .q-brand { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #C8952A; margin-bottom: 6px; }
+    .q-title { font-size: clamp(20px, 4vw, 28px); font-weight: 800; color: #fff; margin-bottom: 12px; line-height: 1.15; }
+    .q-meta { display: flex; flex-wrap: wrap; gap: 14px; }
+    .q-meta span { font-size: 13px; color: #666; }
+    .q-meta strong { color: #999; }
+
+    .line-items { border: 1px solid #2a2a2a; border-radius: 10px; overflow: hidden; margin-bottom: 0; }
+    .li-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 13px 20px; border-bottom: 1px solid #1e1e1e; gap: 12px;
+    }
+    .li-row:last-child { border-bottom: none; }
+    .li-row.li-total { background: rgba(200,149,42,0.07); border-top: 1px solid rgba(200,149,42,0.25); }
+    .li-name { font-size: 14px; color: #bbb; flex: 1; }
+    .li-row.li-total .li-name { font-weight: 700; color: #fff; font-size: 15px; }
+    .li-val { font-size: 14px; color: #fff; font-weight: 600; text-align: right; white-space: nowrap; }
+    .li-row.li-total .li-val { font-size: 22px; font-weight: 800; color: #C8952A; }
+    .li-incl { color: #5a9a5a !important; font-size: 13px !important; }
+
+    /* ── SHARE BANNER ── */
+    .share-banner {
+      background: rgba(200,149,42,0.08); border: 1px solid rgba(200,149,42,0.25);
+      border-radius: 10px; padding: 14px 20px; margin-bottom: 20px; display: none;
+    }
+    .share-banner p { font-size: 14px; color: #C8952A; line-height: 1.5; }
+    .share-banner strong { font-weight: 700; }
+
+    /* ── NOTES BOX ── */
+    .notes-box {
+      margin-top: 16px; padding: 16px 18px;
+      background: #141414; border: 1px solid #2a2a2a; border-radius: 8px;
+      font-size: 14px; color: #888; line-height: 1.65; display: none;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 14px 26px; border-radius: 9px; font-family: 'Archivo', sans-serif;
+      font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; border: none; text-decoration: none;
+    }
+    .btn-primary { background: #C8952A; color: #111; }
+    .btn-primary:hover { background: #d9a43a; }
+    .btn-secondary { background: #1c1c1c; color: #bbb; border: 1px solid #333; }
+    .btn-secondary:hover { border-color: #555; color: #fff; }
+    .btn-ghost { background: transparent; color: #C8952A; border: 2px solid #C8952A; }
+    .btn-ghost:hover { background: rgba(200,149,42,0.08); }
+
+    .nav-row { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; flex-wrap: wrap; }
+    .action-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(16px);
+      background: #C8952A; color: #111; font-weight: 700; font-size: 14px;
+      padding: 11px 22px; border-radius: 8px; opacity: 0; transition: all 0.3s;
+      pointer-events: none; z-index: 999; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── SHOW/HIDE ── */
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+
+    /* ── PRINT ── */
+    @media print {
+      body { background: #fff; color: #111; padding: 20px; font-size: 14px; }
+      .live-bar, .nav-row, .action-row, .share-banner, .steps-labeled, .calc-header { display: none !important; }
+      .card { border-color: #ddd; background: #fff; }
+      .card-title { color: #8a6820; }
+      .quote-header { background: #f9f9f9; border-color: #ddd; }
+      .q-brand { color: #8a6820; }
+      .line-items { border-color: #ddd; }
+      .li-row { border-color: #eee; }
+      .li-row.li-total { background: #fdf5e8; }
+      .li-row.li-total .li-val { color: #8a6820; }
+      .cost-box { border-color: #ddd; background: #f9f9f9; }
+      .cost-box.partner-box { background: #fdf5e8; border-color: #C8952A; }
+      .cb-amount { color: #222; }
+      .cost-box.partner-box .cb-amount { color: #8a6820; }
+    }
+  </style>
+</head>
+<body>
+<div class="calc-wrap">
+
+  <!-- HEADER -->
+  <div class="calc-header" id="calcHeader">
+    <div class="eyebrow-tag">Gauntt Board Company · Made in the Middle</div>
+    <h1>Media Production<br>Quote Calculator</h1>
+    <p>Build a custom production package and generate a shareable quote for your partnership.</p>
+  </div>
+
+  <!-- STEP INDICATOR -->
+  <div class="steps-labeled" id="stepsIndicator">
+    <div class="step-col active" data-step="1">
+      <div class="step-dot active">1</div>
+      <span>Partner</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step-col" data-step="2">
+      <div class="step-dot">2</div>
+      <span>Scope</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step-col" data-step="3">
+      <div class="step-dot">3</div>
+      <span>Voice Over</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step-col" data-step="4">
+      <div class="step-dot">4</div>
+      <span>Contribution</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step-col" data-step="5">
+      <div class="step-dot">5</div>
+      <span>Quote</span>
+    </div>
+  </div>
+
+  <!-- ─── STEP 1: PARTNER DETAILS ─── -->
+  <div class="step-panel active" id="step1">
+    <div class="card">
+      <div class="card-title">Partner Details</div>
+      <div class="field">
+        <label>Partner / Brand Name</label>
+        <input type="text" id="partnerName" placeholder="e.g. Manny's Mexican Restaurant" />
+      </div>
+      <div class="field">
+        <label>Contact Name <span class="sub">optional</span></label>
+        <input type="text" id="contactName" placeholder="e.g. Emmanuel Garcia" />
+      </div>
+      <div class="field">
+        <label>Relationship Type</label>
+        <div class="rel-cards">
+          <div class="rel-card selected" data-rel="mitm" onclick="selectRel(this)">
+            <div class="rc-icon">🎬</div>
+            <div class="rc-title">MITM Partner</div>
+            <div class="rc-desc">Featured in Made in the Middle episode</div>
+          </div>
+          <div class="rel-card" data-rel="commercial" onclick="selectRel(this)">
+            <div class="rc-icon">🏢</div>
+            <div class="rc-title">Commercial Client</div>
+            <div class="rc-desc">Branded content or commercial video production</div>
+          </div>
+          <div class="rel-card" data-rel="distributor" onclick="selectRel(this)">
+            <div class="rc-icon">🤝</div>
+            <div class="rc-title">Distributor / Reseller</div>
+            <div class="rc-desc">Production for a distribution partner's client</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn-primary" onclick="goToStep(2)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ─── STEP 2: PRODUCTION SCOPE ─── -->
+  <div class="step-panel" id="step2">
+    <div class="card">
+      <div class="card-title">Shoot Days</div>
+      <div class="field">
+        <label>Production crew days on location <span class="sub">Crystal Daisy Productions</span></label>
+        <div class="option-tiles cols-4" id="shootTiles">
+          <div class="option-tile" data-price="750" data-label="Half Day" onclick="selectShoot(this)">
+            <div class="ot-label">Half Day</div>
+            <div class="ot-price">$750</div>
+            <div class="ot-desc">Up to 4 hours on location</div>
+          </div>
+          <div class="option-tile selected" data-price="1400" data-label="Full Day" onclick="selectShoot(this)">
+            <div class="ot-label">Full Day</div>
+            <div class="ot-price">$1,400</div>
+            <div class="ot-desc">Standard 8-hour shoot</div>
+          </div>
+          <div class="option-tile" data-price="2500" data-label="2-Day Shoot" onclick="selectShoot(this)">
+            <div class="ot-label">2-Day Shoot</div>
+            <div class="ot-price">$2,500</div>
+            <div class="ot-desc">Multi-location or extended coverage</div>
+          </div>
+          <div class="option-tile" data-price="3500" data-label="3-Day Shoot" onclick="selectShoot(this)">
+            <div class="ot-label">3-Day Shoot</div>
+            <div class="ot-price">$3,500</div>
+            <div class="ot-desc">Full documentary production</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Content Deliverables</div>
+      <div class="field">
+        <label>What gets produced and delivered <span class="sub">select all that apply</span></label>
+        <div class="deliv-grid">
+          <div class="deliv-tile always-on selected" data-key="episode" data-price="0">
+            <div class="deliv-title"><span class="deliv-check" style="background:#C8952A;border-color:#C8952A;color:#111;">✓</span>Full YouTube Episode <span class="incl-badge">Always Included</span></div>
+            <div class="deliv-price">Included in base</div>
+            <div class="deliv-desc">12–18 min edited documentary episode for YouTube Premiere</div>
+          </div>
+          <div class="deliv-tile always-on selected" data-key="partnerkit" data-price="0">
+            <div class="deliv-title"><span class="deliv-check" style="background:#C8952A;border-color:#C8952A;color:#111;">✓</span>Partner Social Kit <span class="incl-badge">Always Included</span></div>
+            <div class="deliv-price">Included in base</div>
+            <div class="deliv-desc">Copy-paste captions, story assets, premiere date + tags</div>
+          </div>
+          <div class="deliv-tile" data-key="shortform" data-price="350" onclick="toggleDeliv(this)">
+            <div class="deliv-title"><span class="deliv-check">✓</span>Short-Form Package</div>
+            <div class="deliv-price">+$350</div>
+            <div class="deliv-desc">5–7 standalone clips (60–180s each) cut for social</div>
+          </div>
+          <div class="deliv-tile" data-key="reel" data-price="150" onclick="toggleDeliv(this)">
+            <div class="deliv-title"><span class="deliv-check">✓</span>Instagram Reel</div>
+            <div class="deliv-price">+$150</div>
+            <div class="deliv-desc">60–90s vertical cut, optimized for Instagram</div>
+          </div>
+          <div class="deliv-tile" data-key="tiktok" data-price="125" onclick="toggleDeliv(this)">
+            <div class="deliv-title"><span class="deliv-check">✓</span>TikTok Cut</div>
+            <div class="deliv-price">+$125</div>
+            <div class="deliv-desc">30–60s vertical format for TikTok</div>
+          </div>
+          <div class="deliv-tile" data-key="shorts" data-price="100" onclick="toggleDeliv(this)">
+            <div class="deliv-title"><span class="deliv-check">✓</span>YouTube Shorts</div>
+            <div class="deliv-price">+$100</div>
+            <div class="deliv-desc">≤60s cut for YouTube Shorts algorithm</div>
+          </div>
+          <div class="deliv-tile" data-key="b2b" data-price="150" onclick="toggleDeliv(this)">
+            <div class="deliv-title"><span class="deliv-check">✓</span>B2B Angle Clip</div>
+            <div class="deliv-price">+$150</div>
+            <div class="deliv-desc">LinkedIn + Instagram clip targeting commercial buyers</div>
+          </div>
+          <div class="deliv-tile bundle-tile" data-key="bundle" data-price="650" onclick="toggleBundle(this)">
+            <div class="deliv-title"><span class="deliv-check">✓</span>Full Platform Bundle <span class="save-badge">Save $175</span></div>
+            <div class="deliv-price" style="color:#5a9a5a">+$650</div>
+            <div class="deliv-desc">All cuts for every platform — Short-Form + Reel + TikTok + Shorts + B2B</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-secondary" onclick="goToStep(1)">← Back</button>
+      <button class="btn btn-primary" onclick="goToStep(3)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ─── STEP 3: VOICE OVER & ADD-ONS ─── -->
+  <div class="step-panel" id="step3">
+    <div class="card">
+      <div class="card-title">Voice Over Sessions</div>
+      <div class="field">
+        <label>Host narration or partner VO sessions needed</label>
+        <div class="option-tiles cols-4" id="voTiles">
+          <div class="option-tile selected" data-price="0" data-label="None" onclick="selectVO(this)">
+            <div class="ot-label">None</div>
+            <div class="ot-price">$0</div>
+            <div class="ot-desc">No VO recorded</div>
+          </div>
+          <div class="option-tile" data-price="175" data-label="1 VO Session" onclick="selectVO(this)">
+            <div class="ot-label">1 Session</div>
+            <div class="ot-price">$175</div>
+            <div class="ot-desc">Up to 60 min recording</div>
+          </div>
+          <div class="option-tile" data-price="325" data-label="2 VO Sessions" onclick="selectVO(this)">
+            <div class="ot-label">2 Sessions</div>
+            <div class="ot-price">$325</div>
+            <div class="ot-desc">Revisions or multi-section VO</div>
+          </div>
+          <div class="option-tile" data-price="450" data-label="3 VO Sessions" onclick="selectVO(this)">
+            <div class="ot-label">3 Sessions</div>
+            <div class="ot-price">$450</div>
+            <div class="ot-desc">Full narration package</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Production Add-Ons</div>
+      <div class="field">
+        <label>Optional production upgrades</label>
+        <div class="addon-grid">
+          <div class="addon-tile always-on selected" data-key="thumbnail" data-price="0">
+            <div class="addon-title"><span class="addon-check" style="background:#C8952A;border-color:#C8952A;color:#111;">✓</span>Thumbnail & YouTube Metadata <span class="incl-badge">Included</span></div>
+            <div class="addon-price"><span class="addon-incl">Always included</span></div>
+            <div class="addon-desc">Custom thumbnail, title options, description, tags</div>
+          </div>
+          <div class="addon-tile" data-key="music" data-price="200" onclick="toggleAddon(this)">
+            <div class="addon-title"><span class="addon-check">✓</span>Licensed Music Track</div>
+            <div class="addon-price">+$200</div>
+            <div class="addon-desc">Cleared license for all platforms — YouTube, Instagram, TikTok</div>
+          </div>
+          <div class="addon-tile" data-key="motion" data-price="250" onclick="toggleAddon(this)">
+            <div class="addon-title"><span class="addon-check">✓</span>Motion Graphics & Overlays</div>
+            <div class="addon-price">+$250</div>
+            <div class="addon-desc">Lower thirds, branded titles, animated transitions</div>
+          </div>
+          <div class="addon-tile" data-key="extended" data-price="350" onclick="toggleAddon(this)">
+            <div class="addon-title"><span class="addon-check">✓</span>Extended Edit Pass</div>
+            <div class="addon-price">+$350</div>
+            <div class="addon-desc">Additional revision round beyond standard edit cycle</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-secondary" onclick="goToStep(2)">← Back</button>
+      <button class="btn btn-primary" onclick="goToStep(4)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ─── STEP 4: CONTRIBUTION & NOTES ─── -->
+  <div class="step-panel" id="step4">
+    <div class="card">
+      <div class="card-title">Partner Contribution</div>
+      <div class="field">
+        <label>What percentage of production costs does the partner contribute?</label>
+        <div class="contrib-presets" id="presetBtns">
+          <button class="preset-btn" onclick="setContrib(25)">25%</button>
+          <button class="preset-btn" onclick="setContrib(33)">33%</button>
+          <button class="preset-btn active" onclick="setContrib(50)">50%</button>
+          <button class="preset-btn" onclick="setContrib(75)">75%</button>
+          <button class="preset-btn" onclick="setContrib(100)">100%</button>
+        </div>
+        <div class="slider-row">
+          <div class="slider-pct" id="sliderPct">50%</div>
+          <input type="range" id="contribSlider" min="0" max="100" value="50"
+            oninput="updateSlider(this.value)" style="--pct:50%" />
+        </div>
+        <div class="cost-split">
+          <div class="cost-box partner-box">
+            <div class="cb-label">Partner Invests</div>
+            <div class="cb-amount" id="partnerAmt">—</div>
+            <div class="cb-sub" id="partnerSub">50% of total</div>
+          </div>
+          <div class="cost-box">
+            <div class="cb-label">GBC Absorbs</div>
+            <div class="cb-amount" id="gbcAmt">—</div>
+            <div class="cb-sub" id="gbcSub">50% of total</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Quote Notes</div>
+      <div class="field">
+        <label>Message or terms for this quote <span class="sub">will appear on the shared quote</span></label>
+        <textarea id="quoteNotes" placeholder="e.g. This quote is valid for 30 days. Production timeline is 3–4 weeks from confirmed shoot date. Partner provides location access and any required permits."></textarea>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-secondary" onclick="goToStep(3)">← Back</button>
+      <button class="btn btn-primary" onclick="buildAndShowQuote()">Generate Quote →</button>
+    </div>
+  </div>
+
+  <!-- ─── STEP 5: QUOTE SUMMARY ─── -->
+  <div class="step-panel" id="step5">
+
+    <div class="share-banner" id="shareBanner">
+      <p>📋 <strong>Shared Production Quote</strong> — This quote was created by Gauntt Board Company. Review the production scope and partnership investment below.</p>
+    </div>
+
+    <div class="quote-header">
+      <div class="q-brand">Gauntt Board Company · Made in the Middle</div>
+      <div class="q-title" id="qTitle">Media Production Quote</div>
+      <div class="q-meta">
+        <span id="qPartner"></span>
+        <span id="qContact"></span>
+        <span id="qDate"></span>
+        <span id="qId" style="color:#444; font-size:12px;"></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Production Scope & Cost Breakdown</div>
+      <div class="line-items" id="lineItems"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Partnership Investment</div>
+      <div class="cost-split" style="margin-bottom:0">
+        <div class="cost-box partner-box">
+          <div class="cb-label">Partner Investment</div>
+          <div class="cb-amount" id="qPartnerAmt">—</div>
+          <div class="cb-sub" id="qPartnerSub">—</div>
+        </div>
+        <div class="cost-box">
+          <div class="cb-label">GBC Investment</div>
+          <div class="cb-amount" id="qGbcAmt">—</div>
+          <div class="cb-sub" id="qGbcSub">—</div>
+        </div>
+      </div>
+      <div class="notes-box" id="notesBox"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Actions</div>
+      <div class="action-row">
+        <button class="btn btn-primary" onclick="copyLink()">📋 Copy Shareable Link</button>
+        <button class="btn btn-ghost" onclick="window.print()">🖨 Print / Save PDF</button>
+        <button class="btn btn-secondary" id="editBtn" onclick="goToStep(4)">← Edit Quote</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- LIVE BAR -->
+<div class="live-bar" id="liveBar">
+  <div class="lb-left">
+    <div class="lb-label">Total Production</div>
+    <div class="lb-total" id="lbTotal">$1,400</div>
+  </div>
+  <div class="lb-right">
+    Partner: <strong id="lbPartner">$700</strong>
+    &nbsp;·&nbsp;
+    GBC: <strong id="lbGbc">$700</strong>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">Link copied!</div>
+
+<script>
+// ─── STATE ────────────────────────────────────────────────
+const S = {
+  step: 1,
+  partner: '',
+  contact: '',
+  rel: 'mitm',
+  shootPrice: 1400,
+  shootLabel: 'Full Day',
+  delivs: { episode: true, partnerkit: true },
+  delivPrice: 0,
+  voPrice: 0,
+  voLabel: 'None',
+  addons: {},
+  addonPrice: 0,
+  contribPct: 50,
+  notes: '',
+};
+
+const DELIV_PRICES  = { episode:0, partnerkit:0, shortform:350, reel:150, tiktok:125, shorts:100, b2b:150, bundle:650 };
+const DELIV_LABELS  = {
+  episode:  'Full YouTube Episode (12–18 min)',
+  partnerkit:'Partner Social Kit',
+  shortform:'Short-Form Package (5–7 clips)',
+  reel:     'Instagram Reel (60–90s)',
+  tiktok:   'TikTok Cut (30–60s)',
+  shorts:   'YouTube Shorts (≤60s)',
+  b2b:      'B2B Angle Clip (LinkedIn + IG)',
+  bundle:   'Full Platform Bundle (all cuts)',
+};
+const BUNDLE_KEYS   = ['shortform','reel','tiktok','shorts','b2b'];
+const ADDON_PRICES  = { music:200, motion:250, extended:350, thumbnail:0 };
+const ADDON_LABELS  = { music:'Licensed Music Track', motion:'Motion Graphics & Overlays', extended:'Extended Edit Pass', thumbnail:'Thumbnail & YouTube Metadata' };
+const REL_LABELS    = { mitm:'MITM Partner', commercial:'Commercial Client', distributor:'Distributor / Reseller' };
+
+// ─── HELPERS ─────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const fmt = n => '$' + Math.round(n).toLocaleString();
+const total = () => S.shootPrice + S.delivPrice + S.voPrice + S.addonPrice;
+
+function livebar() {
+  const t = total(), p = t * S.contribPct / 100;
+  $('lbTotal').textContent   = fmt(t);
+  $('lbPartner').textContent = fmt(p);
+  $('lbGbc').textContent     = fmt(t - p);
+}
+
+function costSplit() {
+  const t = total(), p = t * S.contribPct / 100;
+  $('partnerAmt').textContent = fmt(p);
+  $('gbcAmt').textContent     = fmt(t - p);
+  $('partnerSub').textContent = S.contribPct + '% of total';
+  $('gbcSub').textContent     = (100 - S.contribPct) + '% of total';
+  livebar();
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────
+function goToStep(n) {
+  $('step' + S.step).classList.remove('active');
+  S.step = n;
+  $('step' + n).classList.add('active');
+  updateDots();
+  if (n === 4) costSplit();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateDots() {
+  document.querySelectorAll('.step-col').forEach(col => {
+    const s = +col.dataset.step;
+    const dot = col.querySelector('.step-dot');
+    col.classList.toggle('done',   s < S.step);
+    col.classList.toggle('active', s === S.step);
+    dot.classList.toggle('done',   s < S.step);
+    dot.classList.toggle('active', s === S.step);
+    dot.textContent = s < S.step ? '✓' : s;
+  });
+}
+
+// ─── STEP 1 ──────────────────────────────────────────────
+function selectRel(el) {
+  document.querySelectorAll('.rel-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  S.rel = el.dataset.rel;
+}
+
+// ─── STEP 2 ──────────────────────────────────────────────
+function selectShoot(el) {
+  document.querySelectorAll('#shootTiles .option-tile').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  S.shootPrice = +el.dataset.price;
+  S.shootLabel = el.dataset.label;
+  calcDelivPrice(); livebar();
+}
+
+function calcDelivPrice() {
+  if (S.delivs.bundle) { S.delivPrice = 650; return; }
+  let sum = 0;
+  Object.keys(S.delivs).forEach(k => {
+    if (S.delivs[k] && k !== 'episode' && k !== 'partnerkit') sum += DELIV_PRICES[k] || 0;
+  });
+  S.delivPrice = sum;
+}
+
+function toggleDeliv(el) {
+  const k = el.dataset.key;
+  S.delivs[k] = !S.delivs[k];
+  el.classList.toggle('selected', !!S.delivs[k]);
+  // deactivate bundle if individual toggled
+  if (S.delivs.bundle) {
+    S.delivs.bundle = false;
+    document.querySelector('[data-key="bundle"]').classList.remove('selected');
+  }
+  calcDelivPrice(); livebar();
+}
+
+function toggleBundle(el) {
+  const turning_on = !S.delivs.bundle;
+  // reset all optional delivs
+  ['shortform','reel','tiktok','shorts','b2b','bundle'].forEach(k => {
+    S.delivs[k] = false;
+    const tile = document.querySelector('[data-key="' + k + '"]');
+    if (tile) tile.classList.remove('selected');
+  });
+  if (turning_on) {
+    S.delivs.bundle = true;
+    el.classList.add('selected');
+    BUNDLE_KEYS.forEach(k => {
+      S.delivs[k] = true;
+      document.querySelector('[data-key="' + k + '"]').classList.add('selected');
+    });
+  }
+  calcDelivPrice(); livebar();
+}
+
+// ─── STEP 3 ──────────────────────────────────────────────
+function selectVO(el) {
+  document.querySelectorAll('#voTiles .option-tile').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  S.voPrice = +el.dataset.price;
+  S.voLabel = el.dataset.label;
+  livebar();
+}
+
+function toggleAddon(el) {
+  const k = el.dataset.key;
+  S.addons[k] = !S.addons[k];
+  el.classList.toggle('selected', !!S.addons[k]);
+  S.addonPrice = Object.keys(S.addons)
+    .filter(k2 => S.addons[k2])
+    .reduce((s, k2) => s + (ADDON_PRICES[k2] || 0), 0);
+  livebar();
+}
+
+// ─── STEP 4 ──────────────────────────────────────────────
+function setContrib(pct) {
+  S.contribPct = pct;
+  $('contribSlider').value = pct;
+  $('contribSlider').style.setProperty('--pct', pct + '%');
+  $('sliderPct').textContent = pct + '%';
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', parseInt(b.textContent) === pct));
+  costSplit();
+}
+
+function updateSlider(v) {
+  v = +v; S.contribPct = v;
+  $('contribSlider').style.setProperty('--pct', v + '%');
+  $('sliderPct').textContent = v + '%';
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', parseInt(b.textContent) === v));
+  costSplit();
+}
+
+// ─── QUOTE BUILD ─────────────────────────────────────────
+function buildAndShowQuote() {
+  S.partner = $('partnerName').value.trim() || 'Partner';
+  S.contact = $('contactName').value.trim();
+  S.notes   = $('quoteNotes').value.trim();
+  renderQuote(false);
+  goToStep(5);
+}
+
+function renderQuote(isShared) {
+  const t = total(), p = t * S.contribPct / 100, g = t - p;
+  const today = new Date().toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' });
+  const qid = 'GBC-' + Date.now().toString(36).slice(-5).toUpperCase();
+
+  $('qTitle').textContent  = 'Media Production Quote — ' + S.partner;
+  $('qPartner').innerHTML  = '🏢 <strong>' + S.partner + '</strong>';
+  $('qContact').textContent = S.contact ? '👤 ' + S.contact : '';
+  $('qDate').textContent   = '📅 ' + today;
+  $('qId').textContent     = qid;
+
+  // Build line items
+  let html = '';
+  html += li(REL_LABELS[S.rel] || 'Partner', 'Production Type', false);
+  html += li('Production Crew — ' + S.shootLabel, fmt(S.shootPrice), false);
+
+  const ALWAYS = ['episode','partnerkit'];
+  if (S.delivs.bundle) {
+    ALWAYS.forEach(k => html += li(DELIV_LABELS[k], 'Included', true));
+    html += li(DELIV_LABELS.bundle, fmt(650), false);
+    BUNDLE_KEYS.forEach(k => html += li('  └ ' + DELIV_LABELS[k], 'Included in bundle', true));
+  } else {
+    Object.keys(S.delivs).forEach(k => {
+      if (!S.delivs[k]) return;
+      const price = DELIV_PRICES[k];
+      html += li(DELIV_LABELS[k], price === 0 ? 'Included' : fmt(price), price === 0);
+    });
+  }
+
+  html += li('Voice Over — ' + S.voLabel, S.voPrice === 0 ? 'Not included' : fmt(S.voPrice), S.voPrice === 0);
+  html += li(ADDON_LABELS.thumbnail, 'Included', true);
+  Object.keys(S.addons).forEach(k => {
+    if (S.addons[k] && k !== 'thumbnail') {
+      html += li(ADDON_LABELS[k], fmt(ADDON_PRICES[k]), false);
+    }
+  });
+
+  html += `<div class="li-row li-total"><div class="li-name">Total Production Cost</div><div class="li-val">${fmt(t)}</div></div>`;
+  $('lineItems').innerHTML = html;
+
+  $('qPartnerAmt').textContent = fmt(p);
+  $('qPartnerSub').textContent = S.contribPct + '% of total production cost';
+  $('qGbcAmt').textContent     = fmt(g);
+  $('qGbcSub').textContent     = (100 - S.contribPct) + '% of total production cost';
+
+  const nb = $('notesBox');
+  if (S.notes) { nb.textContent = S.notes; nb.style.display = 'block'; }
+  else          { nb.style.display = 'none'; }
+
+  if (isShared) {
+    $('shareBanner').style.display = 'block';
+    $('editBtn').style.display = 'none';
+    $('stepsIndicator').style.display = 'none';
+    $('calcHeader').style.display = 'none';
+    $('liveBar').style.display = 'none';
+  }
+}
+
+function li(name, val, incl) {
+  return `<div class="li-row"><div class="li-name">${name}</div><div class="li-val ${incl ? 'li-incl' : ''}">${val}</div></div>`;
+}
+
+// ─── SHAREABLE LINK ──────────────────────────────────────
+function copyLink() {
+  const payload = {
+    p: S.partner, c: S.contact, r: S.rel,
+    sp: S.shootPrice, sl: S.shootLabel,
+    d: S.delivs, dp: S.delivPrice,
+    vo: S.voPrice, vl: S.voLabel,
+    a: S.addons, ap: S.addonPrice,
+    pct: S.contribPct, n: S.notes
+  };
+  const enc = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+  const url  = location.href.split('#')[0] + '#q=' + enc;
+  navigator.clipboard.writeText(url)
+    .then(() => toast('Link copied to clipboard!'))
+    .catch(() => { prompt('Copy this link:', url); });
+}
+
+function toast(msg) {
+  const el = $('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ─── LOAD FROM HASH ──────────────────────────────────────
+function loadFromHash() {
+  const h = location.hash;
+  if (!h.startsWith('#q=')) return;
+  try {
+    const d = JSON.parse(decodeURIComponent(escape(atob(h.slice(3)))));
+    S.partner     = d.p  || '';
+    S.contact     = d.c  || '';
+    S.rel         = d.r  || 'mitm';
+    S.shootPrice  = d.sp || 1400;
+    S.shootLabel  = d.sl || 'Full Day';
+    S.delivs      = d.d  || { episode: true, partnerkit: true };
+    S.delivPrice  = d.dp || 0;
+    S.voPrice     = d.vo || 0;
+    S.voLabel     = d.vl || 'None';
+    S.addons      = d.a  || {};
+    S.addonPrice  = d.ap || 0;
+    S.contribPct  = d.pct != null ? d.pct : 50;
+    S.notes       = d.n  || '';
+
+    $('step1').classList.remove('active');
+    $('step5').classList.add('active');
+    S.step = 5;
+    updateDots();
+    renderQuote(true);
+  } catch(e) {
+    console.warn('Could not parse quote hash', e);
+  }
+}
+
+// ─── INIT ────────────────────────────────────────────────
+livebar();
+loadFromHash();
+</script>
+</body>
+</html>

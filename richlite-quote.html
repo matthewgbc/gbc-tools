@@ -1,0 +1,2115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GBC Richlite Quote Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Archivo', sans-serif;
+      background: #111;
+      color: #f0ebe3;
+      min-height: 100vh;
+      padding: 36px 20px 72px;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    .calc-wrap { max-width: 940px; margin: 0 auto; }
+
+    /* ── HEADER ── */
+    .calc-header { text-align: center; margin-bottom: 44px; }
+    .eyebrow-tag {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.22em; text-transform: uppercase; color: #C8952A; margin-bottom: 12px;
+    }
+    .calc-header h1 {
+      font-size: clamp(30px, 5.5vw, 46px); font-weight: 800;
+      line-height: 1.08; color: #fff; margin-bottom: 14px;
+    }
+    .calc-header p { font-size: 19px; color: #999; max-width: 560px; margin: 0 auto; line-height: 1.65; }
+
+    /* ── ACCOUNT TYPE ── */
+    .account-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
+    @media(max-width:520px){ .account-cards { grid-template-columns:1fr; } }
+    .account-card {
+      border: 2px solid #2a2a2a; border-radius: 12px; padding: 22px 20px;
+      cursor: pointer; transition: all 0.2s; background: #1a1a1a; text-align: center;
+    }
+    .account-card:hover { border-color: #555; }
+    .account-card.selected { border-color: #C8952A; background: rgba(200,149,42,0.08); }
+    .account-card .ac-icon { font-size: 30px; margin-bottom: 10px; }
+    .account-card .ac-title { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .account-card .ac-desc { font-size: 15px; color: #777; line-height: 1.5; }
+    .account-card.selected .ac-title { color: #C8952A; }
+
+    /* ── STEP INDICATOR ── */
+    .steps-labeled { display: flex; align-items: flex-start; justify-content: center; margin-bottom: 40px; }
+    .step-col { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .step-dot {
+      width: 34px; height: 34px; border-radius: 50%; border: 2px solid #2a2a2a;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: #444; transition: all 0.3s; background: #1a1a1a;
+    }
+    .step-dot.active { border-color: #C8952A; color: #C8952A; background: rgba(200,149,42,0.1); }
+    .step-dot.done { border-color: #C8952A; background: #C8952A; color: #111; }
+    .step-col span { font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: #444; }
+    .step-col.active span { color: #C8952A; }
+    .step-col.done span { color: #777; }
+    .step-connector { width: 56px; height: 1px; background: #2a2a2a; margin-top: 16px; flex-shrink: 0; }
+
+    /* ── MODE SWITCH ── */
+    .mode-switch {
+      display: flex; background: #1a1a1a; border: 1px solid #2a2a2a;
+      border-radius: 10px; padding: 5px; margin-bottom: 28px; gap: 4px;
+    }
+    .mode-switch-btn {
+      flex: 1; padding: 13px 16px; border: none; border-radius: 7px;
+      font-family: 'Archivo', sans-serif; font-size: 15px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s; background: transparent; color: #666; line-height: 1.3;
+    }
+    .mode-switch-btn small { display: block; font-weight: 400; font-size: 13px; color: #555; margin-top: 3px; }
+    .mode-switch-btn.active { background: #C8952A; color: #111; }
+    .mode-switch-btn.active small { color: rgba(0,0,0,0.55); }
+
+    /* ── CARD ── */
+    .card {
+      background: #1c1c1c; border: 1px solid #2a2a2a;
+      border-radius: 12px; padding: 28px 30px; margin-bottom: 14px;
+    }
+    .card-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; color: #C8952A; margin-bottom: 22px;
+    }
+
+    /* ── FIELDS ── */
+    .field { margin-bottom: 26px; }
+    .field:last-child { margin-bottom: 0; }
+    label { display: block; font-size: 15px; font-weight: 600; color: #ccc; margin-bottom: 10px; }
+    label .sub { font-weight: 400; font-style: italic; color: #666; font-size: 15px; margin-left: 5px; }
+
+    select {
+      width: 100%; background: #141414; border: 1px solid #333; border-radius: 8px;
+      color: #f0ebe3; font-family: 'Archivo', sans-serif; font-size: 16px;
+      padding: 14px 18px; appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 16px center;
+      cursor: pointer; transition: border-color 0.2s;
+    }
+    select:focus { outline: none; border-color: #C8952A; }
+    select option { background: #1c1c1c; }
+    select:disabled { opacity: 0.35; cursor: default; }
+
+    /* ── CUSTOM QTY ── */
+    .qty-custom-row {
+      display: flex; align-items: center; gap: 12px; margin-top: 14px;
+      padding-top: 14px; border-top: 1px solid #222;
+    }
+    .qty-custom-row span { font-size: 14px; color: #666; white-space: nowrap; }
+    .qty-custom-input {
+      width: 90px; background: #141414; border: 1px solid #333; border-radius: 8px;
+      color: #f0ebe3; font-family: 'Archivo', sans-serif; font-size: 17px; font-weight: 700;
+      padding: 10px 14px; transition: border-color 0.2s; text-align: center;
+    }
+    .qty-custom-input:focus { outline: none; border-color: #C8952A; }
+    .qty-custom-input::placeholder { color: #444; font-weight: 400; font-size: 14px; }
+
+    /* ── KNIFE DEAL ── */
+    .knife-original-price {
+      font-size: 16px; color: #555; text-decoration: line-through; font-weight: 500;
+      margin-right: 6px;
+    }
+    .knife-deal-badge {
+      display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #111; background: #5a9a5a;
+      border-radius: 4px; padding: 3px 8px; margin-right: 6px; vertical-align: middle;
+    }
+    .knife-sale-price { font-size: 24px; font-weight: 800; color: #C8952A; }
+    .knife-sale-sub { font-size: 13px; color: #666; font-weight: 400; margin-left: 4px; }
+
+    /* ── SHAPE TABS ── */
+    .shape-tabs { display: flex; gap: 10px; margin-bottom: 24px; }
+    .shape-tab {
+      flex: 1; padding: 14px 10px; background: #141414; border: 1px solid #333;
+      border-radius: 8px; color: #666; font-family: 'Archivo', sans-serif;
+      font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .shape-tab.active { border-color: #C8952A; color: #C8952A; background: rgba(200,149,42,0.08); }
+
+    /* ── SIZE / SHAPE LAYOUT (2-col on desktop) ── */
+    .size-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+    @media(max-width:700px){ .size-layout { grid-template-columns: 1fr; } }
+
+    /* ── SIZE PRESET TILES ── */
+    .size-tiles { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .size-tile {
+      border: 2px solid #2a2a2a; border-radius: 10px; padding: 12px 16px;
+      cursor: pointer; transition: all 0.2s; background: #141414; text-align: center;
+      position: relative; flex: 0 0 auto; min-width: 108px;
+    }
+    .size-tile:hover { border-color: #555; background: #181818; }
+    .size-tile.selected { border-color: #C8952A; background: rgba(200,149,42,0.08); }
+    .size-tile.flagship {
+      border-color: #C8952A;
+      background: linear-gradient(135deg, rgba(200,149,42,0.12), rgba(200,149,42,0.04));
+      min-width: 130px;
+    }
+    .size-tile.flagship .tile-dim { color: #C8952A; }
+    .flagship-badge {
+      display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: #111; background: #C8952A;
+      border-radius: 4px; padding: 3px 8px; margin-bottom: 6px;
+    }
+    .tile-dim {
+      font-size: 17px; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 4px;
+    }
+    .size-tile.selected .tile-dim { color: #C8952A; }
+    .tile-desc { font-size: 12px; color: #666; line-height: 1.4; }
+    .tile-est { font-size: 13px; color: #888; margin-top: 5px; font-weight: 600; }
+    .size-tile.selected .tile-est { color: #C8952A; }
+
+    /* ── BOARD PREVIEW ── */
+    .board-preview-wrap {
+      background: #0d0d0d; border: 1px solid #222;
+      border-radius: 12px; padding: 16px;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+    }
+    .board-preview-wrap svg { display: block; width: 100%; height: auto; }
+    .board-dim-text { font-size: 15px; color: #999; text-align: center; }
+    .board-dim-text strong { color: #fff; font-size: 17px; }
+
+    /* ── COLOR SWATCHES ── */
+    .color-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px,1fr)); gap: 10px; }
+    .color-swatch {
+      border: 2px solid #2a2a2a; border-radius: 8px; padding: 12px 8px 10px;
+      cursor: pointer; transition: all 0.2s; text-align: center; background: #141414;
+    }
+    .color-swatch:hover { border-color: #555; }
+    .color-swatch.selected { border-color: #C8952A; background: rgba(200,149,42,0.08); }
+    .swatch-dot { width: 38px; height: 38px; border-radius: 50%; margin: 0 auto 9px; border: 2px solid #333; }
+    .swatch-name { font-size: 14px; font-weight: 600; color: #ccc; line-height: 1.3; }
+
+    /* ── ADD-ONS ── */
+    .addons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media(max-width:520px){ .addons-grid { grid-template-columns: 1fr; } }
+    .addon-tile {
+      border: 2px solid #2a2a2a; border-radius: 10px; padding: 14px 16px;
+      cursor: pointer; transition: all 0.2s; background: #141414; position: relative;
+    }
+    .addon-tile:hover { border-color: #444; }
+    .addon-tile.selected { border-color: #C8952A; background: rgba(200,149,42,0.06); }
+    .addon-tile input[type=checkbox] { position: absolute; opacity: 0; width: 0; height: 0; }
+    .addon-check {
+      width: 20px; height: 20px; border: 2px solid #444; border-radius: 5px;
+      display: inline-flex; align-items: center; justify-content: center;
+      margin-right: 10px; flex-shrink: 0; transition: all 0.2s; vertical-align: middle;
+      font-size: 12px; color: transparent;
+    }
+    .addon-tile.selected .addon-check { background: #C8952A; border-color: #C8952A; color: #111; }
+    .addon-title { font-size: 16px; font-weight: 700; color: #fff; display: flex; align-items: center; margin-bottom: 4px; }
+    .addon-price { font-size: 15px; color: #C8952A; font-weight: 600; }
+    .addon-desc { font-size: 14px; color: #777; line-height: 1.5; margin-top: 4px; }
+    .addon-tile.discount-tile { border-color: #2a3a2a; }
+    .addon-tile.discount-tile .addon-price { color: #5a9a5a; }
+    .addon-tile.discount-tile.selected { border-color: #5a9a5a; background: rgba(90,154,90,0.06); }
+    .addon-tile.discount-tile.selected .addon-check { background: #5a9a5a; border-color: #5a9a5a; color: #fff; }
+
+    /* ── KNIFE UPSELL ── */
+    .knife-card-inner {
+      display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: start;
+      margin-bottom: 20px;
+    }
+    @media(max-width:520px){ .knife-card-inner { grid-template-columns: 1fr; } }
+    .knife-icon-wrap {
+      width: 80px; height: 80px; background: #141414; border: 1px solid #2a2a2a;
+      border-radius: 12px; display: flex; align-items: center; justify-content: center;
+      font-size: 36px; flex-shrink: 0;
+    }
+    .knife-name { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+    .knife-spec { font-size: 14px; color: #888; line-height: 1.5; margin-bottom: 8px; }
+    .knife-price-tag { font-size: 22px; font-weight: 800; color: #C8952A; }
+    .knife-price-tag .knife-sub { font-size: 14px; color: #666; font-weight: 400; margin-left: 6px; }
+    .knife-prompt { font-size: 16px; color: #ccc; margin-bottom: 14px; font-weight: 600; }
+    .knife-qty-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .knife-qty-row > span { font-size: 15px; color: #888; white-space: nowrap; }
+    .knife-qty-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+    .knife-qty-pill {
+      width: 48px; height: 48px; border: 2px solid #2a2a2a; border-radius: 8px;
+      font-size: 18px; font-weight: 800; color: #666; cursor: pointer; transition: all 0.2s;
+      background: #141414; display: flex; align-items: center; justify-content: center;
+    }
+    .knife-qty-pill:hover { border-color: #555; color: #aaa; }
+    .knife-qty-pill.active { border-color: #C8952A; color: #C8952A; background: rgba(200,149,42,0.08); }
+    .knife-total-line {
+      margin-top: 14px; padding: 12px 16px; background: rgba(200,149,42,0.06);
+      border: 1px solid rgba(200,149,42,0.2); border-radius: 8px;
+      font-size: 16px; color: #C8952A; font-weight: 700; display: none;
+    }
+
+    /* ── QUANTITY ── */
+    .qty-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .qty-pill {
+      padding: 10px 18px; border: 2px solid #2a2a2a; border-radius: 8px;
+      font-size: 17px; font-weight: 700; color: #666; cursor: pointer; transition: all 0.2s;
+      background: #141414;
+    }
+    .qty-pill:hover { border-color: #555; color: #aaa; }
+    .qty-pill.active { border-color: #C8952A; color: #C8952A; background: rgba(200,149,42,0.08); }
+    .qty-pill .pill-disc { display: block; font-size: 12px; font-weight: 600; color: #5a9a5a; margin-top: 2px; }
+
+    /* ── BADGE ── */
+    .badge {
+      display: inline-flex; align-items: center; font-size: 11px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid;
+      border-radius: 4px; padding: 3px 8px; margin-top: 10px; margin-right: 6px;
+    }
+    .badge.nsf { color: #4CAF50; border-color: #4CAF50; }
+    .badge.fsc { color: #7CBB6E; border-color: #7CBB6E; }
+
+    /* ── WHOLESALE NOTICE ── */
+    .wholesale-notice {
+      background: #1a1f1a; border: 1px solid #2a3a2a; border-radius: 10px;
+      padding: 18px 20px; margin-bottom: 14px; font-size: 15px; color: #6a9a6a; line-height: 1.6;
+    }
+    .wholesale-notice strong { color: #8aca8a; }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: block; width: 100%; padding: 18px;
+      font-family: 'Archivo', sans-serif; font-size: 17px; font-weight: 700;
+      letter-spacing: 0.04em; border: none; border-radius: 10px;
+      cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .btn-primary { background: #C8952A; color: #111; }
+    .btn-primary:hover { background: #daa830; }
+    .btn-secondary { background: transparent; color: #C8952A; border: 2px solid #C8952A; }
+    .btn-secondary:hover { background: rgba(200,149,42,0.08); }
+    .btn-ghost { background: transparent; color: #666; font-size: 14px; padding: 12px; }
+    .btn-ghost:hover { color: #aaa; }
+
+    /* ── PRICE REVEAL ── */
+    #step-price { display: none; }
+    .price-reveal { text-align: center; padding: 10px 0 28px; }
+    .price-reveal .rev-eyebrow {
+      font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #888; margin-bottom: 14px;
+    }
+    .price-amount {
+      font-size: clamp(56px, 13vw, 88px); font-weight: 800; color: #fff;
+      line-height: 1; margin-bottom: 4px; font-variant-numeric: tabular-nums;
+    }
+    .price-amount .dollar { font-size: 0.44em; vertical-align: super; color: #C8952A; }
+    .price-note { font-size: 14px; color: #555; font-style: italic; margin-bottom: 28px; }
+
+    .breakdown-wrap { text-align: left; margin-bottom: 24px; }
+    .breakdown-title {
+      font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: #555; margin-bottom: 16px; font-weight: 700;
+    }
+    .bd-row { margin-bottom: 11px; }
+    .bd-lbl-row { display: flex; justify-content: space-between; margin-bottom: 5px; align-items: flex-start; gap: 12px; }
+    .bd-lbl { font-size: 15px; color: #999; line-height: 1.4; }
+    .bd-amt { font-size: 15px; font-weight: 700; color: #fff; white-space: nowrap; }
+    .bd-track { height: 9px; background: #1e1e1e; border-radius: 5px; overflow: hidden; }
+    .bd-fill { height: 100%; border-radius: 5px; transition: width 0.9s cubic-bezier(0.25,1,0.5,1); width: 0; }
+    .fill-mat { background: #C8952A; }
+    .fill-fab { background: #7a6020; }
+    .fill-base { background: #383010; }
+    .fill-addon { background: #7a4a9a; }
+    .fill-knife { background: #2a6a8a; }
+
+    .price-tax-table {
+      background: #141414; border: 1px solid #2a2a2a; border-radius: 10px;
+      padding: 18px 20px; text-align: left; margin-bottom: 24px;
+    }
+    .tax-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 7px 0; border-bottom: 1px solid #1e1e1e; font-size: 15px; color: #888;
+    }
+    .tax-row:last-child { border-bottom: none; }
+    .tax-row.total { font-size: 20px; font-weight: 800; color: #f0ebe3; padding-top: 14px; margin-top: 4px; }
+    .tax-row .val { color: #f0ebe3; }
+    .tax-row.total .val { color: #C8952A; font-size: 20px; }
+    .tax-exempt-badge {
+      display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #5a9a5a; border: 1px solid #3a6a3a;
+      border-radius: 4px; padding: 2px 8px; margin-left: 8px;
+    }
+
+    .spec-summary {
+      background: #141414; border: 1px solid #2a2a2a; border-radius: 10px;
+      padding: 18px 20px; text-align: left; margin-bottom: 24px;
+    }
+    .spec-row {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      font-size: 14px; padding: 6px 0; border-bottom: 1px solid #1e1e1e; color: #888; gap: 12px;
+    }
+    .spec-row:last-child { border-bottom: none; }
+    .spec-row strong { color: #f0ebe3; text-align: right; }
+
+    /* ── BUDGET ── */
+    .budget-result {
+      background: #141414; border: 1px solid #2e2a1a; border-radius: 10px;
+      padding: 20px 22px; margin-top: 20px;
+    }
+    .budget-result .br-eyebrow {
+      font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: #C8952A; margin-bottom: 10px; font-weight: 700;
+    }
+    .budget-suggestion { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .budget-suggestion-sub { font-size: 14px; color: #888; margin-bottom: 14px; }
+    .budget-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .budget-chip {
+      padding: 9px 16px; background: #1c1c1c; border: 1px solid #333;
+      border-radius: 20px; font-size: 13px; color: #ccc; cursor: pointer; transition: all 0.2s;
+    }
+    .budget-chip:hover { border-color: #C8952A; color: #C8952A; }
+    .budget-chip.picked { border-color: #C8952A; color: #C8952A; background: rgba(200,149,42,0.08); }
+
+    /* ── SLIDER (budget only) ── */
+    .slider-row { display: flex; align-items: center; gap: 18px; margin-bottom: 6px; }
+    .slider-row input[type=range] {
+      flex: 1; -webkit-appearance: none; appearance: none;
+      height: 5px; background: #2e2e2e; border-radius: 3px; outline: none; cursor: pointer;
+    }
+    .slider-row input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%;
+      background: #C8952A; cursor: pointer; border: 3px solid #111; transition: transform 0.15s;
+    }
+    .slider-row input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+    .slider-row input[type=range]::-moz-range-thumb {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: #C8952A; cursor: pointer; border: 3px solid #111;
+    }
+    .slider-value { font-size: 26px; font-weight: 800; color: #fff; min-width: 60px; text-align: right; }
+    .slider-range { display: flex; justify-content: space-between; font-size: 12px; color: #444; margin-top: 2px; }
+
+    /* ── LEAD FORM ── */
+    #step-lead { display: none; }
+    .input-field {
+      width: 100%; background: #141414; border: 1px solid #333; border-radius: 8px;
+      color: #f0ebe3; font-family: 'Archivo', sans-serif; font-size: 16px;
+      padding: 14px 18px; transition: border-color 0.2s;
+    }
+    .input-field:focus { outline: none; border-color: #C8952A; }
+    .input-field::placeholder { color: #444; }
+    textarea.input-field { resize: vertical; min-height: 88px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media(max-width:500px){ .form-row { grid-template-columns: 1fr; } }
+
+    /* ── SUCCESS ── */
+    #step-success { display: none; text-align: center; padding: 20px 0; }
+    .success-icon {
+      width: 68px; height: 68px; border-radius: 50%; border: 2px solid #C8952A;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 22px; font-size: 28px;
+    }
+    #step-success h2 { font-size: 28px; margin-bottom: 14px; }
+    #step-success p { font-size: 16px; color: #888; line-height: 1.7; }
+
+    /* ── SECTION LOCKING ── */
+    .section-locked {
+      opacity: 0.38; pointer-events: none; user-select: none;
+      transition: opacity 0.35s ease;
+    }
+
+    /* ── ADDON UNAVAILABLE ── */
+    .addon-unavailable {
+      opacity: 0.32; pointer-events: none; cursor: not-allowed;
+    }
+    .addon-unavailable .addon-price::after {
+      content: ' — N/A for this size'; font-size: 12px; color: #555; font-weight: 400;
+    }
+
+    /* ── QTY SLIDER ── */
+    .qty-slider-wrap { margin-top: 18px; padding-top: 18px; border-top: 1px solid #222; }
+    #qty-slider {
+      -webkit-appearance: none; appearance: none; width: 100%;
+      height: 5px; background: #2e2e2e; border-radius: 3px; outline: none; cursor: pointer;
+    }
+    #qty-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%;
+      background: #C8952A; cursor: pointer; border: 3px solid #111;
+      transition: transform 0.15s;
+    }
+    #qty-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+    #qty-slider::-moz-range-thumb {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: #C8952A; cursor: pointer; border: 3px solid #111; border-style: solid;
+    }
+
+    /* ── COLOR NOTE ── */
+    .color-note-box {
+      margin-top: 10px; font-size: 13px; color: #999; font-style: italic;
+      padding: 10px 14px; background: #0d0d0d; border-radius: 6px;
+      border-left: 3px solid #C8952A; display: none; line-height: 1.6;
+    }
+
+    /* ── RICHLITE INFO ── */
+    .richlite-expand {
+      margin-top: 14px; border: 1px solid #2a2a2a; border-radius: 8px; overflow: hidden;
+    }
+    .richlite-expand-header {
+      padding: 11px 16px; cursor: pointer; display: flex;
+      justify-content: space-between; align-items: center; background: #141414;
+    }
+    .richlite-expand-header:hover { background: #181818; }
+    .richlite-expand-title {
+      font-size: 12px; font-weight: 700; color: #C8952A;
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .richlite-arrow { color: #666; font-size: 12px; transition: transform 0.25s; }
+    .richlite-expand.open .richlite-arrow { transform: rotate(180deg); }
+    .richlite-expand-body {
+      display: none; padding: 14px 16px; background: #0d0d0d;
+      font-size: 13px; color: #888; line-height: 1.85;
+    }
+    .richlite-expand.open .richlite-expand-body { display: block; }
+    .richlite-expand-body li {
+      list-style: none; padding-left: 16px; position: relative; margin-bottom: 7px;
+    }
+    .richlite-expand-body li::before { content: '›'; position: absolute; left: 0; color: #C8952A; }
+
+    /* ── UTIL ── */
+    .divider { height: 1px; background: #222; margin: 24px 0; }
+    .footer-note { text-align: center; font-size: 13px; color: #444; margin-top: 18px; line-height: 1.6; }
+    #collection-info { margin-top: 12px; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.35s ease forwards; }
+    @media(max-width:520px){ .card { padding: 22px 18px; } }
+
+    .err-msg {
+      display: none; margin-top: 10px; padding: 11px 14px;
+      background: rgba(220,60,60,0.12); border: 1px solid rgba(220,60,60,0.4);
+      border-radius: 8px; font-size: 14px; color: #f08080; line-height: 1.5;
+    }
+    .err-msg.visible { display: block; }
+
+    .btn-loading { opacity: 0.7; pointer-events: none; }
+    .submit-status {
+      text-align: center; font-size: 14px; margin-top: 12px;
+      padding: 10px; border-radius: 8px; display: none;
+    }
+    .submit-status.error {
+      display: block; color: #f08080;
+      background: rgba(220,60,60,0.1); border: 1px solid rgba(220,60,60,0.3);
+    }
+
+    /* ── SHIPPING NOTE ── */
+    #shipping-note { padding: 10px 14px; background: #161616; border-radius: 8px; border-left: 3px solid #C8952A; font-size: 14px; color: #777; }
+
+  </style>
+</head>
+<body>
+<div class="calc-wrap">
+
+  <!-- HEADER -->
+  <div class="calc-header">
+    <div class="eyebrow-tag">Gauntt Board Company · Kansas City</div>
+    <h1>Richlite® Quote Calculator</h1>
+    <p>Pick your size, see your price with tax, and get an official GBC quote within 24 hours.</p>
+  </div>
+
+  <!-- STEP INDICATORS -->
+  <div class="steps-labeled" id="step-indicators">
+    <div class="step-col active" id="ind-1"><div class="step-dot active">1</div><span>Configure</span></div>
+    <div class="step-connector"></div>
+    <div class="step-col" id="ind-2"><div class="step-dot">2</div><span>Your Price</span></div>
+    <div class="step-connector"></div>
+    <div class="step-col" id="ind-3"><div class="step-dot">3</div><span>Get Quote</span></div>
+  </div>
+
+
+  <!-- ═══ STEP 1: CONFIGURE ══════════════════════════════════ -->
+  <div id="step-config">
+
+    <!-- Account Type -->
+    <div class="card">
+      <div class="card-title">Account Type</div>
+      <div class="account-cards">
+        <div class="account-card selected" id="ac-retail" onclick="setAccount('retail')">
+          <div class="ac-icon">🛒</div>
+          <div class="ac-title">Retail Customer</div>
+          <div class="ac-desc">Personal or gift order. Sales tax applied based on your state.</div>
+        </div>
+        <div class="account-card" id="ac-wholesale" onclick="setAccount('wholesale')">
+          <div class="ac-icon">🏢</div>
+          <div class="ac-title">Trade / Wholesale</div>
+          <div class="ac-desc">Restaurant, retailer, or reseller. Tax-exempt with valid resale certificate.</div>
+        </div>
+      </div>
+      <div id="wholesale-notice" class="wholesale-notice" style="display:none; margin-top:4px;">
+        <strong>Trade pricing is confidential.</strong> Your quote will include your trade rate. Please include your business name and resale certificate info in the notes field.
+      </div>
+    </div>
+
+    <!-- Size mode toggle -->
+    <div class="mode-switch">
+      <button class="mode-switch-btn active" onclick="setSizeMode('dimensions', this)">
+        Choose Your Size
+        <small>Pick from standard board dimensions</small>
+      </button>
+      <button class="mode-switch-btn" onclick="setSizeMode('budget', this)">
+        Start with a Budget
+        <small>See what fits your price range</small>
+      </button>
+    </div>
+
+
+    <!-- ─── DIMENSIONS PANEL ─────────────────────────────── -->
+    <div id="panel-dimensions">
+
+      <!-- Shape & Size -->
+      <div class="card">
+        <div class="card-title">Shape &amp; Size</div>
+
+        <div class="shape-tabs">
+          <button class="shape-tab active" id="shape-tab-rect" onclick="setShape('rectangle', this)">▭ &nbsp;Rectangle</button>
+          <button class="shape-tab" id="shape-tab-round" onclick="setShape('round', this)">◯ &nbsp;Round</button>
+        </div>
+
+        <div class="size-layout">
+
+          <!-- LEFT: tile grid -->
+          <div>
+            <!-- Rectangle tiles -->
+            <div id="tiles-rectangle" class="size-tiles">
+              <!-- populated by JS -->
+            </div>
+            <!-- Round tiles -->
+            <div id="tiles-round" class="size-tiles" style="display:none;">
+              <!-- populated by JS -->
+            </div>
+            <div class="err-msg" id="err-size" style="margin-top:12px;">⚠ Please select a size above to continue.</div>
+          </div>
+
+          <!-- RIGHT: board preview -->
+          <div class="board-preview-wrap">
+            <svg id="board-svg" viewBox="0 0 400 260" style="max-height:260px;">
+              <defs>
+                <pattern id="dotGrid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                  <circle cx="10" cy="10" r="0.9" fill="#1d1d1d"/>
+                </pattern>
+                <linearGradient id="woodGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#3e2f18"/>
+                  <stop offset="40%" stop-color="#2e2210"/>
+                  <stop offset="100%" stop-color="#1e1608"/>
+                </linearGradient>
+                <linearGradient id="woodGradCircle" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#3e2f18"/>
+                  <stop offset="100%" stop-color="#1e1608"/>
+                </linearGradient>
+                <!-- grain lines filter -->
+                <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.04 0.7" numOctaves="2" result="noise"/>
+                  <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise"/>
+                  <feBlend in="SourceGraphic" in2="grayNoise" mode="overlay" result="blend"/>
+                  <feComponentTransfer in="blend">
+                    <feFuncA type="linear" slope="0.18"/>
+                  </feComponentTransfer>
+                </filter>
+              </defs>
+              <!-- Background -->
+              <rect width="400" height="260" fill="#0d0d0d" rx="10"/>
+              <rect width="400" height="260" fill="url(#dotGrid)" rx="10"/>
+              <!-- Rectangle board -->
+              <rect id="svg-rect" x="60" y="40" width="280" height="180" rx="8"
+                fill="url(#woodGrad)" stroke="#C8952A" stroke-width="1.5"/>
+              <!-- Grain overlay on rect -->
+              <rect id="svg-rect-grain" x="60" y="40" width="280" height="180" rx="8"
+                fill="rgba(200,149,42,0.04)" stroke="none"/>
+              <!-- Round board -->
+              <circle id="svg-circle" cx="200" cy="130" r="90"
+                fill="url(#woodGradCircle)" stroke="#C8952A" stroke-width="1.5" style="display:none"/>
+              <!-- Dimension labels -->
+              <text id="svg-w-label" x="200" y="252" text-anchor="middle"
+                font-family="Archivo,sans-serif" font-size="12" fill="#666"></text>
+              <text id="svg-l-label" x="10" y="130" text-anchor="middle"
+                font-family="Archivo,sans-serif" font-size="12" fill="#666"
+                transform="rotate(-90,10,130)"></text>
+              <!-- GBC watermark -->
+              <text id="svg-watermark" x="330" y="205" text-anchor="end"
+                font-family="Archivo,sans-serif" font-size="11" fill="rgba(200,149,42,0.25)"
+                font-weight="700" letter-spacing="0.15em">GBC</text>
+            </svg>
+            <div class="board-dim-text" id="board-dim-text">
+              <strong>—</strong>
+            </div>
+          </div>
+
+        </div><!-- /size-layout -->
+      </div><!-- /shape & size card -->
+
+      <!-- Material -->
+      <div class="card section-locked" id="card-material">
+        <div class="card-title">Material</div>
+        <div class="field">
+          <label>Collection</label>
+          <select id="sel-collection" onchange="updateCollection()">
+            <option value="">— Select a collection —</option>
+            <option value="heritage">Richlite® Heritage Collection · NSF 51 + FSC Certified</option>
+            <option value="northwest-a">Richlite® Northwest Collection · FSC Certified</option>
+            <option value="northwest-b">Richlite® Northwest Premium Collection · FSC Certified</option>
+          </select>
+          <div id="collection-info"></div>
+          <div class="err-msg" id="err-collection">⚠ Please select a collection to continue.</div>
+        </div>
+        <div class="field">
+          <label>Color</label>
+          <div id="color-grid" class="color-grid">
+            <div style="font-size:14px;color:#555;padding:8px 0;">Select a collection above to see colors</div>
+          </div>
+          <input type="hidden" id="sel-color" value="" />
+          <div id="color-note" class="color-note-box"></div>
+          <div class="err-msg" id="err-color">⚠ Please pick a color swatch above to continue.</div>
+        </div>
+        <div class="field">
+          <label>Thickness</label>
+          <select id="sel-thickness" onchange="updateAddonAvailability()">
+            <option value="0.5">1/2" — Serving trays &amp; lighter boards</option>
+            <option value="0.75" selected>3/4" — Standard cutting board</option>
+            <option value="1.0">1" — Premium thick board</option>
+            <option value="1.25">1-1/4" — Commercial / heavy duty</option>
+            <option value="1.5">1-1/2" — Heavy commercial</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Quantity -->
+      <div class="card section-locked" id="card-qty">
+        <div class="card-title">Quantity</div>
+        <div class="qty-pills" id="qty-pills">
+          <div class="qty-pill active" data-qty="1" onclick="setQty(1, this)">1</div>
+          <div class="qty-pill" data-qty="2" onclick="setQty(2, this)">2<span class="pill-disc"></span></div>
+          <div class="qty-pill" data-qty="3" onclick="setQty(3, this)">3<span class="pill-disc"></span></div>
+          <div class="qty-pill" data-qty="5" onclick="setQty(5, this)">5<span class="pill-disc">5% off</span></div>
+          <div class="qty-pill" data-qty="6" onclick="setQty(6, this)">6<span class="pill-disc">10% off</span></div>
+          <div class="qty-pill" data-qty="10" onclick="setQty(10, this)">10<span class="pill-disc">10% off</span></div>
+          <div class="qty-pill" data-qty="12" onclick="setQty(12, this)">12<span class="pill-disc">15% off</span></div>
+          <div class="qty-pill" data-qty="20" onclick="setQty(20, this)">20<span class="pill-disc">15% off</span></div>
+        </div>
+        <div class="qty-custom-row">
+          <span>Need a different qty?</span>
+          <input class="qty-custom-input" type="number" id="qty-custom" min="1" max="999"
+            placeholder="Enter qty" oninput="setCustomQty(this.value)" />
+        </div>
+        <!-- Qty Slider -->
+        <div class="qty-slider-wrap">
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:6px;">
+            <input type="range" id="qty-slider" min="1" max="25" value="1" oninput="syncQtySlider(this.value)" />
+            <span id="qty-slider-val" style="font-size:22px;font-weight:800;color:#fff;min-width:32px;text-align:right;">1</span>
+          </div>
+          <div id="qty-disc-label" style="font-size:13px;color:#5a9a5a;font-weight:600;min-height:18px;"></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:#444;margin-top:3px;"><span>1</span><span>25+</span></div>
+        </div>
+      </div>
+
+      <!-- Add-Ons -->
+      <div class="card section-locked" id="card-addons">
+        <div class="card-title">Add-Ons</div>
+        <div class="addons-grid">
+          <div class="addon-tile" id="tile-engrave" onclick="toggleAddon('engrave', this)">
+            <input type="checkbox" id="add-engrave" />
+            <div class="addon-title"><span class="addon-check" id="chk-engrave">✓</span>Custom Engraving</div>
+            <div class="addon-price">+$45 flat</div>
+            <div class="addon-desc">Logo, name, or custom text laser-cut into the board.</div>
+          </div>
+          <div class="addon-tile" id="tile-juice" onclick="toggleAddon('juice', this)">
+            <input type="checkbox" id="add-juice" />
+            <div class="addon-title"><span class="addon-check" id="chk-juice">✓</span>Juice Groove</div>
+            <div class="addon-price">+$28 flat</div>
+            <div class="addon-desc">Routed channel around the perimeter — ideal for BBQ &amp; carving.</div>
+          </div>
+          <div class="addon-tile" id="tile-feet" onclick="toggleAddon('feet', this)">
+            <input type="checkbox" id="add-feet" />
+            <div class="addon-title"><span class="addon-check" id="chk-feet">✓</span>Rubber Grip Feet</div>
+            <div class="addon-price">+$10</div>
+            <div class="addon-desc">Set of 4 non-slip adhesive feet. Keeps the board planted.</div>
+          </div>
+          <div class="addon-tile" id="tile-care" onclick="toggleAddon('care', this)">
+            <input type="checkbox" id="add-care" />
+            <div class="addon-title"><span class="addon-check" id="chk-care">✓</span>Board Care Kit</div>
+            <div class="addon-price">+$24</div>
+            <div class="addon-desc">GBC conditioning oil + cleaning scraper. Extends board life.</div>
+          </div>
+          <div class="addon-tile" id="tile-giftbox" onclick="toggleAddon('giftbox', this)">
+            <input type="checkbox" id="add-giftbox" />
+            <div class="addon-title"><span class="addon-check" id="chk-giftbox">✓</span>Presentation Box</div>
+            <div class="addon-price">+$16</div>
+            <div class="addon-desc">Custom gift-ready box. Perfect for weddings, corporate gifts.</div>
+          </div>
+          <div class="addon-tile" id="tile-rush" onclick="toggleAddon('rush', this)">
+            <input type="checkbox" id="add-rush" />
+            <div class="addon-title"><span class="addon-check" id="chk-rush">✓</span>Rush Production</div>
+            <div class="addon-price">+$45 flat</div>
+            <div class="addon-desc">1-week turnaround instead of standard 2–3 weeks.</div>
+          </div>
+          <div class="addon-tile" id="tile-handle" onclick="toggleAddon('handle', this)">
+            <input type="checkbox" id="add-handle" />
+            <div class="addon-title"><span class="addon-check" id="chk-handle">✓</span>Handle Cutout</div>
+            <div class="addon-price" id="handle-price">+$35</div>
+            <div class="addon-desc">CNC-routed handle hole. Rectangle boards ≥ 10"×14" at 3/4"+ only.</div>
+          </div>
+          <div class="addon-tile" id="tile-hanghole" onclick="toggleAddon('hanghole', this)">
+            <input type="checkbox" id="add-hanghole" />
+            <div class="addon-title"><span class="addon-check" id="chk-hanghole">✓</span>Hanging Hole</div>
+            <div class="addon-price">+$8</div>
+            <div class="addon-desc">Drilled hole for wall storage or display. All sizes.</div>
+          </div>
+          <div class="addon-tile" id="tile-waxfinish" onclick="toggleAddon('waxfinish', this)">
+            <input type="checkbox" id="add-waxfinish" />
+            <div class="addon-title"><span class="addon-check" id="chk-waxfinish">✓</span>Wax Finish Upgrade</div>
+            <div class="addon-price">+$18</div>
+            <div class="addon-desc">Beeswax protective coat instead of standard oil finish.</div>
+          </div>
+          <div class="addon-tile discount-tile" id="tile-repeat" onclick="toggleAddon('repeat', this)" style="grid-column: span 2;">
+            <input type="checkbox" id="add-repeat" />
+            <div class="addon-title"><span class="addon-check" id="chk-repeat">✓</span>Repeat Order — Returning Customer</div>
+            <div class="addon-price" style="color:#5a9a5a;">−10% on order subtotal</div>
+            <div class="addon-desc">Ordered from GBC before? Check this and we'll apply your returning customer discount.</div>
+          </div>
+          <!-- Knife as Add-On -->
+          <div class="addon-tile" id="tile-knife" style="grid-column: span 2; border-color: #2e2e2e;">
+            <input type="checkbox" id="add-knife-addon" />
+            <div class="addon-title" style="margin-bottom:6px;">
+              <span class="addon-check" id="chk-knife-addon" onclick="toggleKnifeAddon()">✓</span>
+              🔪 &nbsp;GBC Hammer Forged Santoku Knife
+            </div>
+            <div style="font-size:14px;color:#888;margin-bottom:10px;">12.75" blade · Octagonal Rosewood Handle · Hand-finished · Full tang</div>
+            <div style="margin-bottom:10px;line-height:1.6;">
+              <span class="knife-original-price" id="knife-original-label">$124</span>
+              <span class="knife-deal-badge" id="knife-deal-badge">20% OFF TODAY</span>
+              <span class="knife-sale-price" id="knife-sale-label">$99</span>
+              <span class="knife-sale-sub" id="knife-sale-sub">ea</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+              <span style="font-size:14px;color:#666;">Qty:</span>
+              <div class="knife-qty-pills" id="knife-qty-pills">
+                <div class="knife-qty-pill active" onclick="setKnifeQty(0,this)">0</div>
+                <div class="knife-qty-pill" onclick="setKnifeQty(1,this)">1</div>
+                <div class="knife-qty-pill" onclick="setKnifeQty(2,this)">2</div>
+                <div class="knife-qty-pill" onclick="setKnifeQty(3,this)">3</div>
+                <div class="knife-qty-pill" onclick="setKnifeQty(4,this)">4</div>
+              </div>
+            </div>
+            <div class="knife-total-line" id="knife-total-line"></div>
+          </div>
+        </div>
+        <div style="margin-top:12px;font-size:12px;color:#444;line-height:1.6;">
+          ✓ Available for your selection &nbsp;·&nbsp; Dimmed = not available for current size or thickness
+        </div>
+      </div>
+
+      <!-- Shipping State (retail only) -->
+      <div class="card" id="state-card">
+        <div class="card-title">Shipping Destination</div>
+        <p style="font-size:15px;color:#888;margin-bottom:16px;line-height:1.6;">
+          Sales tax is based on your shipping address. Select your state for an accurate total.
+        </p>
+        <div class="field">
+          <label>Ship-to State</label>
+          <select id="sel-state">
+            <option value="KS">Kansas (8.75% avg)</option>
+            <option value="MO">Missouri (8.98% avg — KC area)</option>
+            <option value="TX">Texas (8.25%)</option>
+            <option value="CO">Colorado (5.50%)</option>
+            <option value="NE">Nebraska (7.00%)</option>
+            <option value="OK">Oklahoma (8.93%)</option>
+            <option value="IL">Illinois (8.88%)</option>
+            <option value="TN">Tennessee (9.75%)</option>
+            <option value="CA">California (8.75%)</option>
+            <option value="FL">Florida (7.00%)</option>
+            <option value="NY">New York (8.00%)</option>
+            <option value="WA">Washington (10.25%)</option>
+            <option value="OH">Ohio (7.25%)</option>
+            <option value="MI">Michigan (6.00%)</option>
+            <option value="GA">Georgia (7.00%)</option>
+            <option value="NC">North Carolina (7.25%)</option>
+            <option value="VA">Virginia (5.30%)</option>
+            <option value="AZ">Arizona (8.40%)</option>
+            <option value="OTHER">Other / International — TBD</option>
+          </select>
+        </div>
+        <div style="font-size:12px;color:#555;line-height:1.6;">
+          ⚠ Rates shown are blended state + average local estimates. Final invoice reflects the exact rate for your ZIP code. GBC is based in Mission, KS.
+        </div>
+      </div>
+
+      <!-- Shipping Method -->
+      <div class="card" id="shipping-card">
+        <div class="card-title">Shipping &amp; Delivery</div>
+        <p style="font-size:15px;color:#888;margin-bottom:16px;line-height:1.6;">
+          Richlite boards ship from Mission, KS via FedEx Ground. Select your preferred delivery method.
+        </p>
+        <div class="field">
+          <label>Delivery Method</label>
+          <select id="sel-shipping" onchange="updateShipping()">
+            <option value="ground">Ground Shipping — estimate shown at checkout</option>
+            <option value="2day">2-Day Air — add ~$20–44 depending on size</option>
+            <option value="overnight">Overnight — add ~$45–95 depending on size</option>
+            <option value="pickup">Local Pickup — Mission, KS (free · confirm availability)</option>
+          </select>
+        </div>
+        <div id="shipping-note">
+          ⚠ Shipping cost is estimated based on board size/weight. Your GBC quote will include the exact rate.
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="calculatePrice()" style="margin-top:8px;">Calculate My Price →</button>
+      <div class="footer-note" style="margin-top:16px;">
+        All prices are estimates. Your official quote is confirmed by GBC within 24 hours.
+      </div>
+
+    </div><!-- /panel-dimensions -->
+
+
+    <!-- ─── BUDGET PANEL ──────────────────────────────────── -->
+    <div id="panel-budget" style="display:none;">
+      <div class="card">
+        <div class="card-title">Your Budget</div>
+        <div class="field">
+          <label>How much are you looking to spend? <span class="sub">before tax &amp; shipping</span></label>
+          <div class="slider-row">
+            <input type="range" id="slider-budget" min="75" max="700" value="200" step="25" oninput="updateBudget()" />
+            <div class="slider-value" id="val-budget">$200</div>
+          </div>
+          <div class="slider-range"><span>$75</span><span>$700+</span></div>
+        </div>
+        <div class="field">
+          <label>Collection</label>
+          <select id="budget-collection" onchange="updateBudget()">
+            <option value="heritage">Richlite® Heritage Collection (most popular)</option>
+            <option value="northwest-a">Richlite® Northwest Collection</option>
+            <option value="northwest-b">Richlite® Northwest Premium Collection</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Thickness</label>
+          <select id="budget-thickness" onchange="updateBudget()">
+            <option value="0.5">1/2" — Lighter boards, serving trays</option>
+            <option value="0.75" selected>3/4" — Standard cutting board</option>
+            <option value="1.0">1" — Premium thick board</option>
+            <option value="1.25">1-1/4" — Commercial</option>
+          </select>
+        </div>
+        <div class="budget-result">
+          <div class="br-eyebrow">What Your Budget Gets You</div>
+          <div class="budget-suggestion" id="budget-suggestion">—</div>
+          <div class="budget-suggestion-sub" id="budget-suggestion-sub"></div>
+          <div class="budget-chips" id="budget-chips"></div>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="useBudgetConfig()" style="margin-top:4px;">Use These Dimensions →</button>
+      <div class="footer-note" style="margin-top:16px;">Estimates only. GBC confirms your exact quote within 24 hours.</div>
+    </div><!-- /panel-budget -->
+
+  </div><!-- /step-config -->
+
+
+  <!-- ═══ STEP 2: PRICE REVEAL ═══════════════════════════════ -->
+  <div id="step-price">
+    <div class="card fade-up">
+      <div class="price-reveal">
+        <div class="rev-eyebrow">Your Estimated Price</div>
+        <div class="price-amount">
+          <span class="dollar">$</span><span id="price-display">0</span>
+        </div>
+        <div class="price-note" id="price-note">Starting estimate · Final quote confirmed by GBC within 24 hrs</div>
+
+        <div class="breakdown-wrap">
+          <div class="breakdown-title">Cost Breakdown</div>
+          <div class="bd-row">
+            <div class="bd-lbl-row"><span class="bd-lbl" id="bar-mat-lbl">Material</span><span class="bd-amt" id="bar-mat-amt">$0</span></div>
+            <div class="bd-track"><div class="bd-fill fill-mat" id="bar-mat"></div></div>
+          </div>
+          <div class="bd-row">
+            <div class="bd-lbl-row"><span class="bd-lbl">Fabrication &amp; Finishing</span><span class="bd-amt" id="bar-fab-amt">$0</span></div>
+            <div class="bd-track"><div class="bd-fill fill-fab" id="bar-fab"></div></div>
+          </div>
+          <div class="bd-row">
+            <div class="bd-lbl-row"><span class="bd-lbl">Shop Setup Fee</span><span class="bd-amt" id="bar-base-amt">$0</span></div>
+            <div class="bd-track"><div class="bd-fill fill-base" id="bar-base"></div></div>
+          </div>
+          <div class="bd-row" id="bar-addons-row" style="display:none;">
+            <div class="bd-lbl-row"><span class="bd-lbl">Add-Ons</span><span class="bd-amt" id="bar-addons-amt">$0</span></div>
+            <div class="bd-track"><div class="bd-fill fill-addon" id="bar-addons"></div></div>
+          </div>
+          <div class="bd-row" id="bar-knife-row" style="display:none;">
+            <div class="bd-lbl-row"><span class="bd-lbl" id="bar-knife-lbl">GBC Knife</span><span class="bd-amt" id="bar-knife-amt">$0</span></div>
+            <div class="bd-track"><div class="bd-fill fill-knife" id="bar-knife"></div></div>
+          </div>
+        </div>
+
+        <div class="price-tax-table" id="price-tax-table"></div>
+        <div class="spec-summary" id="spec-summary"></div>
+
+        <button class="btn btn-primary" onclick="showLead()">Get Your Official Quote →</button>
+        <button class="btn btn-ghost" onclick="goBack('step-config', 1)" style="margin-top:10px;">← Adjust Configuration</button>
+      </div>
+    </div>
+  </div><!-- /step-price -->
+
+
+  <!-- ═══ STEP 3: LEAD FORM ═══════════════════════════════════ -->
+  <div id="step-lead">
+    <div class="card fade-up">
+      <div class="card-title">Almost There</div>
+      <p style="font-size:16px;color:#888;margin-bottom:28px;line-height:1.65;">
+        Enter your info and we'll send your official Richlite® quote within 24 hours. No spam, ever.
+      </p>
+      <form id="quote-form" onsubmit="submitQuote(event)">
+        <div class="field">
+          <div class="form-row">
+            <div><label>First Name</label><input class="input-field" type="text" id="field-name" placeholder="Your name" required /></div>
+            <div><label>Email</label><input class="input-field" type="email" id="field-email" placeholder="you@email.com" required /></div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Phone <span class="sub">optional</span></label>
+          <input class="input-field" type="tel" id="field-phone" placeholder="(816) 000-0000" />
+        </div>
+        <div id="wholesale-fields" style="display:none;">
+          <div class="field">
+            <label>Business Name</label>
+            <input class="input-field" type="text" id="field-business" placeholder="Your restaurant / company name" />
+          </div>
+          <div class="field">
+            <label>Resale Certificate # <span class="sub">for tax-exempt processing</span></label>
+            <input class="input-field" type="text" id="field-resale" placeholder="State resale cert number" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Notes <span class="sub">optional</span></label>
+          <textarea class="input-field" id="field-notes"
+            placeholder="Timeline, delivery details, wholesale account info, special requests..."></textarea>
+        </div>
+
+        <div class="divider"></div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;">
+          <span style="font-size:15px;color:#888;">Your estimated total</span>
+          <span style="font-size:28px;font-weight:800;color:#C8952A;" id="price-reminder">$0</span>
+        </div>
+
+        <!-- Consent -->
+        <div class="field" style="margin-bottom:18px;">
+          <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;font-size:16px;font-weight:400;color:#888;">
+            <input type="checkbox" id="field-consent" required
+              style="width:20px;height:20px;min-width:20px;margin-top:2px;accent-color:#C8952A;" />
+            <span>
+              I agree to be contacted by Gauntt Board Company regarding this quote.
+              Your information will never be sold or shared.
+              View our <a href="https://www.gbckc.com/privacy" target="_blank"
+              style="color:#C8952A;text-decoration:underline;">Privacy Policy</a>.
+            </span>
+          </label>
+          <div class="err-msg" id="err-consent" style="margin-top:6px;">Please check the consent box to continue.</div>
+        </div>
+
+        <!-- Honeypot -->
+        <div style="position:absolute;left:-9999px;height:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+          <input type="text" id="hp-field" name="_hp" tabindex="-1" autocomplete="off" />
+        </div>
+        <!-- Timing check -->
+        <input type="hidden" id="form-load-time" />
+
+        <button class="btn btn-primary" type="submit" id="btn-submit">Request My Official Quote →</button>
+        <div class="submit-status" id="submit-status"></div>
+        <button type="button" class="btn btn-ghost" onclick="goBack('step-price', 2)" style="margin-top:10px;">← Back to Price</button>
+      </form>
+    </div>
+  </div><!-- /step-lead -->
+
+
+  <!-- ═══ STEP 4: SUCCESS ══════════════════════════════════════ -->
+  <div id="step-success">
+    <div class="card fade-up" style="text-align:center;">
+      <div class="success-icon">✓</div>
+      <h2>Quote Request Received!</h2>
+      <p style="margin-top:8px;">
+        We'll send your official Richlite® quote to
+        <strong id="confirm-email" style="color:#C8952A;"></strong>
+        within 24 hours.<br /><br />
+        Questions? Reach us at
+        <strong style="color:#C8952A;">matthew@gbckc.com</strong>
+        or <strong style="color:#C8952A;">(816) 419-4242</strong>.
+      </p>
+      <div class="divider"></div>
+      <button class="btn btn-secondary" onclick="resetCalc()" style="margin-top:8px;">Build Another Quote</button>
+    </div>
+  </div><!-- /step-success -->
+
+</div><!-- /calc-wrap -->
+
+
+<script>
+
+// ─── PRESET SIZES ────────────────────────────────────────────────────────────
+var RECT_PRESETS = [
+  { w:8,  l:12, desc:'Small serving board' },
+  { w:10, l:14, desc:'Personal board' },
+  { w:12, l:18, desc:'Home kitchen' },
+  { w:14, l:20, desc:"Chef's workhorse" },
+  { w:16, l:22, desc:'Restaurant prep' },
+  { w:18, l:24, desc:'Pro kitchen fave' },
+  { w:24, l:30, desc:'Commercial / large' },
+];
+
+var ROUND_PRESETS = [
+  { d:10, desc:'Small charcuterie' },
+  { d:12, desc:'Serving board' },
+  { d:14, desc:'Pizza &amp; carving' },
+  { d:18, desc:'Entertaining' },
+  { d:30, desc:'The Manhole Cover · SKU GBC-MC-001' },
+];
+
+// ─── SVG COLOR MAP ────────────────────────────────────────────────────────────
+var COLOR_SVG_MAP = {
+  'Natural (R50)':     { light: '#D4C5A9', dark: '#A08860' },
+  'Slate':             { light: '#7A8B8B', dark: '#4A5F5F' },
+  'Black Diamond':     { light: '#3E3E3E', dark: '#1A1A1A' },
+  'Grays Harbor':      { light: '#6B7A7A', dark: '#3A5050' },
+  'Maple Valley':      { light: '#9B7B5A', dark: '#6A4A28' },
+  'Blue Canyon':       { light: '#5A7B9A', dark: '#2A4B6A' },
+  'Browns Point':      { light: '#8A5A3A', dark: '#5A2A0A' },
+  'Chocolate Glacier': { light: '#5A4030', dark: '#2A1808' },
+  'Redstone':          { light: '#9A4A3A', dark: '#6A1A0A' },
+};
+
+function updateSVGColor(colorName) {
+  var c = COLOR_SVG_MAP[colorName];
+  if (!c) return;
+  var rectGrad = document.getElementById('woodGrad');
+  if (rectGrad) {
+    rectGrad.innerHTML =
+      '<stop offset="0%" stop-color="' + c.light + '"/>' +
+      '<stop offset="40%" stop-color="' + c.dark + '"/>' +
+      '<stop offset="100%" stop-color="' + c.dark + '"/>';
+  }
+  var circleGrad = document.getElementById('woodGradCircle');
+  if (circleGrad) {
+    circleGrad.innerHTML =
+      '<stop offset="0%" stop-color="' + c.light + '"/>' +
+      '<stop offset="100%" stop-color="' + c.dark + '"/>';
+  }
+}
+
+// ─── COLOR NOTES ──────────────────────────────────────────────────────────────
+var COLOR_NOTES = {
+  'Natural (R50)':     'Our most popular — clean kitchen aesthetic, shows knife marks with character.',
+  'Slate':             "The chef's pick — dark, professional, hides wear beautifully.",
+  'Black Diamond':     'Bold and dramatic — a statement board for serious kitchens.',
+  'Grays Harbor':      'Subtle cool tone — pairs perfectly with stainless steel.',
+  'Maple Valley':      'Warm earth tone — the most natural-looking Richlite colorway.',
+  'Blue Canyon':       'Deep slate blue — striking on camera and on the table.',
+  'Browns Point':      'Rich chocolate-brown — premium look for entertaining.',
+  'Chocolate Glacier': 'Deep espresso — the darkest option, ultra-professional.',
+  'Redstone':          'Warm terracotta — unique, bold, makes every board a conversation piece.',
+};
+
+// ─── SECTION UNLOCK ───────────────────────────────────────────────────────────
+function unlockSection(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.remove('section-locked');
+}
+
+// ─── RICHLITE EXPANDABLE ──────────────────────────────────────────────────────
+function toggleRichlite() {
+  var body = document.getElementById('richlite-body');
+  var arrow = document.getElementById('richlite-arrow');
+  if (!body) return;
+  var isOpen = body.style.display === 'block';
+  body.style.display = isOpen ? 'none' : 'block';
+  if (arrow) arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+}
+
+// ─── QTY SLIDER ──────────────────────────────────────────────────────────────
+function syncQtySlider(val) {
+  var q = parseInt(val, 10);
+  currentQty = q;
+  var sliderVal = document.getElementById('qty-slider-val');
+  if (sliderVal) sliderVal.textContent = q;
+  var slider = document.getElementById('qty-slider');
+  if (slider) {
+    var pct = ((q - 1) / 24) * 100;
+    slider.style.background = 'linear-gradient(to right, #C8952A ' + pct + '%, #2e2e2e ' + pct + '%)';
+  }
+  var disc = q >= 20 ? 15 : q >= 12 ? 15 : q >= 6 ? 10 : q >= 5 ? 5 : q >= 2 ? 5 : 0;
+  var discLabel = document.getElementById('qty-disc-label');
+  if (discLabel) discLabel.textContent = disc > 0 ? 'Volume discount: ' + disc + '% applied' : '';
+  // Sync pills
+  document.querySelectorAll('.qty-pill').forEach(function(p) { p.classList.remove('active'); });
+  var match = document.querySelector('.qty-pill[data-qty="' + q + '"]');
+  if (match) match.classList.add('active');
+  var ci = document.getElementById('qty-custom');
+  if (ci && parseInt(ci.value, 10) !== q) ci.value = '';
+}
+
+// ─── ADDON AVAILABILITY ───────────────────────────────────────────────────────
+function updateAddonAvailability() {
+  var area = (currentShape === 'round')
+    ? Math.PI * Math.pow(selD / 2, 2)
+    : selW * selL;
+  var thick = parseFloat(document.getElementById('sel-thickness').value || '0.75');
+
+  // Juice Groove: area ≥ 168 sqin AND thickness ≥ 3/4"
+  setAddonAvail('juice', area >= 168 && thick >= 0.75);
+  // Handle Cutout: rect only, area ≥ 140, thick ≥ 3/4"
+  setAddonAvail('handle', currentShape === 'rectangle' && area >= 140 && thick >= 0.75);
+  // Giftbox: board ≤ 352 sqin (not for 24×30)
+  setAddonAvail('giftbox', area <= 352);
+}
+
+function setAddonAvail(key, available) {
+  var tile = document.getElementById('tile-' + key);
+  if (!tile) return;
+  if (available) {
+    tile.classList.remove('addon-unavailable');
+  } else {
+    tile.classList.add('addon-unavailable');
+    // Uncheck if was active
+    if (activeAddons[key]) {
+      activeAddons[key] = false;
+      tile.classList.remove('selected');
+      var chk = document.getElementById('chk-' + key);
+      if (chk) chk.style.color = 'transparent';
+    }
+  }
+}
+
+// ─── KNIFE AS ADD-ON ─────────────────────────────────────────────────────────
+function toggleKnifeAddon() {
+  // If 0 knives, bump to 1; if >0, reset to 0
+  var current0 = document.querySelector('#knife-qty-pills .knife-qty-pill.active');
+  var isZero = current0 && current0.textContent === '0';
+  if (isZero) {
+    var pill1 = document.querySelectorAll('#knife-qty-pills .knife-qty-pill')[1];
+    if (pill1) setKnifeQty(1, pill1);
+  } else {
+    var pill0 = document.querySelectorAll('#knife-qty-pills .knife-qty-pill')[0];
+    if (pill0) setKnifeQty(0, pill0);
+  }
+}
+
+// ─── PRICING ENGINE ──────────────────────────────────────────────────────────
+// COGS per sq inch — sourced from 2025 Richlite Material Pricing Sheet (MSRP effective March 1, 2025)
+// Converted from $/sqft ÷ 144 = $/sqin
+// Source: _INBOX/2025 Richlite Material Pricing Sheet.xlsx
+var COGS_PER_SQIN = {
+  // Heritage Collection — Natural vs Slate have different MSRP
+  'Natural (R50)':     { '0.5': 0.1218, '0.75': 0.1827, '1.0': 0.2435, '1.25': 0.3044, '1.5': 0.3653 },
+  'Slate':             { '0.5': 0.1304, '0.75': 0.1956, '1.0': 0.2607, '1.25': 0.3260, '1.5': 0.3911 },
+  // Northwest Collection — Group A (Black Diamond, Grays Harbor, Maple Valley)
+  'Black Diamond':     { '0.5': 0.1324, '0.75': 0.1985, '1.0': 0.2647, '1.25': 0.3308, '1.5': 0.3970 },
+  'Grays Harbor':      { '0.5': 0.1324, '0.75': 0.1985, '1.0': 0.2647, '1.25': 0.3308, '1.5': 0.3970 },
+  'Maple Valley':      { '0.5': 0.1324, '0.75': 0.1985, '1.0': 0.2647, '1.25': 0.3308, '1.5': 0.3970 },
+  // Northwest Premium — Group B (Blue Canyon, Browns Point, Chocolate Glacier, Redstone)
+  'Blue Canyon':       { '0.5': 0.1655, '0.75': 0.2482, '1.0': 0.3310, '1.25': 0.4137, '1.5': 0.4965 },
+  'Browns Point':      { '0.5': 0.1655, '0.75': 0.2482, '1.0': 0.3310, '1.25': 0.4137, '1.5': 0.4965 },
+  'Chocolate Glacier': { '0.5': 0.1655, '0.75': 0.2482, '1.0': 0.3310, '1.25': 0.4137, '1.5': 0.4965 },
+  'Redstone':          { '0.5': 0.1655, '0.75': 0.2482, '1.0': 0.3310, '1.25': 0.4137, '1.5': 0.4965 },
+};
+// Collection-level fallback COGS for budget mode (avg of colors in collection)
+var COGS_COLLECTION_FALLBACK = {
+  'heritage':    { '0.5': 0.1261, '0.75': 0.1892, '1.0': 0.2521, '1.25': 0.3152, '1.5': 0.3782 },
+  'northwest-a': { '0.5': 0.1324, '0.75': 0.1985, '1.0': 0.2647, '1.25': 0.3308, '1.5': 0.3970 },
+  'northwest-b': { '0.5': 0.1655, '0.75': 0.2482, '1.0': 0.3310, '1.25': 0.4137, '1.5': 0.4965 },
+};
+var MARKUP   = 4;
+var BASE_FEE = 25;
+var MINIMUM  = 75;
+
+var ADDON_PRICES = { engrave: 45, juice: 28, feet: 10, care: 24, giftbox: 16, rush: 45, handle: 35, hanghole: 8, waxfinish: 18 };
+var REPEAT_DISC  = 0.10;
+var QTY_DISC = function(q) { return q >= 11 ? 0.15 : q >= 6 ? 0.10 : q >= 2 ? 0.05 : 0; };
+
+var STATE_TAX = {
+  KS:0.0875, MO:0.0898, TX:0.0825, CO:0.0550, NE:0.0700,
+  OK:0.0893, IL:0.0888, TN:0.0975, CA:0.0875, FL:0.0700,
+  NY:0.0800, WA:0.1025, OH:0.0725, MI:0.0600, GA:0.0700,
+  NC:0.0725, VA:0.0530, AZ:0.0840, OTHER:0.0750
+};
+
+var KNIFE_PRICE_RETAIL_ORIG = 124;  // MSRP — shown crossed out
+var KNIFE_PRICE_RETAIL      = 99;   // 20% off today — what gets charged
+var KNIFE_PRICE_WHOLESALE   = 74;   // Trade rate
+
+var COLLECTION_META = {
+  'heritage': {
+    label: 'Richlite\u00ae Heritage Collection',
+    desc:  'The industry standard for professional kitchen boards. NSF 51 food-safe certified.',
+    badges: '<span class="badge nsf">NSF 51 Certified</span><span class="badge fsc">FSC Certified</span>',
+    colors: [
+      { name: 'Natural (R50)', hex: '#D4C5A9' },
+      { name: 'Slate',         hex: '#7A8B8B' },
+    ]
+  },
+  'northwest-a': {
+    label: 'Richlite\u00ae Northwest Collection',
+    desc:  'Earthy tones with a matte satin finish. Great for residential and restaurant use.',
+    badges: '<span class="badge fsc">FSC Certified</span>',
+    colors: [
+      { name: 'Black Diamond', hex: '#2E2E2E' },
+      { name: 'Grays Harbor',  hex: '#6B7A7A' },
+      { name: 'Maple Valley',  hex: '#8B6B4A' },
+    ]
+  },
+  'northwest-b': {
+    label: 'Richlite\u00ae Northwest Premium',
+    desc:  'Deeper pigmentation, premium colorways. Limited availability — book early.',
+    badges: '<span class="badge fsc">FSC Certified</span>',
+    colors: [
+      { name: 'Blue Canyon',       hex: '#4A6B8A' },
+      { name: 'Browns Point',      hex: '#7A4A2A' },
+      { name: 'Chocolate Glacier', hex: '#4A3020' },
+      { name: 'Redstone',          hex: '#8A3A2A' },
+    ]
+  }
+};
+
+var THICKNESS_LABELS = {
+  '0.5': '1/2"', '0.75': '3/4"', '1.0': '1"', '1.25': '1-1/4"', '1.5': '1-1/2"'
+};
+
+// ─── SHIPPING ENGINE ──────────────────────────────────────────────────────────
+var SHIPPING_RATES = {
+  ground:    { small: 9,  medium: 14, large: 18, xl: 24 },
+  '2day':    { small: 24, medium: 34, large: 44, xl: 58 },
+  overnight: { small: 45, medium: 58, large: 72, xl: 95 },
+  pickup:    { small: 0,  medium: 0,  large: 0,  xl: 0  },
+};
+var currentShipping = 'ground';
+
+function getShippingTier(areaSqIn) {
+  if (areaSqIn <= 120)  return 'small';
+  if (areaSqIn <= 280)  return 'medium';
+  if (areaSqIn <= 432)  return 'large';
+  return 'xl';
+}
+
+function updateShipping() {
+  currentShipping = document.getElementById('sel-shipping').value;
+  var notes = {
+    ground:    '\u26a0 Shipping estimate \u00b7 GBC confirms exact rate in your official quote.',
+    '2day':    '\u26a0 2-Day Air \u00b7 Higher rate for faster delivery. Exact amount in your quote.',
+    overnight: '\u26a0 Overnight shipping \u00b7 Premium rate. Must be ordered before 2PM CT.',
+    pickup:    '\u2713 Local pickup at GBC \u00b7 Mission, KS 66202 \u00b7 Call ahead to confirm readiness.'
+  };
+  document.getElementById('shipping-note').textContent = notes[currentShipping] || '';
+}
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+var currentShape   = 'rectangle';
+var currentSizeMode = 'dimensions';
+var currentAccount  = 'retail';
+var currentQty      = 1;
+var activeAddons    = {};
+var knifeQty        = 0;
+var calculatedPrice = 0;
+var quoteData       = {};
+var budgetDims      = { w: 12, l: 18 };
+
+// Current selected preset dims
+var selW = 12, selL = 18, selD = 0;
+
+// ─── TILE ESTIMATE HELPER ─────────────────────────────────────────────────────
+// Uses Heritage Natural R50 @ 3/4" as the estimate baseline on tiles
+function tileEst(area) {
+  var mat = area * COGS_PER_SQIN['Natural (R50)']['0.75'];
+  return Math.max(MINIMUM, Math.ceil((mat * MARKUP + BASE_FEE) / 5) * 5);
+}
+
+// ─── BUILD TILE GRIDS ─────────────────────────────────────────────────────────
+function buildTiles() {
+  // Rectangle tiles
+  var rContainer = document.getElementById('tiles-rectangle');
+  rContainer.innerHTML = RECT_PRESETS.map(function(p, i) {
+    var area = p.w * p.l;
+    var est  = tileEst(area);
+    var sqft = (area / 144).toFixed(2);
+    var sel  = (p.w === selW && p.l === selL) ? ' selected' : '';
+    // 14×20 = flagship rectangle
+    var flagship = (p.w === 14 && p.l === 20);
+    var badge = flagship ? '<div class="flagship-badge">Most Popular</div>' : '';
+    return '<div class="size-tile' + (flagship ? ' flagship' : '') + sel + '" id="rt-' + i + '" onclick="selectRectTile(' + i + ')">' +
+      badge +
+      '<div class="tile-dim">' + p.w + '" \u00d7 ' + p.l + '"</div>' +
+      '<div class="tile-desc">' + p.desc + '</div>' +
+      '<div class="tile-est">~$' + est + ' &nbsp;\u00b7&nbsp; ' + sqft + ' sq ft</div>' +
+      '</div>';
+  }).join('');
+
+  // Round tiles
+  var roundContainer = document.getElementById('tiles-round');
+  roundContainer.innerHTML = ROUND_PRESETS.map(function(p, i) {
+    var area = Math.PI * Math.pow(p.d / 2, 2);
+    var est  = tileEst(area);
+    var sqft = (area / 144).toFixed(2);
+    var sel = (p.d === selD) ? ' selected' : '';
+    // 30" = Manhole Cover flagship
+    var flagship = (p.d === 30);
+    var badge = flagship ? '<div class="flagship-badge">The Manhole Cover</div>' : '';
+    return '<div class="size-tile' + (flagship ? ' flagship' : '') + sel + '" id="ro-' + i + '" onclick="selectRoundTile(' + i + ')">' +
+      badge +
+      '<div class="tile-dim">' + p.d + '" Round</div>' +
+      '<div class="tile-desc">' + p.desc + '</div>' +
+      '<div class="tile-est">~$' + est + ' &nbsp;\u00b7&nbsp; ' + sqft + ' sq ft</div>' +
+      '</div>';
+  }).join('');
+}
+
+function selectRectTile(i) {
+  var p = RECT_PRESETS[i];
+  selW = p.w; selL = p.l; selD = 0;
+  document.querySelectorAll('#tiles-rectangle .size-tile').forEach(function(t) { t.classList.remove('selected'); });
+  document.getElementById('rt-' + i).classList.add('selected');
+  // Clear Manhole Cover hero selection (it's round, not rect)
+  var mhHero = document.getElementById('manhole-hero');
+  if (mhHero) mhHero.classList.remove('mh-selected');
+  document.getElementById('err-size').classList.remove('visible');
+  updateBoardSVG_rect(p.w, p.l);
+  var area = p.w * p.l;
+  document.getElementById('board-dim-text').innerHTML =
+    '<strong>' + p.w + '" \u00d7 ' + p.l + '"</strong> &nbsp;\u00b7&nbsp; ' + area + ' sq in &nbsp;\u00b7&nbsp; ' + (area/144).toFixed(2) + ' sq ft';
+  unlockSection('card-material');
+  updateAddonAvailability();
+  wixResize();
+}
+
+function selectRoundTile(i) {
+  var p = ROUND_PRESETS[i];
+  selD = p.d; selW = 0; selL = 0;
+  document.querySelectorAll('#tiles-round .size-tile').forEach(function(t) { t.classList.remove('selected'); });
+  document.getElementById('ro-' + i).classList.add('selected');
+  // Sync hero highlight when Manhole Cover (d=30) is selected
+  var mhHero = document.getElementById('manhole-hero');
+  if (mhHero) mhHero.classList.toggle('mh-selected', p.d === 30);
+  document.getElementById('err-size').classList.remove('visible');
+  updateBoardSVG_round(p.d);
+  var area = Math.PI * Math.pow(p.d/2, 2);
+  document.getElementById('board-dim-text').innerHTML =
+    '<strong>' + p.d + '" round</strong> &nbsp;\u00b7&nbsp; ' + Math.round(area) + ' sq in &nbsp;\u00b7&nbsp; ' + (area/144).toFixed(2) + ' sq ft';
+  unlockSection('card-material');
+  updateAddonAvailability();
+  wixResize();
+}
+
+// ─── SVG BOARD PREVIEW ───────────────────────────────────────────────────────
+function updateBoardSVG_rect(w, l) {
+  var svgW = 400, svgH = 260, pad = 40;
+  var maxW = 36, maxL = 36; // max preview size in pixels (capped for large boards)
+  var scaleW = (svgW - pad * 2) / 36;
+  var scaleH = (svgH - pad * 2) / 36;
+  var scale  = Math.min(scaleW, scaleH);
+  var bw = Math.round(Math.min(w, 36) * scale);
+  var bh = Math.round(Math.min(l, 36) * scale);
+  // Proportional to actual board
+  var maxDim = Math.max(w, l);
+  var s  = Math.min((svgW - pad*2) / w, (svgH - pad*2) / l, 14);
+  bw = Math.round(w * s);
+  bh = Math.round(l * s);
+  var x = Math.round((svgW - bw) / 2);
+  var y = Math.round((svgH - bh) / 2);
+
+  var rect = document.getElementById('svg-rect');
+  var grain = document.getElementById('svg-rect-grain');
+  document.getElementById('svg-circle').style.display = 'none';
+  rect.style.display = ''; grain.style.display = '';
+  rect.setAttribute('x', x); rect.setAttribute('y', y);
+  rect.setAttribute('width', bw); rect.setAttribute('height', bh);
+  grain.setAttribute('x', x); grain.setAttribute('y', y);
+  grain.setAttribute('width', bw); grain.setAttribute('height', bh);
+
+  var wl = document.getElementById('svg-w-label');
+  wl.setAttribute('x', x + bw / 2); wl.setAttribute('y', svgH - 4);
+  wl.textContent = w + '"';
+
+  var ll = document.getElementById('svg-l-label');
+  ll.setAttribute('x', 12); ll.setAttribute('y', y + bh / 2);
+  ll.setAttribute('transform', 'rotate(-90,12,' + (y + bh/2) + ')');
+  ll.textContent = l + '"';
+
+  var m = document.getElementById('svg-watermark');
+  m.setAttribute('x', x + bw - 6); m.setAttribute('y', y + bh - 8);
+}
+
+function updateBoardSVG_round(d) {
+  var svgW = 400, svgH = 260;
+  var maxR = Math.min(svgW, svgH) / 2 - 30;
+  var r = Math.round((d / 36) * maxR);
+  if (r > maxR) r = maxR;
+  document.getElementById('svg-rect').style.display = 'none';
+  document.getElementById('svg-rect-grain').style.display = 'none';
+  var circle = document.getElementById('svg-circle');
+  circle.style.display = '';
+  circle.setAttribute('cx', svgW / 2); circle.setAttribute('cy', svgH / 2); circle.setAttribute('r', r);
+
+  var wl = document.getElementById('svg-w-label');
+  wl.setAttribute('x', svgW / 2); wl.setAttribute('y', svgH - 4);
+  wl.textContent = d + '" \u2300';
+  document.getElementById('svg-l-label').textContent = '';
+
+  var m = document.getElementById('svg-watermark');
+  m.setAttribute('x', svgW/2 + r - 6); m.setAttribute('y', svgH/2 + r - 8);
+}
+
+// ─── MANHOLE COVER HERO ──────────────────────────────────────────────────────
+function selectManholeHero() {
+  // Switch shape tabs to "Round"
+  var roundTab = document.getElementById('shape-tab-round');
+  setShape('round', roundTab);
+  // Select the 30" Manhole Cover tile (index 4 in ROUND_PRESETS)
+  selectRoundTile(4);
+  // Visual feedback on hero card
+  document.getElementById('manhole-hero').classList.add('mh-selected');
+  // Scroll down to size layout
+  document.getElementById('tiles-round').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  wixResize();
+}
+
+// ─── ACCOUNT TYPE ────────────────────────────────────────────────────────────
+function setAccount(type) {
+  currentAccount = type;
+  document.getElementById('ac-retail').classList.toggle('selected', type === 'retail');
+  document.getElementById('ac-wholesale').classList.toggle('selected', type === 'wholesale');
+  document.getElementById('wholesale-notice').style.display  = type === 'wholesale' ? 'block' : 'none';
+  document.getElementById('state-card').style.display        = type === 'retail'    ? 'block' : 'none';
+  document.getElementById('wholesale-fields').style.display  = type === 'wholesale' ? 'block' : 'none';
+  // Update knife price display for account type
+  var origLabel = document.getElementById('knife-original-label');
+  var dealBadge = document.getElementById('knife-deal-badge');
+  var saleLabel = document.getElementById('knife-sale-label');
+  var saleSub   = document.getElementById('knife-sale-sub');
+  if (type === 'wholesale') {
+    if (origLabel) origLabel.style.display = 'none';
+    if (dealBadge) dealBadge.style.display = 'none';
+    if (saleLabel) saleLabel.textContent = '$74';
+    if (saleSub)   saleSub.textContent = 'ea — trade rate';
+  } else {
+    if (origLabel) origLabel.style.display = '';
+    if (dealBadge) dealBadge.style.display = '';
+    if (saleLabel) saleLabel.textContent = '$99';
+    if (saleSub)   saleSub.textContent = 'ea';
+  }
+  updateKnifeTotal();
+}
+
+// ─── SIZE MODE ───────────────────────────────────────────────────────────────
+function setSizeMode(mode, btn) {
+  currentSizeMode = mode;
+  document.querySelectorAll('.mode-switch-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('panel-dimensions').style.display = mode === 'dimensions' ? '' : 'none';
+  document.getElementById('panel-budget').style.display     = mode === 'budget'     ? '' : 'none';
+  if (mode === 'budget') updateBudget();
+}
+
+// ─── SHAPE ───────────────────────────────────────────────────────────────────
+function setShape(shape, el) {
+  currentShape = shape;
+  document.querySelectorAll('.shape-tab').forEach(function(t) { t.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('tiles-rectangle').style.display = shape === 'rectangle' ? '' : 'none';
+  document.getElementById('tiles-round').style.display     = shape === 'round'     ? '' : 'none';
+  // Auto-select first tile if none selected
+  if (shape === 'rectangle' && selW === 0) selectRectTile(2); // default 12×18
+  if (shape === 'round'     && selD === 0) selectRoundTile(2); // default 14"
+  wixResize();
+}
+
+// ─── COLLECTION & COLORS ─────────────────────────────────────────────────────
+function updateCollection() {
+  var key  = document.getElementById('sel-collection').value;
+  var info = document.getElementById('collection-info');
+  var grid = document.getElementById('color-grid');
+  document.getElementById('sel-color').value = '';
+  if (!key) {
+    info.innerHTML = '';
+    grid.innerHTML = '<div style="font-size:14px;color:#555;padding:8px 0;">Select a collection above to see colors</div>';
+    return;
+  }
+  var meta = COLLECTION_META[key];
+  info.innerHTML = '<div style="font-size:14px;color:#888;margin-bottom:6px;">' + meta.desc + '</div>' + meta.badges +
+    '<div class="richlite-expand" style="margin-top:14px;">' +
+    '<div class="richlite-expand-header" onclick="toggleRichlite()">' +
+    '<span class="richlite-expand-title">What is Richlite®?</span>' +
+    '<span id="richlite-arrow" class="richlite-arrow">▼</span></div>' +
+    '<div id="richlite-body" class="richlite-expand-body"><ul>' +
+    '<li>Made from recycled paper fiber + phenolic resin — no wood grain, no warping, no bacteria harboring</li>' +
+    '<li>NSF 51 certified for direct food contact (Heritage Collection)</li>' +
+    '<li>FSC Certified — sustainably sourced fiber</li>' +
+    '<li>Harder than maple, impervious to moisture and stains</li>' +
+    '<li>Used in commercial kitchens and Michelin-starred restaurants worldwide</li>' +
+    '<li>The only cutting board material GBC builds with — because nothing else performs like it</li>' +
+    '</ul></div></div>';
+  grid.innerHTML = meta.colors.map(function(c, i) {
+    return '<div class="color-swatch" onclick="selectColor(\'' + key + '\',' + i + ',this)">' +
+      '<div class="swatch-dot" style="background:' + c.hex + ';"></div>' +
+      '<div class="swatch-name">' + c.name + '</div></div>';
+  }).join('');
+  // Reset color note
+  var noteEl = document.getElementById('color-note');
+  if (noteEl) { noteEl.textContent = ''; noteEl.style.display = 'none'; }
+  setTimeout(wixResize, 50);
+}
+
+function selectColor(collKey, colorIdx, el) {
+  document.querySelectorAll('.color-swatch').forEach(function(s) { s.classList.remove('selected'); });
+  el.classList.add('selected');
+  document.getElementById('sel-color').value = collKey + '::' + colorIdx;
+  // Update SVG color
+  var colorName = COLLECTION_META[collKey].colors[colorIdx].name;
+  updateSVGColor(colorName);
+  // Show per-color note
+  var noteEl = document.getElementById('color-note');
+  if (noteEl && COLOR_NOTES[colorName]) {
+    noteEl.textContent = '"' + COLOR_NOTES[colorName] + '"';
+    noteEl.style.display = 'block';
+  }
+  // Unlock downstream sections
+  unlockSection('card-qty');
+  unlockSection('card-addons');
+}
+
+// ─── QUANTITY ─────────────────────────────────────────────────────────────────
+function setQty(q, el) {
+  currentQty = q;
+  document.querySelectorAll('.qty-pill').forEach(function(p) { p.classList.remove('active'); });
+  el.classList.add('active');
+  // Clear custom input when a pill is selected
+  var customInput = document.getElementById('qty-custom');
+  if (customInput) customInput.value = '';
+  // Sync slider
+  var slider = document.getElementById('qty-slider');
+  if (slider) { slider.value = Math.min(q, 25); syncQtySlider(Math.min(q, 25)); }
+}
+
+function setCustomQty(val) {
+  var q = parseInt(val, 10);
+  if (!q || q < 1) return;
+  currentQty = q;
+  // Deselect all pills
+  document.querySelectorAll('.qty-pill').forEach(function(p) { p.classList.remove('active'); });
+}
+
+// ─── ADD-ONS ─────────────────────────────────────────────────────────────────
+function toggleAddon(key, tile) {
+  activeAddons[key] = !activeAddons[key];
+  tile.classList.toggle('selected', activeAddons[key]);
+  document.getElementById('chk-' + key).style.color = activeAddons[key] ? '#111' : 'transparent';
+}
+
+// ─── KNIFE ───────────────────────────────────────────────────────────────────
+function setKnifeQty(q, el) {
+  knifeQty = q;
+  document.querySelectorAll('.knife-qty-pill').forEach(function(p) { p.classList.remove('active'); });
+  el.classList.add('active');
+  updateKnifeTotal();
+}
+
+function updateKnifeTotal() {
+  var price    = currentAccount === 'wholesale' ? KNIFE_PRICE_WHOLESALE : KNIFE_PRICE_RETAIL;
+  var totalEl  = document.getElementById('knife-total-line');
+  if (knifeQty > 0) {
+    totalEl.style.display = '';
+    totalEl.textContent   = knifeQty + ' knife' + (knifeQty > 1 ? 's' : '') +
+      ' \u00d7 $' + price + ' = $' + (knifeQty * price);
+  } else {
+    totalEl.style.display = 'none';
+  }
+}
+
+// ─── BUDGET MODE ─────────────────────────────────────────────────────────────
+function updateBudget() {
+  var budget = parseInt(document.getElementById('slider-budget').value);
+  var coll   = document.getElementById('budget-collection').value;
+  var thick  = document.getElementById('budget-thickness').value;
+  document.getElementById('val-budget').textContent = budget >= 700 ? '$700+' : '$' + budget;
+
+  var costPerSqIn = COGS_COLLECTION_FALLBACK[coll][thick] * MARKUP;
+  var available   = budget - BASE_FEE;
+  if (available <= 0) {
+    document.getElementById('budget-suggestion').textContent = 'Increase budget above $' + BASE_FEE;
+    document.getElementById('budget-chips').innerHTML = '';
+    return;
+  }
+  var maxSqIn = available / costPerSqIn;
+  var sugL = Math.sqrt(maxSqIn * 1.55);
+  var sugW = maxSqIn / sugL;
+  var rW = Math.min(48, Math.round(sugW)), rL = Math.min(60, Math.round(sugL));
+  budgetDims = { w: rW, l: rL, collection: coll, thickness: thick };
+
+  var meta = COLLECTION_META[coll];
+  document.getElementById('budget-suggestion').textContent = 'Up to a ' + rW + '" \u00d7 ' + rL + '" board';
+  document.getElementById('budget-suggestion-sub').textContent =
+    'in ' + meta.label + ' \u00b7 ' + (maxSqIn / 144).toFixed(2) + ' sq ft';
+
+  var examples = [
+    {w:10,l:14},{w:12,l:18},{w:14,l:20},{w:16,l:22},{w:18,l:24}
+  ].filter(function(e) {
+    var mat = e.w * e.l * COGS_COLLECTION_FALLBACK[coll][thick];
+    var raw = mat * MARKUP + BASE_FEE;
+    return Math.max(MINIMUM, Math.ceil(raw/5)*5) <= (budget >= 700 ? 99999 : budget);
+  });
+
+  document.getElementById('budget-chips').innerHTML = examples.map(function(e) {
+    var mat = e.w * e.l * COGS_COLLECTION_FALLBACK[coll][thick];
+    var est = Math.max(MINIMUM, Math.ceil((mat*MARKUP+BASE_FEE)/5)*5);
+    return '<span class="budget-chip" onclick="applyBudgetChip(' + e.w + ',' + e.l + ',this)">' +
+      e.w + '" \u00d7 ' + e.l + '" &nbsp;~$' + est + '</span>';
+  }).join('');
+}
+
+function applyBudgetChip(w, l, el) {
+  document.querySelectorAll('.budget-chip').forEach(function(c) { c.classList.remove('picked'); });
+  el.classList.add('picked');
+  budgetDims.w = w; budgetDims.l = l;
+}
+
+function useBudgetConfig() {
+  setSizeMode('dimensions', document.querySelectorAll('.mode-switch-btn')[0]);
+  // Find closest rect preset
+  var best = 0, bestDist = 99999;
+  RECT_PRESETS.forEach(function(p, i) {
+    var dist = Math.abs(p.w - budgetDims.w) + Math.abs(p.l - budgetDims.l);
+    if (dist < bestDist) { bestDist = dist; best = i; }
+  });
+  setShape('rectangle', document.querySelectorAll('.shape-tab')[0]);
+  selectRectTile(best);
+  if (budgetDims.collection) {
+    document.getElementById('sel-collection').value = budgetDims.collection;
+    updateCollection();
+  }
+  if (budgetDims.thickness) document.getElementById('sel-thickness').value = budgetDims.thickness;
+  wixResize();
+}
+
+// ─── CALCULATE ───────────────────────────────────────────────────────────────
+function calculatePrice() {
+  var collKey  = document.getElementById('sel-collection').value;
+  var colorVal = document.getElementById('sel-color').value;
+  var thick    = document.getElementById('sel-thickness').value;
+
+  // Clear errors
+  document.getElementById('err-size').classList.remove('visible');
+  document.getElementById('err-collection').classList.remove('visible');
+  document.getElementById('err-color').classList.remove('visible');
+
+  // Validate size
+  var hasSize = (currentShape === 'rectangle' && selW > 0) ||
+                (currentShape === 'round' && selD > 0);
+  if (!hasSize) {
+    var errS = document.getElementById('err-size');
+    errS.classList.add('visible');
+    errS.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    wixResize(); return;
+  }
+  if (!collKey) {
+    var errC = document.getElementById('err-collection');
+    errC.classList.add('visible');
+    errC.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    wixResize(); return;
+  }
+  if (!colorVal) {
+    var errCol = document.getElementById('err-color');
+    errCol.classList.add('visible');
+    errCol.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    wixResize(); return;
+  }
+
+  var parts     = colorVal.split('::');
+  var colorData = COLLECTION_META[parts[0]].colors[parseInt(parts[1])];
+
+  var area, dimLabel;
+  if (currentShape === 'rectangle') {
+    area = selW * selL;
+    dimLabel = selW + '" \u00d7 ' + selL + '"';
+  } else {
+    area = Math.PI * Math.pow(selD / 2, 2);
+    dimLabel = selD + '" round';
+  }
+
+  // Core costs — look up by color name (real MSRP per sqin from 2025 pricing sheet)
+  var cogsTable = COGS_PER_SQIN[colorData.name] || COGS_COLLECTION_FALLBACK[collKey];
+  var matCost  = area * cogsTable[thick];
+  var fabCost  = matCost * (MARKUP - 1);
+  var baseCost = BASE_FEE;
+
+  // Add-ons
+  var addonTotal = 0, addonNames = [];
+  ['engrave','juice','feet','care','giftbox','rush'].forEach(function(k) {
+    if (activeAddons[k]) { addonTotal += ADDON_PRICES[k]; addonNames.push(k); }
+  });
+
+  var raw      = matCost + fabCost + baseCost + addonTotal;
+  var unitPrice = Math.max(MINIMUM, Math.ceil(raw / 5) * 5);
+
+  // Qty + volume discount
+  var qDisc    = QTY_DISC(currentQty);
+  var subtotal = qDisc ? Math.round(unitPrice * currentQty * (1 - qDisc)) : unitPrice * currentQty;
+
+  // Repeat discount
+  var repeatDisc = activeAddons['repeat'] ? Math.round(subtotal * REPEAT_DISC) : 0;
+  subtotal -= repeatDisc;
+
+  // Tax
+  var stateKey = document.getElementById('sel-state').value;
+  var taxRate  = currentAccount === 'wholesale' ? 0 : (STATE_TAX[stateKey] || 0.075);
+  var taxAmt   = Math.round(subtotal * taxRate * 100) / 100;
+
+  // Shipping
+  var shippingTier = getShippingTier(area);
+  var shippingAmt  = currentAccount === 'wholesale' ? 0
+    : (SHIPPING_RATES[currentShipping] ? SHIPPING_RATES[currentShipping][shippingTier] : 0);
+
+  // Knife
+  var knifePrice = currentAccount === 'wholesale' ? KNIFE_PRICE_WHOLESALE : KNIFE_PRICE_RETAIL;
+  var knifeTotal = knifeQty * knifePrice;
+
+  var grandTotal = subtotal + taxAmt + shippingAmt + knifeTotal;
+
+  calculatedPrice = grandTotal;
+  document.getElementById('price-display').textContent  = Math.round(grandTotal).toLocaleString();
+  document.getElementById('price-reminder').textContent = '$' + Math.round(grandTotal).toLocaleString();
+
+  // Material label for breakdown: "Richlite® Heritage · Natural (R50) · 18" × 24" · 3/4""
+  var matLabel = COLLECTION_META[collKey].label + ' \u00b7 ' + colorData.name +
+    ' \u00b7 ' + dimLabel + ' \u00b7 ' + THICKNESS_LABELS[thick];
+  document.getElementById('bar-mat-lbl').textContent = matLabel;
+
+  // Breakdown bars
+  var barTotal = Math.max(raw + knifeTotal, MINIMUM);
+  document.getElementById('bar-mat-amt').textContent    = '$' + matCost.toFixed(2);
+  document.getElementById('bar-fab-amt').textContent    = '$' + fabCost.toFixed(2);
+  document.getElementById('bar-base-amt').textContent   = '$' + baseCost.toFixed(2);
+  document.getElementById('bar-addons-row').style.display = addonTotal > 0 ? '' : 'none';
+  document.getElementById('bar-addons-amt').textContent = '$' + addonTotal.toFixed(2);
+  document.getElementById('bar-knife-row').style.display = knifeTotal > 0 ? '' : 'none';
+  document.getElementById('bar-knife-lbl').textContent  = knifeQty + ' GBC Knife' + (knifeQty > 1 ? 's' : '');
+  document.getElementById('bar-knife-amt').textContent  = '$' + knifeTotal.toFixed(2);
+
+  setTimeout(function() {
+    document.getElementById('bar-mat').style.width    = ((matCost    / barTotal) * 100) + '%';
+    document.getElementById('bar-fab').style.width    = ((fabCost    / barTotal) * 100) + '%';
+    document.getElementById('bar-base').style.width   = ((baseCost   / barTotal) * 100) + '%';
+    document.getElementById('bar-addons').style.width = ((addonTotal / barTotal) * 100) + '%';
+    document.getElementById('bar-knife').style.width  = ((knifeTotal / barTotal) * 100) + '%';
+  }, 80);
+
+  // Tax + totals table
+  var taxHTML = '';
+  if (currentQty > 1 && qDisc) {
+    taxHTML += '<div class="tax-row"><span>' + currentQty + ' boards \u00d7 $' + unitPrice +
+      ' (' + (qDisc*100).toFixed(0) + '% vol disc)</span><span class="val">$' +
+      (unitPrice * currentQty * (1-qDisc)).toFixed(2) + '</span></div>';
+  } else if (currentQty > 1) {
+    taxHTML += '<div class="tax-row"><span>' + currentQty + ' boards \u00d7 $' + unitPrice +
+      '</span><span class="val">$' + (unitPrice * currentQty) + '</span></div>';
+  } else {
+    taxHTML += '<div class="tax-row"><span>Board subtotal</span><span class="val">$' + unitPrice + '</span></div>';
+  }
+  if (repeatDisc) {
+    taxHTML += '<div class="tax-row"><span>Returning customer (10%)</span><span class="val" style="color:#5a9a5a;">-$' + repeatDisc + '</span></div>';
+  }
+  if (knifeTotal > 0) {
+    taxHTML += '<div class="tax-row"><span>' + knifeQty + ' GBC Knife' + (knifeQty>1?'s':'') +
+      ' \u00d7 $' + knifePrice + '</span><span class="val">$' + knifeTotal + '</span></div>';
+  }
+  if (currentAccount === 'wholesale') {
+    taxHTML += '<div class="tax-row"><span>Sales Tax <span class="tax-exempt-badge">Exempt</span></span><span class="val">$0.00</span></div>';
+  } else {
+    taxHTML += '<div class="tax-row"><span>Sales Tax (' + stateKey + ' ~' + (taxRate*100).toFixed(2) +
+      '%)</span><span class="val">$' + taxAmt.toFixed(2) + '</span></div>';
+  }
+  var shippingLabel = { ground: 'Ground Shipping (est.)', '2day': '2-Day Air (est.)',
+    overnight: 'Overnight (est.)', pickup: 'Local Pickup \u2014 Free' }[currentShipping] || 'Shipping';
+  if (currentAccount === 'wholesale') {
+    taxHTML += '<div class="tax-row"><span>Shipping <span class="tax-exempt-badge">Quoted</span></span><span class="val">TBD</span></div>';
+  } else {
+    taxHTML += '<div class="tax-row"><span>' + shippingLabel + '</span><span class="val">' +
+      (shippingAmt === 0 ? 'FREE' : '$' + shippingAmt.toFixed(2)) + '</span></div>';
+  }
+  taxHTML += '<div class="tax-row total"><span>Estimated Total</span><span class="val">$' + grandTotal.toFixed(2) + '</span></div>';
+  document.getElementById('price-tax-table').innerHTML = taxHTML;
+
+  // Spec summary
+  var specs = [
+    ['Account',    currentAccount === 'wholesale' ? 'Trade / Wholesale' : 'Retail'],
+    ['Material',   COLLECTION_META[collKey].label + ' \u00b7 ' + colorData.name],
+    ['Dimensions', dimLabel],
+    ['Thickness',  THICKNESS_LABELS[thick]],
+    ['Sq. Footage', (area / 144).toFixed(2) + ' sq ft'],
+    ['Quantity',   currentQty + (qDisc ? ' (' + (qDisc*100).toFixed(0) + '% vol disc)' : '')],
+    ['Add-Ons',    addonNames.length ? addonNames.join(', ') : 'None'],
+  ];
+  if (knifeQty > 0) {
+    specs.push(['Knife', knifeQty + ' \u00d7 GBC Hammer Forged Santoku ($' + knifePrice + ' ea)']);
+  }
+  document.getElementById('spec-summary').innerHTML = specs.map(function(s) {
+    return '<div class="spec-row"><span>' + s[0] + '</span><strong>' + s[1] + '</strong></div>';
+  }).join('');
+
+  quoteData = {
+    account:        currentAccount,
+    collection:     COLLECTION_META[collKey].label,
+    color:          colorData.name,
+    thickness:      THICKNESS_LABELS[thick],
+    dimensions:     dimLabel,
+    area:           Math.round(area),
+    sqft:           (area / 144).toFixed(2),
+    quantity:       currentQty,
+    addons:         addonNames.join(', ') || 'None',
+    knifeQty:       knifeQty,
+    knifeTotal:     knifeTotal.toFixed(2),
+    unitPrice:      unitPrice,
+    subtotal:       subtotal,
+    taxState:       currentAccount === 'retail' ? stateKey : 'Exempt',
+    taxRate:        currentAccount === 'retail' ? (taxRate * 100).toFixed(2) + '%' : '0% (wholesale)',
+    taxAmount:      taxAmt.toFixed(2),
+    shippingMethod: currentShipping,
+    shippingAmount: shippingAmt.toFixed(2),
+    grandTotal:     grandTotal.toFixed(2),
+  };
+
+  document.getElementById('price-note').textContent = currentAccount === 'wholesale'
+    ? 'Trade pricing is confidential \u2014 your official trade rate will be in your quote'
+    : 'Starting estimate \u00b7 Final quote confirmed by GBC within 24 hrs';
+
+  showStep('step-price', 2);
+}
+
+// ─── LEAD FORM ────────────────────────────────────────────────────────────────
+function showLead() {
+  showStep('step-lead', 3);
+  document.getElementById('form-load-time').value = Date.now();
+}
+
+// ─── SUBMISSION CONFIG ────────────────────────────────────────────────────────
+var FORMSPREE_ID      = 'mgonrkpq';
+var HUBSPOT_PORTAL_ID = '244356870';
+var HUBSPOT_FORM_GUID = 'c166241c-adec-4270-9905-d9f74a6d3d7b';
+
+function submitQuote(e) {
+  e.preventDefault();
+
+  if (document.getElementById('hp-field').value !== '') { return; }
+  var loadTime = parseInt(document.getElementById('form-load-time').value || '0', 10);
+  if (loadTime > 0 && (Date.now() - loadTime) < 3000) { return; }
+
+  var name    = document.getElementById('field-name').value.trim();
+  var email   = document.getElementById('field-email').value.trim();
+  var phone   = document.getElementById('field-phone').value.trim();
+  var notes   = document.getElementById('field-notes').value.trim();
+  var biz     = document.getElementById('field-business').value.trim();
+  var resale  = document.getElementById('field-resale').value.trim();
+  var consent = document.getElementById('field-consent').checked;
+  var btn     = document.getElementById('btn-submit');
+  var status  = document.getElementById('submit-status');
+
+  if (!consent) {
+    var errC = document.getElementById('err-consent');
+    errC.classList.add('visible');
+    errC.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  document.getElementById('err-consent').classList.remove('visible');
+
+  btn.classList.add('btn-loading');
+  btn.textContent = 'Sending\u2026';
+  btn.disabled = true;
+  status.className = 'submit-status';
+
+  var payload = {
+    name:             name,
+    email:            email,
+    phone:            phone || 'N/A',
+    business:         biz || 'N/A',
+    resale_cert:      resale || 'N/A',
+    account_type:     quoteData.account,
+    collection:       quoteData.collection,
+    color:            quoteData.color,
+    thickness:        quoteData.thickness,
+    dimensions:       quoteData.dimensions,
+    sq_footage:       quoteData.sqft + ' sq ft',
+    quantity:         quoteData.quantity,
+    addons:           quoteData.addons,
+    knife_qty:        quoteData.knifeQty,
+    knife_total:      '$' + quoteData.knifeTotal,
+    shipping_method:  quoteData.shippingMethod,
+    shipping_amount:  '$' + quoteData.shippingAmount,
+    unit_price:       '$' + quoteData.unitPrice,
+    subtotal:         '$' + quoteData.subtotal,
+    tax_state:        quoteData.taxState,
+    tax_rate:         quoteData.taxRate,
+    tax_amount:       '$' + quoteData.taxAmount,
+    grand_total:      '$' + quoteData.grandTotal,
+    notes:            notes || 'None',
+    consent_given:    'Yes \u2014 checked at submission',
+    submitted_at:     new Date().toISOString(),
+    source:           'gbckc.com/richlitecalculator',
+    pricing_note:     'CLIENT-SIDE ESTIMATE \u2014 verify with GBC pricing sheet before quoting.',
+  };
+
+  // Channel 1: Formspree
+  var formspreePromise = Promise.resolve({ ok: false });
+  if (FORMSPREE_ID && FORMSPREE_ID !== 'YOUR_FORM_ID') {
+    formspreePromise = fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload),
+    }).then(function(r) { return { ok: r.ok }; })
+      .catch(function() { return { ok: false }; });
+  }
+
+  // Channel 2: HubSpot
+  var hubspotPromise = Promise.resolve({ ok: false });
+  if (HUBSPOT_FORM_GUID && HUBSPOT_FORM_GUID !== 'YOUR_FORM_GUID') {
+    var firstName = name.split(' ')[0];
+    var lastName  = name.split(' ').slice(1).join(' ') || '';
+    hubspotPromise = fetch(
+      'https://api.hsforms.com/submissions/v3/integration/submit/' + HUBSPOT_PORTAL_ID + '/' + HUBSPOT_FORM_GUID,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fields: [
+            { name: 'firstname', value: firstName },
+            { name: 'lastname',  value: lastName },
+            { name: 'email',     value: email },
+            { name: 'phone',     value: phone || '' },
+            { name: 'company',   value: biz || '' },
+            { name: 'message',   value:
+                'QUOTE — ' + new Date().toLocaleDateString() + '\n' +
+                'Account: '    + quoteData.account + '\n' +
+                'Material: '   + quoteData.collection + ' \u00b7 ' + quoteData.color + '\n' +
+                'Dimensions: ' + quoteData.dimensions + ' \u00b7 ' + quoteData.thickness + '\n' +
+                'Qty: '        + quoteData.quantity + ' board(s)\n' +
+                'Add-Ons: '    + quoteData.addons + '\n' +
+                'Knife: '      + quoteData.knifeQty + ' ($' + quoteData.knifeTotal + ')\n' +
+                'Shipping: '   + quoteData.shippingMethod + ' (~$' + quoteData.shippingAmount + ')\n' +
+                'Est. Total: $' + quoteData.grandTotal + ' (ESTIMATE \u2014 re-verify)\n' +
+                (resale ? 'Resale Cert: ' + resale + '\n' : '') +
+                (notes  ? 'Notes: ' + notes : '')
+            },
+          ],
+          context: {
+            pageUri:  window.location.href || 'gbckc.com/richlitecalculator',
+            pageName: 'Richlite Quote Calculator v2',
+          },
+        }),
+      }
+    ).then(function(r) { return { ok: r.ok }; })
+     .catch(function() { return { ok: false }; });
+  }
+
+  Promise.all([formspreePromise, hubspotPromise]).then(function(results) {
+    var formspreeOk = results[0].ok;
+    var hubspotOk   = results[1].ok;
+    btn.classList.remove('btn-loading');
+    btn.textContent = 'Request My Official Quote \u2192';
+    btn.disabled = false;
+
+    var bothUnconfigured = FORMSPREE_ID === 'YOUR_FORM_ID' && HUBSPOT_FORM_GUID === 'YOUR_FORM_GUID';
+    if (bothUnconfigured) {
+      var body = Object.keys(payload).map(function(k) { return k.replace(/_/g,' ') + ': ' + payload[k]; }).join('\n');
+      window.open('mailto:matthew@gbckc.com?subject=' +
+        encodeURIComponent('Richlite Quote \u2013 ' + name + ' (' + quoteData.account + ')') +
+        '&body=' + encodeURIComponent(body), '_blank');
+      document.getElementById('confirm-email').textContent = email;
+      showStep('step-success', 4);
+      return;
+    }
+
+    if (formspreeOk || hubspotOk) {
+      document.getElementById('confirm-email').textContent = email;
+      showStep('step-success', 4);
+    } else {
+      status.className = 'submit-status error';
+      status.textContent = 'Something went wrong sending your quote. Please email matthew@gbckc.com directly or call (816) 419-4242.';
+      wixResize();
+    }
+  });
+}
+
+// ─── WIX RESIZE ──────────────────────────────────────────────────────────────
+function wixResize() {
+  var h = document.documentElement.scrollHeight || document.body.scrollHeight;
+  window.parent.postMessage({ height: h }, '*');
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────────────────────────
+function showStep(stepId, stepNum) {
+  ['step-config','step-price','step-lead','step-success'].forEach(function(id) {
+    var el = document.getElementById(id);
+    el.style.display = 'none'; el.classList.remove('fade-up');
+  });
+  var target = document.getElementById(stepId);
+  target.style.display = 'block';
+  void target.offsetWidth;
+  target.classList.add('fade-up');
+  updateIndicators(stepNum);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  setTimeout(wixResize, 50);
+}
+
+function goBack(stepId, stepNum) { showStep(stepId, stepNum); }
+
+function updateIndicators(active) {
+  [1, 2, 3].forEach(function(n) {
+    var col = document.getElementById('ind-' + n);
+    var dot = col.querySelector('.step-dot');
+    col.classList.remove('active','done'); dot.classList.remove('active','done');
+    if (n < active)        { col.classList.add('done');   dot.classList.add('done'); }
+    else if (n === active) { col.classList.add('active'); dot.classList.add('active'); }
+  });
+}
+
+function resetCalc() {
+  currentAccount = 'retail'; currentQty = 1; activeAddons = {}; knifeQty = 0;
+  selW = 12; selL = 18; selD = 0;
+  setAccount('retail');
+  document.getElementById('sel-collection').value = '';
+  document.getElementById('sel-color').value = '';
+  document.getElementById('color-grid').innerHTML =
+    '<div style="font-size:14px;color:#555;padding:8px 0;">Select a collection above to see colors</div>';
+  document.getElementById('collection-info').innerHTML = '';
+  document.querySelectorAll('.addon-tile').forEach(function(t) { t.classList.remove('selected'); });
+  document.querySelectorAll('.addon-check').forEach(function(c) { c.style.color = 'transparent'; });
+  document.querySelectorAll('.qty-pill').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelector('.qty-pill[data-qty="1"]').classList.add('active');
+  var qci = document.getElementById('qty-custom');
+  if (qci) qci.value = '';
+  document.querySelectorAll('.knife-qty-pill').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelector('.knife-qty-pill').classList.add('active'); // 0
+  document.getElementById('knife-total-line').style.display = 'none';
+  ['bar-mat','bar-fab','bar-base','bar-addons','bar-knife'].forEach(function(id) {
+    document.getElementById(id).style.width = '0%';
+  });
+  document.getElementById('quote-form').reset();
+  buildTiles();
+  selectRectTile(2); // default 12×18
+  showStep('step-config', 1);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+buildTiles();
+selectRectTile(2); // default: 12"×18"
+updateBudget();
+wixResize();
+window.addEventListener('load', function() { setTimeout(wixResize, 100); });
+window.addEventListener('resize', function() { setTimeout(wixResize, 150); });
+
+</script>
+</body>
+</html>
