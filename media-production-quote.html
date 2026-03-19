@@ -58,6 +58,15 @@
     }
     .meta-label { font-weight: 700; color: #666; margin-bottom: 3px; letter-spacing: 0.06em; font-size: 10px; text-transform: uppercase; }
     @media(max-width: 560px) { .calc-hero { padding: 36px 24px 28px; } }
+    /* Collapsed hero — steps 2–6 */
+    .calc-hero.collapsed { padding: 20px 48px 18px; }
+    .calc-hero.collapsed .hero-eyebrow,
+    .calc-hero.collapsed .hero-sub-label,
+    .calc-hero.collapsed .hero-h1,
+    .calc-hero.collapsed .hero-desc { display: none; }
+    .calc-hero.collapsed .steps-labeled { margin-bottom: 0; }
+    .calc-hero.collapsed .calc-meta { margin-top: 14px; padding-top: 14px; }
+    @media(max-width: 560px) { .calc-hero.collapsed { padding: 16px 24px 14px; } }
 
     /* ── STEP INDICATOR ── */
     .steps-labeled { display: flex; align-items: flex-start; justify-content: center; margin-bottom: 0; }
@@ -720,7 +729,7 @@
       <div class="card-title">Actions</div>
       <div class="action-row">
         <button class="btn btn-primary" onclick="emailQuote()">✉ Email Me This Quote</button>
-        <button class="btn btn-ghost" onclick="window.print()">🖨 Print / Save PDF</button>
+        <button class="btn btn-ghost" onclick="printAndEmail()">🖨 Print / Save PDF</button>
         <button class="btn btn-secondary" id="editBtn" onclick="goToStep(5)">← Edit Quote</button>
       </div>
     </div>
@@ -782,6 +791,55 @@ const ADDON_PRICES   = { music:200, motion:250, extended:0, thumbnail:0 };
 const ADDON_LABELS   = { music:'Licensed Music Track', motion:'Motion Graphics & Overlays', extended:'Extended Edit Pass', thumbnail:'Thumbnail & YouTube Metadata' };
 const MITM_DISCOUNT  = 0.20;
 
+// ─── HUBSPOT ─────────────────────────────────────────────
+const HS_PORTAL = '243867516';
+const HS_FORM   = 'f7e43421-0cee-498d-9057-eea659b04a94';
+const HS_URL    = `https://api.hsforms.com/submissions/v3/integration/submit/${HS_PORTAL}/${HS_FORM}`;
+
+function hsSubmit(extraFields) {
+  const fields = [
+    { name: 'email',     value: S.email   || $('contactEmail').value.trim() },
+    { name: 'firstname', value: S.contact || $('contactName').value.trim() },
+    { name: 'company',   value: S.partner || $('partnerName').value.trim() },
+    ...extraFields
+  ].filter(f => f.value);
+  fetch(HS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      fields,
+      context: {
+        pageUri: location.href.split('#')[0],
+        pageName: 'GBC Media Production Quote Calculator'
+      }
+    })
+  }).catch(() => {}); // silent — never block the user flow
+}
+
+function buildQuoteText() {
+  const t = total(), disc = mitmDiscount();
+  let txt = `Production Crew: ${S.shootLabel} — ${fmt(S.shootPrice)}\n`;
+  txt += `Full YouTube Episode (5-7 min) — Included\n`;
+  txt += `60-Second Website Teaser — Included\n`;
+  if (S.delivs.masterbundle)     txt += `Master Bundle (3 reels + interview) — ${fmt(800)}\n`;
+  else if (S.delivs.bundle)      txt += `Full Bundle (3 reels) — ${fmt(550)}\n`;
+  else {
+    const SKIP = ['episode','teaser','bundle','masterbundle'];
+    Object.keys(S.delivs).forEach(k => {
+      if (S.delivs[k] && !SKIP.includes(k)) txt += `${DELIV_LABELS[k]} — ${fmt(DELIV_PRICES[k])}\n`;
+    });
+  }
+  if (S.voPrice > 0) txt += `Post Production Session — ${fmt(S.voPrice)}\n`;
+  txt += `Extended Edit Pass (up to 3 revisions) — Included\n`;
+  Object.keys(S.addons).forEach(k => {
+    if (S.addons[k] && k !== 'thumbnail' && k !== 'extended') txt += `${ADDON_LABELS[k]} — ${fmt(ADDON_PRICES[k])}\n`;
+  });
+  if (S.socialPrice > 0) txt += `Social Media Management (${S.socialLabel}) — ${fmt(S.socialPrice)}\n`;
+  if (disc > 0) txt += `Crystal Daisy Partner Rate: -${fmt(disc)}\n`;
+  txt += `TOTAL: ${fmt(t)}`;
+  return txt;
+}
+
 // ─── HELPERS ─────────────────────────────────────────────
 const $ = id => document.getElementById(id);
 const fmt = n => '$' + Math.round(n).toLocaleString();
@@ -824,7 +882,14 @@ function validateAndAdvance() {
     $('errContactEmail').textContent = 'Please enter a valid email address.';
     valid = false;
   }
-  if (valid) goToStep(2);
+  if (valid) {
+    // Capture lead in HubSpot immediately — before they build anything
+    S.partner = $('partnerName').value.trim();
+    S.contact = $('contactName').value.trim();
+    S.email   = $('contactEmail').value.trim();
+    hsSubmit([{ name: 'message', value: 'Started GBC media production quote calculator.' }]);
+    goToStep(2);
+  }
 }
 
 function clearFieldError(el) {
@@ -839,6 +904,8 @@ function goToStep(n) {
   S.step = n;
   $('step' + n).classList.add('active');
   updateDots();
+  // Collapse hero after step 1 — keep only steps + metadata strip
+  $('calcHeader').classList.toggle('collapsed', n > 1);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -972,6 +1039,11 @@ function buildAndShowQuote() {
   S.email   = $('contactEmail').value.trim();
   S.notes   = $('quoteNotes').value.trim();
   renderQuote(false);
+  // Update HubSpot contact with full quote details
+  hsSubmit([
+    { name: 'message', value: buildQuoteText() },
+    { name: 'hs_lead_status', value: 'IN_PROGRESS' }
+  ]);
   goToStep(6);
 }
 
@@ -1096,49 +1168,21 @@ function copyLink() {
 }
 
 function emailQuote() {
-  const company = S.partner || 'Partner';
-  const t = total(), disc = mitmDiscount();
-  let body = `GBC Media Production Quote\n`;
-  body += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-  body += `Company: ${company}\n`;
-  if (S.contact) body += `Contact: ${S.contact}\n`;
-  if (S.email)   body += `Email: ${S.email}\n`;
-  body += `\n— PACKAGE DETAILS —\n`;
-  body += `Production Crew: ${S.shootLabel} — ${fmt(S.shootPrice)}\n`;
-  body += `Full YouTube Episode (5–7 min) — Included\n`;
-  body += `60-Second Website Teaser — Included\n`;
-  if (S.delivs.masterbundle) {
-    body += `Master Bundle (3 reels + interview) — ${fmt(800)}\n`;
-  } else if (S.delivs.bundle) {
-    body += `Full Bundle (3 reels) — ${fmt(550)}\n`;
-  } else {
-    const SKIP = ['episode','teaser','bundle','masterbundle'];
-    Object.keys(S.delivs).forEach(k => {
-      if (S.delivs[k] && !SKIP.includes(k)) body += `${DELIV_LABELS[k]} — ${fmt(DELIV_PRICES[k])}\n`;
-    });
-  }
-  if (S.voPrice > 0) body += `Post Production Session — ${fmt(S.voPrice)}\n`;
-  body += `Extended Edit Pass (up to 3 revisions) — Included\n`;
-  body += `Thumbnail & YouTube Metadata — Included\n`;
-  Object.keys(S.addons).forEach(k => {
-    if (S.addons[k] && k !== 'thumbnail' && k !== 'extended') body += `${ADDON_LABELS[k]} — ${fmt(ADDON_PRICES[k])}\n`;
-  });
-  if (S.socialPrice > 0) body += `Social Media Management (${S.socialLabel}) — ${fmt(S.socialPrice)}\n`;
-  body += `\n`;
-  if (disc > 0) body += `Crystal Daisy Partner Rate Discount: -${fmt(disc)}\n`;
-  body += `TOTAL: ${fmt(t)}\n`;
-  body += `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-  body += `Production: Crystal Daisy Productions\nSeries: Made in the Middle · Season 1\nMarket: Kansas City · National Distribution\n`;
-  body += `\nReady to move forward? Contact Matt at matthew@gbckc.com or reply to this email.\n`;
-  body += `gbckc.com\n`;
+  hsSubmit([
+    { name: 'message',         value: buildQuoteText() },
+    { name: 'hs_lead_status',  value: 'NEW' }
+  ]);
+  const dest = S.email || 'your email';
+  toast(`Quote sent to ${dest} — check your inbox!`);
+}
 
-  const subject = `Your GBC Media Production Quote — ${company}`;
-  const to = S.email || 'matthew@gbckc.com';
-  const cc = S.email ? 'matthew@gbckc.com' : '';
-  const sep = S.email ? '&' : '?';
-  const mailtoBase = `mailto:${to}?${cc ? 'cc=' + encodeURIComponent(cc) + '&' : ''}subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  window.location.href = mailtoBase;
-  toast('Opening your email client...');
+function printAndEmail() {
+  hsSubmit([
+    { name: 'message',        value: buildQuoteText() },
+    { name: 'hs_lead_status', value: 'NEW' }
+  ]);
+  toast('Quote saved — printing now...');
+  setTimeout(() => window.print(), 600);
 }
 
 function toast(msg) {
