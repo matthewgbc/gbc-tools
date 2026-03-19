@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GBC Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080808;--surface:#0f0f0f;--card:#141414;--card2:#1a1a1a;
+  --border:#1e1e1e;--border2:#282828;--border3:#333;
+  --gold:#C8952A;--gold2:#E4A83C;--gold-dim:#7a5a1a;
+  --txt:#f0ebe3;--txt2:#999;--txt3:#555;
+  --green:#22c55e;--green-dim:#14532d;
+  --yellow:#f59e0b;--yellow-dim:#78350f;
+  --red:#ef4444;--red-dim:#7f1d1d;
+  --blue:#3b82f6;--blue-dim:#1e3a5f;
+  --purple:#a855f7;--purple-dim:#4a1772;
+  --sidebar:240px;
+}
+body{font-family:'Archivo',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;display:flex;flex-direction:column;font-size:13px;}
+a{color:inherit;text-decoration:none;}
+/* TOP STATUS BAR */
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;height:40px;display:flex;align-items:center;gap:0;flex-shrink:0;z-index:100;}
+.topbar-brand{font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-right:24px;white-space:nowrap;}
+.topbar-stats{display:flex;gap:0;flex:1;overflow:hidden;}
+.tstat{display:flex;align-items:center;gap:8px;padding:0 16px;border-right:1px solid var(--border);height:40px;white-space:nowrap;}
+.tstat:first-child{padding-left:0;}
+.tstat-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3);}
+.tstat-value{font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace;}
+.tstat-value.green{color:var(--green);}
+.tstat-value.yellow{color:var(--yellow);}
+.tstat-value.red{color:var(--red);}
+.tstat-value.gold{color:var(--gold);}
+.pulse-dot{width:6px;height:6px;border-radius:50%;animation:pulse 2s infinite;}
+.pulse-dot.green{background:var(--green);}
+.pulse-dot.yellow{background:var(--yellow);}
+.pulse-dot.red{background:var(--red);}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.topbar-date{font-size:11px;color:var(--txt3);font-family:'JetBrains Mono',monospace;margin-left:auto;flex-shrink:0;}
+/* LAYOUT */
+.layout{display:flex;flex:1;overflow:hidden;height:calc(100vh - 40px);}
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;}
+.sidebar::-webkit-scrollbar{width:3px;}
+.sidebar::-webkit-scrollbar-track{background:transparent;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border2);}
+.nav-section{padding:16px 12px 4px;}
+.nav-section-label{font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--txt3);padding:0 8px;margin-bottom:6px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s;color:var(--txt2);font-size:12px;font-weight:500;border:1px solid transparent;}
+.nav-item:hover{background:var(--card);color:var(--txt);}
+.nav-item.active{background:linear-gradient(135deg,rgba(200,149,42,.12),rgba(200,149,42,.06));color:var(--gold);border-color:rgba(200,149,42,.2);}
+.nav-item .icon{font-size:14px;width:18px;text-align:center;flex-shrink:0;}
+.nav-item .badge{margin-left:auto;font-size:9px;font-weight:700;background:var(--red);color:#fff;border-radius:10px;padding:1px 5px;}
+.nav-item .badge.yellow{background:var(--yellow-dim);color:var(--yellow);}
+.nav-item .badge.green{background:var(--green-dim);color:var(--green);}
+.nav-divider{height:1px;background:var(--border);margin:8px 12px;}
+/* MAIN */
+.main{flex:1;overflow-y:auto;overflow-x:hidden;}
+.main::-webkit-scrollbar{width:4px;}
+.main::-webkit-scrollbar-track{background:transparent;}
+.main::-webkit-scrollbar-thumb{background:var(--border2);}
+.view{display:none;padding:24px;}
+.view.active{display:block;}
+/* PAGE HEADER */
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;}
+.page-title{font-size:22px;font-weight:800;color:var(--txt);}
+.page-subtitle{font-size:12px;color:var(--txt3);margin-top:3px;}
+.page-actions{display:flex;gap:8px;align-items:center;}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;border:none;transition:all .15s;}
+.btn-primary{background:var(--gold);color:#000;}
+.btn-primary:hover{background:var(--gold2);}
+.btn-ghost{background:transparent;color:var(--txt2);border:1px solid var(--border2);}
+.btn-ghost:hover{background:var(--card);color:var(--txt);}
+/* GRID */
+.grid{display:grid;gap:16px;}
+.grid-4{grid-template-columns:repeat(4,1fr);}
+.grid-3{grid-template-columns:repeat(3,1fr);}
+.grid-2{grid-template-columns:repeat(2,1fr);}
+.grid-1-2{grid-template-columns:1fr 2fr;}
+.grid-2-1{grid-template-columns:2fr 1fr;}
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.card-header{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--txt2);}
+.card-body{padding:16px;}
+/* KPI CARDS */
+.kpi{padding:16px;position:relative;overflow:hidden;}
+.kpi::before{content:'';position:absolute;top:0;right:0;width:60px;height:60px;border-radius:50%;opacity:.06;transform:translate(20px,-20px);}
+.kpi.green::before{background:var(--green);}
+.kpi.yellow::before{background:var(--yellow);}
+.kpi.red::before{background:var(--red);}
+.kpi.gold::before{background:var(--gold);}
+.kpi-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3);margin-bottom:8px;}
+.kpi-value{font-size:28px;font-weight:800;font-family:'JetBrains Mono',monospace;line-height:1;}
+.kpi-value.green{color:var(--green);}
+.kpi-value.yellow{color:var(--yellow);}
+.kpi-value.red{color:var(--red);}
+.kpi-value.gold{color:var(--gold);}
+.kpi-sub{font-size:11px;color:var(--txt3);margin-top:6px;}
+.kpi-trend{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;margin-top:4px;}
+.kpi-trend.up{color:var(--green);}
+.kpi-trend.down{color:var(--red);}
+.kpi-trend.flat{color:var(--txt3);}
+/* ALERT BANNERS */
+.alert{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:8px;margin-bottom:8px;font-size:12px;}
+.alert.red{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:var(--txt);}
+.alert.yellow{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);color:var(--txt);}
+.alert.green{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--txt);}
+.alert.blue{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);color:var(--txt);}
+.alert-icon{font-size:14px;flex-shrink:0;margin-top:1px;}
+.alert strong{color:var(--txt);font-weight:700;}
+/* TABLES */
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--txt3);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px;vertical-align:middle;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:rgba(255,255,255,.02);}
+.tbl .mono{font-family:'JetBrains Mono',monospace;}
+/* TAGS / PILLS */
+.pill{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.05em;}
+.pill.green{background:var(--green-dim);color:var(--green);}
+.pill.yellow{background:var(--yellow-dim);color:var(--yellow);}
+.pill.red{background:var(--red-dim);color:var(--red);}
+.pill.blue{background:var(--blue-dim);color:var(--blue);}
+.pill.purple{background:var(--purple-dim);color:var(--purple);}
+.pill.gold{background:rgba(200,149,42,.15);color:var(--gold);}
+.pill.grey{background:rgba(255,255,255,.05);color:var(--txt3);}
+/* TABS */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px;}
+.tab{padding:10px 16px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--txt3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;}
+.tab:hover{color:var(--txt2);}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+/* PARTNER CARD */
+.partner-card{border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s;cursor:pointer;}
+.partner-card:hover{border-color:var(--border3);}
+.partner-card.active{border-color:var(--gold);background:linear-gradient(135deg,rgba(200,149,42,.04),transparent);}
+.partner-card-top{padding:14px 16px;display:flex;align-items:center;gap:12px;}
+.partner-avatar{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0;}
+.partner-info{flex:1;min-width:0;}
+.partner-name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.partner-type{font-size:10px;color:var(--txt3);margin-top:2px;}
+.partner-card-stats{padding:0 16px 14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.partner-stat{text-align:center;}
+.partner-stat-v{font-size:14px;font-weight:700;font-family:'JetBrains Mono',monospace;}
+.partner-stat-l{font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.08em;margin-top:2px;}
+/* KANBAN */
+.kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.kanban-col{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.kanban-col-header{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.kanban-col-title{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;}
+.kanban-count{font-size:10px;font-weight:700;background:var(--card2);padding:1px 7px;border-radius:10px;color:var(--txt3);}
+.kanban-items{padding:8px;}
+.kanban-item{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px;cursor:pointer;transition:border-color .15s;}
+.kanban-item:hover{border-color:var(--border3);}
+.kanban-item-title{font-size:12px;font-weight:600;margin-bottom:6px;}
+.kanban-item-sub{font-size:10px;color:var(--txt3);}
+.kanban-item-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;}
+/* PROGRESS BAR */
+.progress-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:2px;transition:width .3s;}
+.progress-fill.green{background:var(--green);}
+.progress-fill.yellow{background:var(--yellow);}
+.progress-fill.red{background:var(--red);}
+.progress-fill.gold{background:var(--gold);}
+.progress-fill.blue{background:var(--blue);}
+/* TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:0;}
+.timeline-item{display:flex;gap:12px;padding-bottom:16px;position:relative;}
+.timeline-item::before{content:'';position:absolute;left:15px;top:30px;bottom:0;width:1px;background:var(--border);}
+.timeline-item:last-child::before{display:none;}
+.timeline-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;border:2px solid var(--border);}
+.timeline-dot.done{background:var(--green-dim);border-color:var(--green);color:var(--green);}
+.timeline-dot.active{background:rgba(200,149,42,.15);border-color:var(--gold);color:var(--gold);}
+.timeline-dot.pending{background:var(--card2);border-color:var(--border2);color:var(--txt3);}
+.timeline-dot.blocked{background:var(--red-dim);border-color:var(--red);color:var(--red);}
+.timeline-content{flex:1;padding-top:4px;}
+.timeline-title{font-size:12px;font-weight:600;}
+.timeline-sub{font-size:11px;color:var(--txt3);margin-top:2px;}
+/* LIFECYCLE */
+.lifecycle-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+.lifecycle-row:last-child{border-bottom:none;}
+.lifecycle-name{font-size:12px;font-weight:600;flex:1;}
+.lifecycle-days{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--txt3);width:60px;text-align:right;}
+/* EXPENSE TABLE */
+.expense-header{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:8px;padding:8px 12px;border-bottom:1px solid var(--border);}
+.expense-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:8px;padding:8px 12px;border-bottom:1px solid var(--border);align-items:center;}
+.expense-row:last-child{border-bottom:none;}
+.expense-row:hover{background:rgba(255,255,255,.02);}
+/* SEARCH */
+.search-bar{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 14px;display:flex;align-items:center;gap:8px;width:100%;max-width:300px;}
+.search-bar input{background:transparent;border:none;outline:none;color:var(--txt);font-size:12px;font-family:'Archivo',sans-serif;flex:1;}
+.search-bar input::placeholder{color:var(--txt3);}
+/* SECTION TITLE */
+.section-title{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--txt3);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+/* INVENTORY */
+.inv-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);}
+.inv-item:last-child{border-bottom:none;}
+.inv-bar-wrap{flex:1;margin:0 12px;}
+.inv-qty{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--txt3);width:60px;text-align:right;}
+/* CONTACT CARD */
+.contact-card{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:12px;display:flex;gap:10px;align-items:flex-start;}
+.contact-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;background:var(--card);flex-shrink:0;border:1px solid var(--border2);}
+.contact-name{font-size:12px;font-weight:700;}
+.contact-role{font-size:10px;color:var(--txt3);margin-top:2px;}
+.contact-email{font-size:10px;color:var(--gold);margin-top:4px;}
+/* MEDIA PIPELINE */
+.ep-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:8px;}
+.ep-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.ep-title{font-size:13px;font-weight:700;}
+.ep-partner{font-size:10px;color:var(--txt3);}
+.ep-steps{display:flex;gap:4px;margin-top:10px;}
+.ep-step{flex:1;height:4px;border-radius:2px;background:var(--border);}
+.ep-step.done{background:var(--green);}
+.ep-step.active{background:var(--gold);}
+.ep-step.blocked{background:var(--red);}
+/* RESPONSIVE */
+@media(max-width:900px){
+  .grid-4{grid-template-columns:repeat(2,1fr);}
+  .grid-3{grid-template-columns:repeat(2,1fr);}
+  .kanban{grid-template-columns:1fr 1fr;}
+  .sidebar{width:200px;}
+}
+@media(max-width:600px){
+  .sidebar{display:none;}
+  .grid-4,.grid-3,.grid-2{grid-template-columns:1fr;}
+  .kanban{grid-template-columns:1fr;}
+}
+/* SCROLLBAR GLOBAL */
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+/* HIGHLIGHT NUMBERS */
+.num{font-family:'JetBrains Mono',monospace;}
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:16px 0;}
+/* EMPTY STATE */
+.empty{text-align:center;padding:32px;color:var(--txt3);font-size:12px;}
+/* TOOLTIP */
+[data-tip]{position:relative;cursor:help;}
+[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#000;border:1px solid var(--border2);color:var(--txt);font-size:10px;padding:4px 8px;border-radius:4px;white-space:nowrap;z-index:1000;pointer-events:none;}
+/* MINI CHART BARS */
+.mini-chart{display:flex;align-items:flex-end;gap:3px;height:32px;}
+.mini-bar{flex:1;background:var(--gold-dim);border-radius:2px 2px 0 0;transition:background .15s;}
+.mini-bar.active{background:var(--gold);}
+</style>
+</head>
+<body>
+
+<!-- TOP STATUS BAR -->
+<div class="topbar">
+  <div class="topbar-brand">GBC OS</div>
+  <div class="topbar-stats">
+    <div class="tstat">
+      <div class="pulse-dot" id="cashDot"></div>
+      <span class="tstat-label">Cash</span>
+      <span class="tstat-value" id="cashVal" data-tip="$30K floor — flag within $10K">—</span>
+    </div>
+    <div class="tstat">
+      <div class="pulse-dot yellow"></div>
+      <span class="tstat-label">Licensing</span>
+      <span class="tstat-value yellow" id="licVal">1 UNSIGNED</span>
+    </div>
+    <div class="tstat">
+      <div class="pulse-dot" id="gapDot"></div>
+      <span class="tstat-label">Content Gap</span>
+      <span class="tstat-value" id="gapVal">—</span>
+    </div>
+    <div class="tstat">
+      <span class="tstat-label">Active Deals</span>
+      <span class="tstat-value gold">4 WARM</span>
+    </div>
+    <div class="tstat">
+      <span class="tstat-label">Episodes</span>
+      <span class="tstat-value">EP2 LIVE</span>
+    </div>
+  </div>
+  <div class="topbar-date" id="topDate"></div>
+</div>
+
+<div class="layout">
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="nav-section">
+    <div class="nav-section-label">Command</div>
+    <div class="nav-item active" onclick="showView('cmd')">
+      <span class="icon">⚡</span> Command Center
+    </div>
+    <div class="nav-item" onclick="showView('pipeline')">
+      <span class="icon">📊</span> Sales Pipeline
+    </div>
+    <div class="nav-item" onclick="showView('mitm')">
+      <span class="icon">🎬</span> MITM Pipeline
+    </div>
+  </div>
+  <div class="nav-divider"></div>
+  <div class="nav-section">
+    <div class="nav-section-label">Partners</div>
+    <div class="nav-item" onclick="showPartner('q39')">
+      <span class="icon">🔥</span> Q39 BBQ
+      <span class="badge green">ACTIVE</span>
+    </div>
+    <div class="nav-item" onclick="showPartner('burnted')">
+      <span class="icon">🍖</span> Burnt End BBQ
+      <span class="badge yellow">LIC</span>
+    </div>
+    <div class="nav-item" onclick="showPartner('meatmitch')">
+      <span class="icon">🏆</span> Meat Mitch BBQ
+    </div>
+    <div class="nav-item" onclick="showPartner('boothcreek')">
+      <span class="icon">🐄</span> Booth Creek Wagyu
+    </div>
+    <div class="nav-item" onclick="showPartner('dallasmavs')">
+      <span class="icon">🏀</span> Dallas Mavericks
+    </div>
+    <div class="nav-item" onclick="showPartner('chefthompson')">
+      <span class="icon">👨‍🍳</span> Chef Thompson
+    </div>
+  </div>
+  <div class="nav-divider"></div>
+  <div class="nav-section">
+    <div class="nav-section-label">Vendors</div>
+    <div class="nav-item" onclick="showVendor('richlite')">
+      <span class="icon">🪨</span> Richlite
+      <span class="badge yellow">REORDER</span>
+    </div>
+    <div class="nav-item" onclick="showVendor('jedunn')">
+      <span class="icon">🏗️</span> JE Dunn
+    </div>
+    <div class="nav-item" onclick="showVendor('mccray')">
+      <span class="icon">🪵</span> McCray Lumber
+    </div>
+    <div class="nav-item" onclick="showVendor('adeo')">
+      <span class="icon">🌲</span> Adeo Wood
+    </div>
+    <div class="nav-item" onclick="showVendor('crystaldaisy')">
+      <span class="icon">🎥</span> Crystal Daisy
+    </div>
+  </div>
+  <div class="nav-divider"></div>
+  <div class="nav-section">
+    <div class="nav-section-label">Finance</div>
+    <div class="nav-item" onclick="showView('financials')">
+      <span class="icon">💰</span> Revenue &amp; Margins
+    </div>
+    <div class="nav-item" onclick="showView('inventory')">
+      <span class="icon">📦</span> Inventory Reorder
+    </div>
+    <div class="nav-item" onclick="showView('lifecycle')">
+      <span class="icon">🔄</span> Relationship Health
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+<!-- ═══════════════════════════ COMMAND CENTER ═══════════════════════════ -->
+<div class="view active" id="view-cmd">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Command Center</div>
+      <div class="page-subtitle" id="cmdDate">Loading...</div>
+    </div>
+    <div class="page-actions">
+      <div class="btn btn-ghost">↻ Refresh</div>
+      <div class="btn btn-primary">+ New Deal</div>
+    </div>
+  </div>
+
+  <!-- ALERTS -->
+  <div id="alertZone"></div>
+
+  <!-- KPIs -->
+  <div class="grid grid-4" style="margin-bottom:20px;">
+    <div class="card kpi gold">
+      <div class="kpi-label">2026 Rev Target</div>
+      <div class="kpi-value gold">$163.5K</div>
+      <div class="kpi-sub">Forecast vs. $163,500 plan</div>
+    </div>
+    <div class="card kpi green">
+      <div class="kpi-label">Cash Floor Status</div>
+      <div class="kpi-value green" id="kpiCash">$30K</div>
+      <div class="kpi-sub">Floor: $30K — Flag at $40K</div>
+    </div>
+    <div class="card kpi yellow">
+      <div class="kpi-label">Active Partners</div>
+      <div class="kpi-value yellow">6</div>
+      <div class="kpi-sub">2 need immediate action</div>
+    </div>
+    <div class="card kpi">
+      <div class="kpi-label">Open Licensing</div>
+      <div class="kpi-value red">1</div>
+      <div class="kpi-sub">Burnt End — blocking EP2 distribution</div>
+    </div>
+  </div>
+
+  <div class="grid grid-2" style="margin-bottom:20px;">
+    <!-- PARTNER HEALTH -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Partner Relationship Health</span>
+        <span class="pill yellow">2 watch</span>
+      </div>
+      <div class="card-body" style="padding:0;">
+        <div id="healthTable"></div>
+      </div>
+    </div>
+
+    <!-- MITM EPISODE TRACKER -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">MITM Episode Pipeline</span>
+        <span class="pill gold">S1 · 8 eps</span>
+      </div>
+      <div class="card-body" style="padding:8px 16px;" id="epMiniList"></div>
+    </div>
+  </div>
+
+  <div class="grid grid-2">
+    <!-- DEALS -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Hot Deals &amp; Open Quotes</span>
+      </div>
+      <div class="card-body" style="padding:0;">
+        <table class="tbl">
+          <thead><tr>
+            <th>Opportunity</th><th>Value</th><th>Stage</th><th>Next Action</th>
+          </tr></thead>
+          <tbody>
+            <tr><td>PFG Pitch Deck</td><td class="mono gold">—</td><td><span class="pill gold">HOT</span></td><td style="color:var(--txt3);font-size:11px;">Mar 21 pitch</td></tr>
+            <tr><td>Chef Thompson Custom</td><td class="mono">TBD</td><td><span class="pill yellow">WARM</span></td><td style="color:var(--txt3);font-size:11px;">R&D costing</td></tr>
+            <tr><td>JE Dunn (Logan Tallman)</td><td class="mono gold">FLAGSHIP</td><td><span class="pill blue">WARM</span></td><td style="color:var(--txt3);font-size:11px;">Precision outreach</td></tr>
+            <tr><td>Dallas Mavs Re-engage</td><td class="mono">$16K+</td><td><span class="pill grey">DORMANT</span></td><td style="color:var(--txt3);font-size:11px;">2026 pricing correction</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ACTION ITEMS -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Immediate Actions</span>
+        <span class="pill red">5 urgent</span>
+      </div>
+      <div class="card-body" style="padding:0;">
+        <table class="tbl">
+          <thead><tr><th>Action</th><th>Owner</th><th>Due</th></tr></thead>
+          <tbody>
+            <tr><td><span class="pill red" style="margin-right:6px;">BLOCK</span>Burnt End licensing signed</td><td>Tim</td><td style="color:var(--red);font-size:11px;" class="mono">OVERDUE</td></tr>
+            <tr><td>Richlite reorder call (Brendan)</td><td>Matt</td><td style="color:var(--red);font-size:11px;" class="mono">OVERDUE</td></tr>
+            <tr><td>Betty EP3 brief sent</td><td>Matt</td><td style="color:var(--yellow);font-size:11px;" class="mono">Mar 26</td></tr>
+            <tr><td>Adeo Wood eval + contact</td><td>Matt</td><td style="color:var(--yellow);font-size:11px;" class="mono">Mar 21</td></tr>
+            <tr><td>Dallas Mavs re-engage at correct price</td><td>Matt</td><td style="color:var(--txt3);font-size:11px;" class="mono">Apr 01</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ PARTNER VIEW ═══════════════════════════ -->
+<div class="view" id="view-partner">
+  <div id="partnerContent"></div>
+</div>
+
+<!-- ═══════════════════════════ VENDOR VIEW ═══════════════════════════ -->
+<div class="view" id="view-vendor">
+  <div id="vendorContent"></div>
+</div>
+
+<!-- ═══════════════════════════ MITM PIPELINE ═══════════════════════════ -->
+<div class="view" id="view-mitm">
+  <div class="page-header">
+    <div>
+      <div class="page-title">MITM Episode Pipeline</div>
+      <div class="page-subtitle">Made in the Middle · Season 1 · 8–12 episodes · Crystal Daisy Productions</div>
+    </div>
+    <div class="page-actions">
+      <span class="pill yellow">1 LICENSING BLOCK</span>
+      <span class="pill red">1 VO PENDING</span>
+    </div>
+  </div>
+  <div id="mitmKanban"></div>
+  <div style="margin-top:24px;" class="section-title">Episode Timeline</div>
+  <div class="grid grid-2" style="margin-top:12px;">
+    <div id="epTimeline"></div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Critical Path Rules</span></div>
+      <div class="card-body">
+        <div class="alert yellow"><span class="alert-icon">⚡</span><div><strong>Tim VO — Critical Path:</strong> Do NOT schedule VO until (1) shoot locked, (2) partner agreement signed, (3) rough cut complete.</div></div>
+        <div class="alert red"><span class="alert-icon">🚫</span><div><strong>Asset Deadline:</strong> All footage, VO, B-roll delivered by Friday of week prior to Betty's edit deadline. No exceptions.</div></div>
+        <div class="alert blue"><span class="alert-icon">📋</span><div><strong>Revision Window:</strong> Final revision requests ≥2 days before launch. After that window = next publish cycle.</div></div>
+        <div class="alert green"><span class="alert-icon">✂️</span><div><strong>Short-Form:</strong> Every episode must produce min 8 pieces. Fire/smoke · key quote · kitchen process · board reveal.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ SALES PIPELINE ═══════════════════════════ -->
+<div class="view" id="view-pipeline">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Sales Pipeline</div>
+      <div class="page-subtitle">HOT · WARM · COLD · DORMANT — Jira Kanban</div>
+    </div>
+  </div>
+  <div class="kanban" id="pipelineKanban"></div>
+</div>
+
+<!-- ═══════════════════════════ FINANCIALS ═══════════════════════════ -->
+<div class="view" id="view-financials">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Revenue &amp; Margins</div>
+      <div class="page-subtitle">COGS: Richlite · Adeo Wood · Crystal Daisy · McCray — B2B vs. Sales &amp; Marketing</div>
+    </div>
+  </div>
+
+  <div class="grid grid-4" style="margin-bottom:20px;">
+    <div class="card kpi gold">
+      <div class="kpi-label">2026 Forecast Revenue</div>
+      <div class="kpi-value gold">$163,500</div>
+    </div>
+    <div class="card kpi red">
+      <div class="kpi-label">2026 Forecast Net</div>
+      <div class="kpi-value red">($155,132)</div>
+      <div class="kpi-sub">Floor breach Aug 2026</div>
+    </div>
+    <div class="card kpi">
+      <div class="kpi-label">Richlite COGS Type</div>
+      <div class="kpi-value" style="font-size:14px;">B2B COGS</div>
+      <div class="kpi-sub">Direct material cost</div>
+    </div>
+    <div class="card kpi">
+      <div class="kpi-label">Crystal Daisy Type</div>
+      <div class="kpi-value" style="font-size:14px;">Sales &amp; Mktg</div>
+      <div class="kpi-sub">Production / media spend</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-header"><span class="card-title">Partner Revenue Roll-Up</span></div>
+    <div class="card-body" style="padding:0;">
+      <table class="tbl">
+        <thead><tr>
+          <th>Partner</th><th>2025 Revenue</th><th>2026 YTD</th>
+          <th>Last Order</th><th>Richlite COGS</th><th>Gross Margin</th><th>Status</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Q39 BBQ</strong></td>
+            <td class="mono gold">$42,000+</td>
+            <td class="mono">—</td>
+            <td class="mono" style="color:var(--txt3);">2025</td>
+            <td class="mono">~$8,400</td>
+            <td><span class="pill green">~80%</span></td>
+            <td><span class="pill green">ACTIVE</span></td>
+          </tr>
+          <tr>
+            <td><strong>Dallas Mavericks</strong></td>
+            <td class="mono red">$16,413 <span style="font-size:9px;color:var(--red);">(74% off!)</span></td>
+            <td class="mono" style="color:var(--txt3);">NONE</td>
+            <td class="mono" style="color:var(--txt3);">Dec 2025</td>
+            <td class="mono">~$3,200</td>
+            <td><span class="pill red">DISCOUNTED</span></td>
+            <td><span class="pill grey">DORMANT</span></td>
+          </tr>
+          <tr>
+            <td><strong>Meat Mitch BBQ</strong></td>
+            <td class="mono">—</td>
+            <td class="mono">—</td>
+            <td class="mono" style="color:var(--txt3);">—</td>
+            <td class="mono">—</td>
+            <td>—</td>
+            <td><span class="pill yellow">PRE-PROD</span></td>
+          </tr>
+          <tr>
+            <td><strong>Burnt End BBQ</strong></td>
+            <td class="mono">—</td>
+            <td class="mono">—</td>
+            <td class="mono" style="color:var(--txt3);">—</td>
+            <td class="mono">—</td>
+            <td>—</td>
+            <td><span class="pill red">LIC BLOCKED</span></td>
+          </tr>
+          <tr>
+            <td><strong>Booth Creek Wagyu</strong></td>
+            <td class="mono">—</td>
+            <td class="mono">—</td>
+            <td class="mono" style="color:var(--txt3);">—</td>
+            <td class="mono">—</td>
+            <td>—</td>
+            <td><span class="pill blue">PROSPECT</span></td>
+          </tr>
+          <tr>
+            <td><strong>Chef Thompson</strong></td>
+            <td class="mono">—</td>
+            <td class="mono">TBD</td>
+            <td class="mono" style="color:var(--txt3);">—</td>
+            <td class="mono">TBD</td>
+            <td>—</td>
+            <td><span class="pill purple">R&amp;D</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="card-header"><span class="card-title">COGS Breakdown by Category</span></div>
+      <div class="card-body" style="padding:0;">
+        <table class="tbl">
+          <thead><tr><th>Vendor</th><th>Category</th><th>Type</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Richlite</strong></td><td>Sheet Stock</td><td><span class="pill blue">B2B COGS</span></td><td style="color:var(--txt3);font-size:11px;">Direct material · Channy / Brendan</td></tr>
+            <tr><td><strong>Adeo Wood</strong></td><td>Sheet Stock</td><td><span class="pill blue">B2B COGS</span></td><td style="color:var(--txt3);font-size:11px;">New supplier + potential distrib partner</td></tr>
+            <tr><td><strong>McCray Lumber</strong></td><td>Raw Material</td><td><span class="pill blue">B2B COGS</span></td><td style="color:var(--txt3);font-size:11px;">Follow-up overdue</td></tr>
+            <tr><td><strong>Crystal Daisy</strong></td><td>Production</td><td><span class="pill purple">Sales &amp; Mktg</span></td><td style="color:var(--txt3);font-size:11px;">Betty (editor) + Sam (camera)</td></tr>
+            <tr><td><strong>Gusto</strong></td><td>Payroll</td><td><span class="pill grey">G&amp;A</span></td><td style="color:var(--txt3);font-size:11px;">Warren W-2 started Mar 1 2026</td></tr>
+            <tr><td><strong>Guragai Tax</strong></td><td>Accounting</td><td><span class="pill grey">G&amp;A</span></td><td style="color:var(--txt3);font-size:11px;">Monthly retainer April 2026+</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Dallas Mavs Discount Alert</span></div>
+      <div class="card-body">
+        <div class="alert red">
+          <span class="alert-icon">🚨</span>
+          <div>
+            <strong>$16,413 Dec 2025 order was ~74% below standard pricing.</strong><br/>
+            <span style="font-size:11px;color:var(--txt3);">Claire Gerhardt. No 2026 activity. Do NOT re-engage at same pricing — correct price first, then reach out.</span>
+          </div>
+        </div>
+        <div style="margin-top:12px;" class="section-title">Re-Engage Checklist</div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px;">
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--txt3);"><span>□</span> Pull original order — verify exact items + dimensions</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--txt3);"><span>□</span> Rebuild quote at 2026 Richlite pricing (confirm w/ Channy)</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--txt3);"><span>□</span> Send warm re-engage to Claire with new pricing + MITM EP2 link</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--txt3);"><span>□</span> CRO + CFO sign off before sending</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ INVENTORY ═══════════════════════════ -->
+<div class="view" id="view-inventory">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Inventory &amp; Reorder Tracker</div>
+      <div class="page-subtitle">Richlite sheet stock · raw materials · consumables</div>
+    </div>
+    <div class="page-actions">
+      <span class="pill yellow">1 REORDER DUE</span>
+    </div>
+  </div>
+
+  <div class="alert yellow" style="margin-bottom:16px;">
+    <span class="alert-icon">⚠️</span>
+    <div><strong>Richlite reorder call overdue.</strong> Brendan has not been called. Price change confirmation from Channy also pending. Reorder + pricing must be resolved before next quote goes out.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">Sheet Stock Inventory</span></div>
+    <div class="card-body" style="padding:0;">
+      <table class="tbl">
+        <thead><tr>
+          <th>Material</th><th>Supplier</th><th>Stock Status</th><th>Reorder Point</th><th>Contact</th><th>Action</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Richlite — Heritage Collection</strong></td>
+            <td>Richlite (Tacoma WA)</td>
+            <td><span class="pill yellow">REORDER DUE</span></td>
+            <td class="mono">—</td>
+            <td style="font-size:11px;">Brendan (reorder)<br/>Channy (pricing)</td>
+            <td><div class="btn btn-ghost" style="font-size:10px;padding:4px 10px;">Call Brendan</div></td>
+          </tr>
+          <tr>
+            <td><strong>Richlite — Northwest A</strong></td>
+            <td>Richlite (Tacoma WA)</td>
+            <td><span class="pill grey">UNKNOWN</span></td>
+            <td class="mono">—</td>
+            <td style="font-size:11px;">Brendan</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><strong>Richlite — Northwest B</strong></td>
+            <td>Richlite (Tacoma WA)</td>
+            <td><span class="pill grey">UNKNOWN</span></td>
+            <td class="mono">—</td>
+            <td style="font-size:11px;">Brendan</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><strong>Adeo Wood — TBD</strong></td>
+            <td>Adeo Wood</td>
+            <td><span class="pill blue">EVALUATING</span></td>
+            <td class="mono">—</td>
+            <td style="font-size:11px;">Contact TBD</td>
+            <td><div class="btn btn-ghost" style="font-size:10px;padding:4px 10px;">Research</div></td>
+          </tr>
+          <tr>
+            <td><strong>McCray Lumber — Hardwood</strong></td>
+            <td>McCray Lumber</td>
+            <td><span class="pill yellow">FOLLOW-UP DUE</span></td>
+            <td class="mono">—</td>
+            <td style="font-size:11px;">—</td>
+            <td><div class="btn btn-ghost" style="font-size:10px;padding:4px 10px;">Call McCray</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid grid-2" style="margin-top:16px;">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Price Change Log</span></div>
+      <div class="card-body">
+        <div class="alert yellow">
+          <span class="alert-icon">💰</span>
+          <div><strong>Richlite price change — confirmation pending from Channy.</strong> Do not send quotes until new pricing is locked.</div>
+        </div>
+        <table class="tbl" style="margin-top:12px;">
+          <thead><tr><th>Material</th><th>Old Price</th><th>New Price</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Richlite Sheet Stock</td>
+              <td class="mono">TBD</td>
+              <td class="mono">TBD</td>
+              <td><span class="pill yellow">PENDING</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Supplier Contacts</span></div>
+      <div class="card-body" style="display:flex;flex-direction:column;gap:8px;">
+        <div class="contact-card">
+          <div class="contact-avatar" style="background:rgba(200,149,42,.1);color:var(--gold);">R</div>
+          <div>
+            <div class="contact-name">Channy</div>
+            <div class="contact-role">Richlite Sales — Price Change Confirmation</div>
+            <div class="contact-email">Price change pending</div>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-avatar" style="background:rgba(200,149,42,.1);color:var(--gold);">B</div>
+          <div>
+            <div class="contact-name">Brendan</div>
+            <div class="contact-role">Richlite — Reorder Contact</div>
+            <div class="contact-email" style="color:var(--red);">⚠️ Call overdue</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ RELATIONSHIP LIFECYCLE ═══════════════════════════ -->
+<div class="view" id="view-lifecycle">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Relationship Health</div>
+      <div class="page-subtitle">30-day content gap rule · Testimonial gate: Q39 · Meat Mitch · Burnt End</div>
+    </div>
+  </div>
+  <div class="grid grid-2" id="lifecycleGrid"></div>
+</div>
+
+</main>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════════
+
+var TODAY = new Date('2026-03-19');
+
+var PARTNERS = {
+  q39: {
+    id: 'q39', label: 'Q39 BBQ', emoji: '🔥',
+    type: 'Restaurant Partner', tier: 'VIP',
+    status: 'active', statusLabel: 'ACTIVE',
+    color: '#e85d04',
+    contacts: [
+      { name: 'Rob Magee', role: 'Owner', email: 'rob@q39bbq.com' },
+      { name: 'Kelly McGee', role: 'Marketing / Usage Agreement', email: '—' }
+    ],
+    revenue2025: '$42,000+', revenue2026: '—',
+    lastOrder: '2025', lastTouch: '2026-03-19',
+    lifecycle: 'active',
+    mitm: { episode: 'EP2 — Adjacent / Burnt End', status: 'POST-LAUNCH', licensing: 'pending-usage' },
+    notes: 'Flagship restaurant partner. Usage agreement → Kelly McGee. Q39 Instagram post pending. Captions + photo swap + 12-hour loop done. Crux YouTube SEO via Andrew Kneessy Mar 21.',
+    testimonialGate: true,
+    contentGapDays: 0,
+    inventory: 'Boards featured in EP2 footage. Reorder likely with next install.',
+    opportunities: [
+      { title: 'Usage Agreement Sign-off', owner: 'Matt', priority: 'HOT', due: '2026-03-26' },
+      { title: 'Q39 Instagram Post', owner: 'Matt', priority: 'HOT', due: '2026-03-26' },
+      { title: 'Crux YouTube SEO (Andrew Kneessy)', owner: 'Matt', priority: 'HOT', due: '2026-03-21' }
+    ]
+  },
+  burnted: {
+    id: 'burnted', label: 'Burnt End BBQ', emoji: '🍖',
+    type: 'Restaurant Partner', tier: 'VIP',
+    status: 'blocked', statusLabel: 'LIC BLOCKED',
+    color: '#c05621',
+    contacts: [
+      { name: 'Smokey', role: 'Owner / Licensing Contact', email: '—' }
+    ],
+    revenue2025: '—', revenue2026: '—',
+    lastOrder: '—', lastTouch: '2026-03-19',
+    lifecycle: 'watch',
+    mitm: { episode: 'EP2 — Burnt End BBQ', status: 'POST-LAUNCH', licensing: 'UNSIGNED' },
+    notes: 'EP2 LIVE ✅ https://youtu.be/2CNrRJxBfBA · Nachos reel live ✅ · LICENSING STILL NOT SIGNED — blocks ALL partner social content and short-form distribution. Tim must get Smokey to sign.',
+    testimonialGate: true,
+    contentGapDays: 0,
+    inventory: '—',
+    opportunities: [
+      { title: 'Licensing Agreement — Tim must get signed', owner: 'Tim', priority: 'HOT', due: 'OVERDUE' },
+      { title: 'Short-form clip extraction (8+ pieces)', owner: 'Matt', priority: 'HOT', due: '2026-03-26' },
+      { title: 'Partner social kit sent after license', owner: 'Matt', priority: 'HOT', due: 'After license' }
+    ]
+  },
+  meatmitch: {
+    id: 'meatmitch', label: 'Meat Mitch BBQ', emoji: '🏆',
+    type: 'Restaurant Partner', tier: 'VIP',
+    status: 'preproduction', statusLabel: 'PRE-PROD',
+    color: '#9d4edd',
+    contacts: [
+      { name: 'Becca', role: 'GM / Outreach Contact', email: '—' }
+    ],
+    revenue2025: '—', revenue2026: '—',
+    lastOrder: '—', lastTouch: '—',
+    lifecycle: 'watch',
+    mitm: { episode: 'EP5 — Meat Mitch BBQ', status: 'PRE-PROD', licensing: 'not-sent' },
+    notes: 'Always "MMB" — Meat Mitch Barbecue. Bumped to EP5 (was EP3). Tim decides reshoot vs. existing assets. Licensing not yet sent. Becca is GM outreach contact. Mitch grew on YouTube — strong channel collab opportunity.',
+    testimonialGate: true,
+    contentGapDays: null,
+    inventory: '—',
+    opportunities: [
+      { title: 'Tim decides: reshoot vs. existing assets', owner: 'Tim', priority: 'HOT', due: '2026-03-26' },
+      { title: 'Send licensing agreement', owner: 'Matt', priority: 'SOON', due: 'After Tim decision' },
+      { title: 'Betty brief', owner: 'Matt', priority: 'LATER', due: 'After license' }
+    ]
+  },
+  boothcreek: {
+    id: 'boothcreek', label: 'Booth Creek Wagyu', emoji: '🐄',
+    type: 'Food Producer Partner', tier: 'STANDARD',
+    status: 'prospect', statusLabel: 'PROSPECT',
+    color: '#457b9d',
+    contacts: [],
+    revenue2025: '—', revenue2026: '—',
+    lastOrder: '—', lastTouch: '—',
+    lifecycle: 'prospect',
+    mitm: { episode: 'TBD', status: 'INTAKE', licensing: 'not-started' },
+    notes: 'Premium wagyu producer. Board usage context strong — high-end butchering + presentation. Opportunity for product integration + MITM episode.',
+    testimonialGate: false,
+    contentGapDays: null,
+    inventory: '—',
+    opportunities: [
+      { title: 'Outreach + intro call', owner: 'Matt', priority: 'LATER', due: 'TBD' }
+    ]
+  },
+  dallasmavs: {
+    id: 'dallasmavs', label: 'Dallas Mavericks', emoji: '🏀',
+    type: 'Corporate / Venue', tier: 'HIGH-VALUE',
+    status: 'dormant', statusLabel: 'DORMANT',
+    color: '#006bb6',
+    contacts: [
+      { name: 'Claire Gerhardt', role: 'Corporate Procurement', email: '—' }
+    ],
+    revenue2025: '$16,413 (Dec 2025)', revenue2026: 'NONE',
+    lastOrder: 'Dec 2025', lastTouch: 'Dec 2025',
+    lifecycle: 'inactive',
+    mitm: { episode: 'N/A', status: 'N/A', licensing: 'n/a' },
+    notes: '⚠️ $16,413 Dec 2025 order — ~74% below standard pricing. Heavy discount approved by whom? No 2026 activity. DO NOT re-engage at same pricing. Rebuild at 2026 Richlite prices first.',
+    testimonialGate: false,
+    contentGapDays: null,
+    inventory: '—',
+    opportunities: [
+      { title: 'Rebuild quote at 2026 pricing', owner: 'Matt', priority: 'SOON', due: '2026-04-01' },
+      { title: 'Re-engage Claire with MITM EP2 link', owner: 'Matt', priority: 'SOON', due: 'After quote' }
+    ]
+  },
+  chefthompson: {
+    id: 'chefthompson', label: 'Chef Thompson', emoji: '👨‍🍳',
+    type: 'Investor + Custom Client', tier: 'VIP',
+    status: 'active', statusLabel: 'ACTIVE',
+    color: '#2d6a4f',
+    contacts: [
+      { name: 'Chef Thompson', role: 'Investor (2.27%) + Custom Client', email: '—' }
+    ],
+    revenue2025: '—', revenue2026: 'TBD (custom)',
+    lastOrder: '—', lastTouch: '—',
+    lifecycle: 'active',
+    mitm: { episode: 'N/A', status: 'N/A', licensing: 'n/a' },
+    notes: 'Tim: "I just have to build something phenomenal." Investor + potential custom piece client. Fundraising network contact — KC food/restaurant angels. Custom piece: research ideas + costs + margin before committing to build.',
+    testimonialGate: false,
+    contentGapDays: null,
+    inventory: 'Custom piece R&D — scope + materials TBD',
+    opportunities: [
+      { title: 'Custom piece: research costs + margin', owner: 'Tim + Matt', priority: 'HOT', due: '2026-04-01' },
+      { title: 'Fundraising intro — KC food angels', owner: 'Matt + Tim', priority: 'LATER', due: '2026-08-01' }
+    ]
+  }
+};
+
+var VENDORS = {
+  richlite: {
+    id: 'richlite', label: 'Richlite', emoji: '🪨',
+    type: 'Primary Material Supplier', status: 'REORDER DUE',
+    statusClass: 'yellow', location: 'Tacoma, WA',
+    contacts: [
+      { name: 'Channy', role: 'Sales — Price Change Confirmation', email: '—' },
+      { name: 'Brendan', role: 'Reorder Contact', email: '—' }
+    ],
+    notes: 'Certified Richlite fabricator. GBC buys sheet stock. Potential Maker Series feature + MITM EP4. Reorder call overdue (Brendan). Price change confirmation pending (Channy). Potential Tacoma trip. Maker Series playlist: 11 videos — Martin Guitar flagship story.',
+    actions: [
+      { title: 'Call Brendan — reorder + pricing', priority: 'HOT', due: 'OVERDUE' },
+      { title: 'Confirm price change with Channy', priority: 'HOT', due: 'OVERDUE' },
+      { title: 'EP4 Richlite brief — compile Q39 footage', priority: 'SOON', due: '2026-04-09' },
+      { title: 'Maker Series pitch deck — study format', priority: 'LATER', due: 'TBD' },
+      { title: 'Potential Tacoma HQ trip w/ Tim', priority: 'LATER', due: 'TBD' }
+    ]
+  },
+  jedunn: {
+    id: 'jedunn', label: 'JE Dunn', emoji: '🏗️',
+    type: 'Commercial Construction — Flagship Opportunity', status: 'WARM',
+    statusClass: 'blue', location: 'Kansas City, MO',
+    contacts: [
+      { name: 'Logan Tallman', role: 'Contact — Commercial Opportunity', email: '—' }
+    ],
+    notes: 'Flagship opportunity — scale comparable to Chef Thompson. Treat every touchpoint with precision. Commercial construction firm — potential for large-scale custom surface installs. CRO + CFO must sign off on any pitch.',
+    actions: [
+      { title: 'Precision outreach — Logan Tallman', priority: 'HOT', due: 'TBD' },
+      { title: 'Build commercial surface pitch', priority: 'HOT', due: 'TBD' }
+    ]
+  },
+  mccray: {
+    id: 'mccray', label: 'McCray Lumber', emoji: '🪵',
+    type: 'Raw Material Supplier', status: 'FOLLOW-UP DUE',
+    statusClass: 'yellow', location: 'Kansas City area',
+    contacts: [],
+    notes: 'Hardwood supplier. Follow-up overdue. Confirm current pricing + availability.',
+    actions: [
+      { title: 'Follow-up call — pricing + availability', priority: 'SOON', due: 'OVERDUE' }
+    ]
+  },
+  adeo: {
+    id: 'adeo', label: 'Adeo Wood', emoji: '🌲',
+    type: 'New Supplier + Potential Richlite Distribution Partner', status: 'EVALUATING',
+    statusClass: 'blue', location: '—',
+    contacts: [],
+    notes: 'New supplier + potential Richlite distribution partner. Research + contact needed. May open distribution channel opportunity alongside Richlite. Evaluate before Apr 2026.',
+    actions: [
+      { title: 'Research Adeo Wood — products + contact', priority: 'HOT', due: '2026-03-21' },
+      { title: 'Evaluate Richlite distribution potential', priority: 'SOON', due: 'TBD' }
+    ]
+  },
+  crystaldaisy: {
+    id: 'crystaldaisy', label: 'Crystal Daisy Productions', emoji: '🎥',
+    type: 'Production Partner (MITM)', status: 'ACTIVE',
+    statusClass: 'green', location: 'Kansas City, MO',
+    contacts: [
+      { name: 'Betty', role: 'Lead Editor — Critical Path', email: '—' },
+      { name: 'Sam', role: 'Camera Operator', email: '—' }
+    ],
+    notes: 'MITM production partner. Betty directs. Sam operates camera. Asset deadline: all footage/VO/B-roll by Friday of week prior to Betty edit deadline. Final revision requests ≥2 days before launch. Betty brief for EP3 pending.',
+    actions: [
+      { title: 'EP3 brief → Betty (all footage + direction)', priority: 'HOT', due: '2026-03-26' },
+      { title: 'EP4 brief after EP3', priority: 'SOON', due: '2026-04-09' }
+    ]
+  }
+};
+
+var EPISODES = [
+  { num: 'EP1', title: 'Pilot / Origin Tease', partner: 'GBC', status: 'ARCHIVED', licensing: 'n/a',
+    steps: ['done','done','done','done','done','done'] },
+  { num: 'EP2', title: 'Burnt End BBQ', partner: 'Burnt End BBQ', status: 'POST-LAUNCH',
+    licensing: 'UNSIGNED', licBlock: true,
+    steps: ['done','done','done','done','done','blocked'],
+    notes: 'LIVE ✅ https://youtu.be/2CNrRJxBfBA · Licensing blocks short-form + partner social' },
+  { num: 'EP3', title: 'GBC Origin Story', partner: 'GBC', status: 'PRE-PROD',
+    licensing: 'n/a', licBlock: false,
+    steps: ['done','done','active','pending','pending','pending'],
+    notes: 'No new shoot needed — facility demo footage + voiceovers. Matt sends Betty all footage this week.' },
+  { num: 'EP4', title: 'Richlite Deep Dive', partner: 'Richlite', status: 'PRE-PROD',
+    licensing: 'n/a', licBlock: false,
+    steps: ['done','active','pending','pending','pending','pending'],
+    notes: 'Inserted slot Mar 19. Compile existing footage (Q39 Richlite interviews + facility + shipment). No new shoot. Betty brief after EP3.' },
+  { num: 'EP5', title: 'Meat Mitch BBQ', partner: 'Meat Mitch BBQ', status: 'PRE-PROD',
+    licensing: 'not-sent', licBlock: false,
+    steps: ['pending','pending','pending','pending','pending','pending'],
+    notes: 'Tim decides: reshoot vs. existing assets. Licensing not sent. Becca is GM contact.' },
+  { num: 'EP6', title: 'GBC Facility', partner: 'GBC', status: 'PLANNING',
+    licensing: 'n/a', licBlock: false,
+    steps: ['pending','pending','pending','pending','pending','pending'],
+    notes: 'Showroom must be camera-ready. Waste-to-Wealth brief + Crystal Daisy coordination.' },
+  { num: 'EP7', title: 'Gates BBQ', partner: 'Gates BBQ', status: 'BLOCKED',
+    licensing: 'UNSIGNED', licBlock: true,
+    steps: ['pending','blocked','pending','pending','pending','pending'],
+    notes: 'HARD BLOCK — licensing agreement must be signed first.' }
+];
+
+var PIPELINE_DEALS = {
+  hot: [
+    { title: 'PFG Pitch Deck', value: '—', contact: 'Matt', due: 'Mar 21', notes: 'Food service distributor pitch' },
+    { title: 'Burnt End Licensing', value: 'BLOCK', contact: 'Tim', due: 'OVERDUE', notes: 'Blocks EP2 distribution' }
+  ],
+  warm: [
+    { title: 'Chef Thompson Custom Piece', value: 'TBD', contact: 'Tim + Matt', due: 'Apr 1', notes: 'R&D costing in progress' },
+    { title: 'JE Dunn — Logan Tallman', value: 'FLAGSHIP', contact: 'Matt', due: 'TBD', notes: 'Commercial construction' },
+    { title: 'Adeo Wood Distribution', value: 'TBD', contact: 'Matt', due: 'Mar 21', notes: 'Richlite distrib potential' }
+  ],
+  cold: [
+    { title: 'Dallas Mavericks Re-engage', value: '$16K+', contact: 'Matt', due: 'Apr 1', notes: 'Correct pricing first' }
+  ],
+  dormant: [
+    { title: 'Gates BBQ Episode', value: 'EP7', contact: 'Tim', due: 'Jul 1', notes: 'Hard block — license must sign' }
+  ]
+};
+
+var LIFECYCLE = [
+  { name: 'Q39 BBQ', type: 'VIP Partner', lastTouch: '2026-03-19', status: 'active', statusLabel: '🟢 Active', contentDays: 0 },
+  { name: 'Burnt End BBQ', type: 'VIP Partner', lastTouch: '2026-03-19', status: 'watch', statusLabel: '🟡 Watch', contentDays: 0, flag: 'Licensing unsigned — content blocked' },
+  { name: 'Meat Mitch BBQ', type: 'VIP Partner', lastTouch: '—', status: 'watch', statusLabel: '🟡 Watch', contentDays: null, flag: 'Pre-production — no content yet' },
+  { name: 'Chef Thompson', type: 'Investor + Client', lastTouch: '—', status: 'active', statusLabel: '🟢 Active', contentDays: null },
+  { name: 'Dallas Mavericks', type: 'Corporate', lastTouch: 'Dec 2025', status: 'inactive', statusLabel: '🔴 Inactive', contentDays: null, flag: 'No 2026 activity — heavy discount on last order' },
+  { name: 'Booth Creek Wagyu', type: 'Prospect', lastTouch: '—', status: 'prospect', statusLabel: '⚪ Prospect', contentDays: null },
+  { name: 'Gates BBQ', type: 'Partner (Blocked)', lastTouch: '—', status: 'inactive', statusLabel: '🔴 Blocked', flag: 'Hard block — license not signed' },
+  { name: 'Richlite', type: 'Supplier', lastTouch: '—', status: 'watch', statusLabel: '🟡 Watch', flag: 'Reorder overdue + price change pending' },
+  { name: 'JE Dunn', type: 'Prospect (Flagship)', lastTouch: '—', status: 'prospect', statusLabel: '⚪ Hot Prospect' },
+  { name: 'Crystal Daisy', type: 'Production Partner', lastTouch: '2026-03-19', status: 'active', statusLabel: '🟢 Active' },
+  { name: 'McCray Lumber', type: 'Supplier', lastTouch: '—', status: 'watch', statusLabel: '🟡 Watch', flag: 'Follow-up overdue' }
+];
+
+// ══════════════════════════════════════════════════════
+// RENDERING
+// ══════════════════════════════════════════════════════
+
+function fmt(n) {
+  if (n == null) return '—';
+  return '$' + Number(n).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+}
+
+function daysSince(dateStr) {
+  if (!dateStr || dateStr === '—') return null;
+  var d = new Date(dateStr);
+  return Math.floor((TODAY - d) / 86400000);
+}
+
+function statusPill(s, l) {
+  var map = {active:'green', blocked:'red', preproduction:'yellow', prospect:'blue', dormant:'grey', watch:'yellow', inactive:'red'};
+  return '<span class="pill ' + (map[s]||'grey') + '">' + l + '</span>';
+}
+
+function priorityPill(p) {
+  var map = {HOT:'red', SOON:'yellow', LATER:'grey'};
+  return '<span class="pill ' + (map[p]||'grey') + '">' + p + '</span>';
+}
+
+function renderAlerts() {
+  var z = document.getElementById('alertZone');
+  var html = '';
+  html += '<div class="alert red"><span class="alert-icon">🚨</span><div><strong>Burnt End licensing UNSIGNED</strong> — blocking all short-form clips and partner social distribution from EP2. Tim must get Smokey to sign.</div></div>';
+  html += '<div class="alert yellow"><span class="alert-icon">📞</span><div><strong>Richlite reorder call overdue</strong> (Brendan) + price change confirmation pending (Channy). Cannot send accurate quotes until resolved.</div></div>';
+  html += '<div class="alert yellow"><span class="alert-icon">✍️</span><div><strong>Betty EP3 brief</strong> — Matt must send all footage + direction this week. Deadline Mar 26.</div></div>';
+  z.innerHTML = html;
+}
+
+function renderHealthTable() {
+  var t = document.getElementById('healthTable');
+  var html = '<table class="tbl"><thead><tr><th>Partner</th><th>Status</th><th>Last Touch</th><th>Flags</th></tr></thead><tbody>';
+  LIFECYCLE.slice(0,8).forEach(function(r) {
+    var days = daysSince(r.lastTouch);
+    var daysStr = days !== null ? days + 'd ago' : r.lastTouch || '—';
+    var daysColor = '';
+    if (days !== null && days > 30) daysColor = 'color:var(--yellow)';
+    if (days !== null && days > 45) daysColor = 'color:var(--red)';
+    html += '<tr>';
+    html += '<td><strong>' + r.name + '</strong><br/><span style="font-size:10px;color:var(--txt3);">' + r.type + '</span></td>';
+    html += '<td>' + r.statusLabel + '</td>';
+    html += '<td class="mono" style="font-size:11px;' + daysColor + '">' + daysStr + '</td>';
+    html += '<td style="font-size:11px;color:var(--txt3);">' + (r.flag || '—') + '</td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  t.innerHTML = html;
+}
+
+function renderEpMiniList() {
+  var z = document.getElementById('epMiniList');
+  var html = '';
+  EPISODES.forEach(function(ep) {
+    var statusColor = {
+      'POST-LAUNCH': 'green', 'PRE-PROD': 'yellow', 'PLANNING': 'blue',
+      'BLOCKED': 'red', 'ARCHIVED': 'grey'
+    }[ep.status] || 'grey';
+    html += '<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);">';
+    html += '<span style="font-size:10px;font-weight:800;font-family:\'JetBrains Mono\',monospace;color:var(--txt3);width:28px;">' + ep.num + '</span>';
+    html += '<div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + ep.title + '</div>';
+    html += '<div style="font-size:10px;color:var(--txt3);">' + ep.partner + '</div></div>';
+    html += '<span class="pill ' + statusColor + '">' + ep.status + '</span>';
+    if (ep.licBlock) html += '<span class="pill red" style="font-size:9px;">LIC</span>';
+    html += '</div>';
+  });
+  z.innerHTML = html;
+}
+
+function renderMitmKanban() {
+  var z = document.getElementById('mitmKanban');
+  var cols = {
+    'POST-LAUNCH': {label:'Post-Launch', color:'var(--green)', items:[]},
+    'PRE-PROD': {label:'Pre-Production', color:'var(--yellow)', items:[]},
+    'PLANNING': {label:'Planning', color:'var(--blue)', items:[]},
+    'BLOCKED': {label:'Blocked', color:'var(--red)', items:[]}
+  };
+  EPISODES.forEach(function(ep) {
+    var key = ep.status === 'ARCHIVED' ? 'POST-LAUNCH' : ep.status;
+    if (cols[key]) cols[key].items.push(ep);
+  });
+
+  var html = '<div class="kanban">';
+  Object.keys(cols).forEach(function(k) {
+    var col = cols[k];
+    html += '<div class="kanban-col">';
+    html += '<div class="kanban-col-header"><span class="kanban-col-title" style="color:' + col.color + ';">' + col.label + '</span><span class="kanban-count">' + col.items.length + '</span></div>';
+    html += '<div class="kanban-items">';
+    col.items.forEach(function(ep) {
+      html += '<div class="kanban-item">';
+      html += '<div class="kanban-item-title">' + ep.num + ' · ' + ep.title + '</div>';
+      html += '<div class="kanban-item-sub">' + ep.partner + '</div>';
+      if (ep.notes) html += '<div style="font-size:10px;color:var(--txt3);margin-top:4px;">' + ep.notes.substring(0,80) + (ep.notes.length>80?'…':'') + '</div>';
+      html += '<div class="kanban-item-footer">';
+      if (ep.licBlock) html += '<span class="pill red">LIC UNSIGNED</span>';
+      else if (ep.licensing === 'n/a') html += '<span class="pill grey">GBC-OWNED</span>';
+      else html += '<span class="pill green">LIC OK</span>';
+      html += '<div class="ep-steps" style="width:60px;">';
+      ep.steps.forEach(function(s) {
+        html += '<div class="ep-step ' + s + '"></div>';
+      });
+      html += '</div></div></div>';
+    });
+    html += '</div></div>';
+  });
+  html += '</div>';
+  z.innerHTML = html;
+}
+
+function renderEpTimeline() {
+  var z = document.getElementById('epTimeline');
+  var html = '<div class="timeline">';
+  EPISODES.forEach(function(ep) {
+    var dotClass = {
+      'POST-LAUNCH': 'done', 'ARCHIVED': 'done',
+      'PRE-PROD': 'active', 'PLANNING': 'pending',
+      'BLOCKED': 'blocked'
+    }[ep.status] || 'pending';
+    var icon = dotClass === 'done' ? '✓' : dotClass === 'active' ? '▶' : dotClass === 'blocked' ? '✗' : '○';
+    html += '<div class="timeline-item">';
+    html += '<div class="timeline-dot ' + dotClass + '">' + icon + '</div>';
+    html += '<div class="timeline-content">';
+    html += '<div class="timeline-title">' + ep.num + ' — ' + ep.title + '</div>';
+    html += '<div class="timeline-sub">' + ep.partner + ' · ' + ep.status;
+    if (ep.licBlock) html += ' · <span style="color:var(--red);">LIC UNSIGNED</span>';
+    html += '</div>';
+    html += '</div></div>';
+  });
+  html += '</div>';
+  z.innerHTML = html;
+}
+
+function renderPipeline() {
+  var z = document.getElementById('pipelineKanban');
+  var colDefs = [
+    {key:'hot', label:'HOT', color:'var(--red)'},
+    {key:'warm', label:'WARM', color:'var(--yellow)'},
+    {key:'cold', label:'COLD', color:'var(--blue)'},
+    {key:'dormant', label:'DORMANT', color:'var(--txt3)'}
+  ];
+  var html = '';
+  colDefs.forEach(function(col) {
+    var items = PIPELINE_DEALS[col.key] || [];
+    html += '<div class="kanban-col">';
+    html += '<div class="kanban-col-header"><span class="kanban-col-title" style="color:' + col.color + ';">' + col.label + '</span><span class="kanban-count">' + items.length + '</span></div>';
+    html += '<div class="kanban-items">';
+    items.forEach(function(d) {
+      html += '<div class="kanban-item">';
+      html += '<div class="kanban-item-title">' + d.title + '</div>';
+      html += '<div class="kanban-item-sub">' + d.notes + '</div>';
+      html += '<div class="kanban-item-footer"><span style="font-size:10px;color:var(--txt3);">' + d.contact + '</span>';
+      html += '<span style="font-size:10px;font-family:\'JetBrains Mono\',monospace;color:' + (d.due==='OVERDUE'?'var(--red)':'var(--txt3)') + ';">' + d.due + '</span></div>';
+      html += '</div>';
+    });
+    html += '</div></div>';
+  });
+  z.innerHTML = html;
+}
+
+function renderLifecycle() {
+  var z = document.getElementById('lifecycleGrid');
+  var active = [], watch = [], inactive = [], prospect = [];
+  LIFECYCLE.forEach(function(r) {
+    if (r.status === 'active') active.push(r);
+    else if (r.status === 'watch') watch.push(r);
+    else if (r.status === 'inactive') inactive.push(r);
+    else prospect.push(r);
+  });
+  function renderGroup(title, items, color) {
+    var html = '<div class="card"><div class="card-header"><span class="card-title">' + title + '</span><span class="pill" style="background:' + color + '20;color:' + color + ';">' + items.length + '</span></div><div class="card-body" style="padding:0;">';
+    if (!items.length) { html += '<div class="empty">None</div>'; }
+    items.forEach(function(r) {
+      var days = daysSince(r.lastTouch);
+      html += '<div class="lifecycle-row">';
+      html += '<div><div class="lifecycle-name">' + r.name + '</div>';
+      html += '<div style="font-size:10px;color:var(--txt3);">' + r.type + '</div>';
+      if (r.flag) html += '<div style="font-size:10px;color:var(--yellow);margin-top:2px;">' + r.flag + '</div>';
+      html += '</div>';
+      var dStr = days !== null ? days + 'd ago' : (r.lastTouch || '—');
+      var dColor = days > 45 ? 'var(--red)' : days > 30 ? 'var(--yellow)' : 'var(--txt3)';
+      html += '<div class="lifecycle-days" style="color:' + dColor + ';">' + dStr + '</div>';
+      html += '</div>';
+    });
+    html += '</div></div>';
+    return html;
+  }
+  z.innerHTML =
+    renderGroup('🟢 Active', active, '#22c55e') +
+    renderGroup('🟡 Watch', watch, '#f59e0b') +
+    renderGroup('🔴 Inactive / Blocked', inactive, '#ef4444') +
+    renderGroup('⚪ Prospects', prospect, '#888');
+}
+
+// PARTNER VIEW
+function buildPartnerView(pid) {
+  var p = PARTNERS[pid];
+  if (!p) return '';
+  var daysLastTouch = daysSince(p.lastTouch);
+  var html = '';
+  html += '<div class="page-header">';
+  html += '<div style="display:flex;align-items:center;gap:12px;">';
+  html += '<div style="width:48px;height:48px;border-radius:10px;background:' + p.color + '20;border:1px solid ' + p.color + '40;display:flex;align-items:center;justify-content:center;font-size:22px;">' + p.emoji + '</div>';
+  html += '<div><div class="page-title">' + p.label + '</div>';
+  html += '<div class="page-subtitle">' + p.type + ' · ' + (p.tier || '') + '</div></div></div>';
+  html += '<div class="page-actions">' + statusPill(p.status, p.statusLabel);
+  if (p.testimonialGate) html += ' <span class="pill purple">TESTIMONIAL GATE</span>';
+  html += '</div></div>';
+
+  // TABS
+  html += '<div class="tabs">';
+  html += '<div class="tab active" onclick="switchTab(this,\'pt-overview-' + pid + '\')">Overview</div>';
+  html += '<div class="tab" onclick="switchTab(this,\'pt-contacts-' + pid + '\')">Contacts</div>';
+  html += '<div class="tab" onclick="switchTab(this,\'pt-opportunities-' + pid + '\')">Opportunities</div>';
+  html += '<div class="tab" onclick="switchTab(this,\'pt-mitm-' + pid + '\')">MITM</div>';
+  html += '<div class="tab" onclick="switchTab(this,\'pt-notes-' + pid + '\')">Notes</div>';
+  html += '</div>';
+
+  // TAB CONTENTS
+  html += '<div class="tab-content active" id="pt-overview-' + pid + '">';
+  html += '<div class="grid grid-4" style="margin-bottom:16px;">';
+  html += '<div class="card kpi"><div class="kpi-label">2025 Revenue</div><div class="kpi-value" style="font-size:18px;">' + (p.revenue2025 || '—') + '</div></div>';
+  html += '<div class="card kpi"><div class="kpi-label">2026 YTD</div><div class="kpi-value" style="font-size:18px;">' + (p.revenue2026 || '—') + '</div></div>';
+  html += '<div class="card kpi"><div class="kpi-label">Last Touch</div><div class="kpi-value" style="font-size:14px;">' + (daysLastTouch !== null ? daysLastTouch + 'd ago' : p.lastTouch || '—') + '</div></div>';
+  html += '<div class="card kpi"><div class="kpi-label">MITM Episode</div><div class="kpi-value" style="font-size:13px;">' + (p.mitm.episode !== 'N/A' ? p.mitm.episode : '—') + '</div></div>';
+  html += '</div>';
+  if (p.notes) {
+    html += '<div class="card" style="margin-bottom:16px;"><div class="card-header"><span class="card-title">Partner Intel</span></div>';
+    html += '<div class="card-body"><p style="font-size:13px;line-height:1.6;color:var(--txt2);">' + p.notes + '</p></div></div>';
+  }
+  if (p.status === 'blocked' || p.mitm.licensing === 'UNSIGNED') {
+    html += '<div class="alert red"><span class="alert-icon">🚨</span><div><strong>Licensing Agreement UNSIGNED</strong> — blocking all content distribution and partner social until Tim secures signature.</div></div>';
+  }
+  html += '</div>'; // end overview
+
+  html += '<div class="tab-content" id="pt-contacts-' + pid + '">';
+  if (p.contacts && p.contacts.length) {
+    html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">';
+    p.contacts.forEach(function(c) {
+      var init = c.name.split(' ').map(function(w){return w[0];}).join('').substring(0,2).toUpperCase();
+      html += '<div class="contact-card">';
+      html += '<div class="contact-avatar" style="background:' + p.color + '20;color:' + p.color + ';">' + init + '</div>';
+      html += '<div><div class="contact-name">' + c.name + '</div>';
+      html += '<div class="contact-role">' + c.role + '</div>';
+      if (c.email && c.email !== '—') html += '<div class="contact-email">' + c.email + '</div>';
+      html += '</div></div>';
+    });
+    html += '</div>';
+  } else {
+    html += '<div class="empty">No contacts logged yet.</div>';
+  }
+  html += '</div>';
+
+  html += '<div class="tab-content" id="pt-opportunities-' + pid + '">';
+  if (p.opportunities && p.opportunities.length) {
+    html += '<table class="tbl"><thead><tr><th>Action</th><th>Owner</th><th>Priority</th><th>Due</th></tr></thead><tbody>';
+    p.opportunities.forEach(function(o) {
+      html += '<tr><td>' + o.title + '</td><td>' + o.owner + '</td><td>' + priorityPill(o.priority) + '</td>';
+      html += '<td class="mono" style="font-size:11px;color:' + (o.due === 'OVERDUE' ? 'var(--red)' : 'var(--txt3)') + ';">' + o.due + '</td></tr>';
+    });
+    html += '</tbody></table>';
+  } else {
+    html += '<div class="empty">No open opportunities.</div>';
+  }
+  html += '</div>';
+
+  html += '<div class="tab-content" id="pt-mitm-' + pid + '">';
+  var ep = p.mitm;
+  if (ep.episode === 'N/A') {
+    html += '<div class="empty">Not a current MITM episode subject.</div>';
+  } else {
+    html += '<div class="grid grid-3" style="margin-bottom:16px;">';
+    html += '<div class="card kpi"><div class="kpi-label">Episode</div><div class="kpi-value" style="font-size:14px;">' + ep.episode + '</div></div>';
+    html += '<div class="card kpi"><div class="kpi-label">Status</div><div class="kpi-value" style="font-size:14px;">' + ep.status + '</div></div>';
+    html += '<div class="card kpi"><div class="kpi-label">Licensing</div><div class="kpi-value ' + (ep.licensing === 'UNSIGNED' ? 'red' : 'green') + '" style="font-size:14px;">' + ep.licensing + '</div></div>';
+    html += '</div>';
+    if (ep.licensing === 'UNSIGNED') {
+      html += '<div class="alert red"><span class="alert-icon">🚫</span><div><strong>Licensing unsigned</strong> — no short-form, no partner social until signed.</div></div>';
+    }
+  }
+  html += '</div>';
+
+  html += '<div class="tab-content" id="pt-notes-' + pid + '">';
+  html += '<div class="card"><div class="card-body"><p style="font-size:13px;line-height:1.7;color:var(--txt2);">' + (p.notes || 'No notes.') + '</p></div></div>';
+  html += '</div>';
+
+  return html;
+}
+
+// VENDOR VIEW
+function buildVendorView(vid) {
+  var v = VENDORS[vid];
+  if (!v) return '';
+  var html = '';
+  html += '<div class="page-header">';
+  html += '<div style="display:flex;align-items:center;gap:12px;">';
+  html += '<div style="width:48px;height:48px;border-radius:10px;background:rgba(200,149,42,.1);border:1px solid rgba(200,149,42,.2);display:flex;align-items:center;justify-content:center;font-size:22px;">' + v.emoji + '</div>';
+  html += '<div><div class="page-title">' + v.label + '</div>';
+  html += '<div class="page-subtitle">' + v.type + ' · ' + (v.location || '') + '</div></div></div>';
+  html += '<div class="page-actions"><span class="pill ' + v.statusClass + '">' + v.status + '</span></div></div>';
+
+  html += '<div class="tabs">';
+  html += '<div class="tab active" onclick="switchTab(this,\'vt-overview-' + vid + '\')">Overview</div>';
+  html += '<div class="tab" onclick="switchTab(this,\'vt-contacts-' + vid + '\')">Contacts</div>';
+  html += '<div class="tab" onclick="switchTab(this,\'vt-actions-' + vid + '\')">Open Actions</div>';
+  html += '</div>';
+
+  html += '<div class="tab-content active" id="vt-overview-' + vid + '">';
+  html += '<div class="card"><div class="card-body"><p style="font-size:13px;line-height:1.7;color:var(--txt2);">' + v.notes + '</p></div></div>';
+  html += '</div>';
+
+  html += '<div class="tab-content" id="vt-contacts-' + vid + '">';
+  if (v.contacts && v.contacts.length) {
+    html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">';
+    v.contacts.forEach(function(c) {
+      var init = c.name.split(' ').map(function(w){return w[0];}).join('').substring(0,2).toUpperCase();
+      html += '<div class="contact-card"><div class="contact-avatar">' + init + '</div>';
+      html += '<div><div class="contact-name">' + c.name + '</div><div class="contact-role">' + c.role + '</div></div></div>';
+    });
+    html += '</div>';
+  } else { html += '<div class="empty">No contacts logged.</div>'; }
+  html += '</div>';
+
+  html += '<div class="tab-content" id="vt-actions-' + vid + '">';
+  if (v.actions && v.actions.length) {
+    html += '<table class="tbl"><thead><tr><th>Action</th><th>Priority</th><th>Due</th></tr></thead><tbody>';
+    v.actions.forEach(function(a) {
+      html += '<tr><td>' + a.title + '</td><td>' + priorityPill(a.priority) + '</td>';
+      html += '<td class="mono" style="font-size:11px;color:' + (a.due === 'OVERDUE' ? 'var(--red)' : 'var(--txt3)') + ';">' + a.due + '</td></tr>';
+    });
+    html += '</tbody></table>';
+  } else { html += '<div class="empty">No open actions.</div>'; }
+  html += '</div>';
+
+  return html;
+}
+
+// ══════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════
+
+function showView(id) {
+  document.querySelectorAll('.view').forEach(function(v) { v.classList.remove('active'); });
+  document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+  var el = document.getElementById('view-' + id);
+  if (el) el.classList.add('active');
+}
+
+function showPartner(pid) {
+  showView('partner');
+  document.getElementById('partnerContent').innerHTML = buildPartnerView(pid);
+  // mark nav
+  document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+  event.currentTarget.classList.add('active');
+}
+
+function showVendor(vid) {
+  showView('vendor');
+  document.getElementById('vendorContent').innerHTML = buildVendorView(vid);
+  document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+  event.currentTarget.classList.add('active');
+}
+
+function switchTab(el, tabId) {
+  var parent = el.closest('.view') || el.closest('div[id^="view"]') || document.body;
+  var allTabs = el.parentElement.querySelectorAll('.tab');
+  allTabs.forEach(function(t) { t.classList.remove('active'); });
+  el.classList.add('active');
+  // find sibling tab-contents
+  var container = el.parentElement.parentElement;
+  container.querySelectorAll('.tab-content').forEach(function(tc) { tc.classList.remove('active'); });
+  var target = document.getElementById(tabId);
+  if (target) target.classList.add('active');
+}
+
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+
+window.addEventListener('DOMContentLoaded', function() {
+  // Date
+  var d = new Date('2026-03-19');
+  var opts = {weekday:'long', year:'numeric', month:'long', day:'numeric'};
+  var ds = d.toLocaleDateString('en-US', opts);
+  var el = document.getElementById('topDate');
+  if (el) el.textContent = ds;
+  var cmd = document.getElementById('cmdDate');
+  if (cmd) cmd.textContent = ds + ' · Week of Mar 23 (Noah surgery week — remote all week)';
+
+  // Cash status
+  var cashDot = document.getElementById('cashDot');
+  var cashVal = document.getElementById('cashVal');
+  // Floor is $30K, breach projected Aug 2026
+  if (cashDot) cashDot.className = 'pulse-dot yellow';
+  if (cashVal) { cashVal.textContent = 'MONITOR'; cashVal.className = 'tstat-value yellow'; }
+
+  // Content gap
+  var gapDot = document.getElementById('gapDot');
+  var gapVal = document.getElementById('gapVal');
+  if (gapDot) gapDot.className = 'pulse-dot yellow';
+  if (gapVal) { gapVal.textContent = 'EP2 LIVE'; gapVal.className = 'tstat-value gold'; }
+
+  // Render all sections
+  renderAlerts();
+  renderHealthTable();
+  renderEpMiniList();
+  renderMitmKanban();
+  renderEpTimeline();
+  renderPipeline();
+  renderLifecycle();
+});
+</script>
+</body>
+</html>
