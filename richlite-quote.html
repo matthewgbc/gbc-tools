@@ -431,6 +431,15 @@
     .footer-note { text-align: center; font-size: 13px; color: #444; margin-top: 18px; line-height: 1.6; }
     #collection-info { margin-top: 12px; }
 
+    /* ── GREYED COLOR SWATCH ── */
+    .color-swatch.color-greyed {
+      opacity: 0.2; pointer-events: none; cursor: not-allowed;
+    }
+    .color-swatch .swatch-coll-label {
+      font-size: 10px; color: #555; margin-top: 3px;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(14px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -515,6 +524,10 @@
         <label>Name</label>
         <input class="input-field" type="text" id="r-name" placeholder="Your full name" />
         <div class="field-error" id="err-r-name"></div>
+      </div>
+      <div class="field">
+        <label>Company Name <span class="sub">optional</span></label>
+        <input class="input-field" type="text" id="r-company" placeholder="Restaurant, hotel, business name..." />
       </div>
       <div class="field">
         <label>Email</label>
@@ -638,9 +651,9 @@
       </div>
 
       <div class="field">
-        <label>Color</label>
+        <label>Color <span class="sub">select collection above to filter</span></label>
         <div id="color-grid" class="color-grid">
-          <div style="font-size:14px;color:#555;padding:8px 0;">Select a collection above to see colors</div>
+          <!-- populated by renderAllColors() on init -->
         </div>
         <input type="hidden" id="sel-color" value="" />
         <div id="color-note" class="color-note-box"></div>
@@ -703,12 +716,7 @@
     <div class="card">
       <div class="card-title">Add-Ons</div>
       <div class="addons-grid">
-        <div class="addon-tile" id="tile-engrave" onclick="toggleAddon('engrave', this)">
-          <input type="checkbox" id="add-engrave" />
-          <div class="addon-title"><span class="addon-check" id="chk-engrave">✓</span>Custom Engraving</div>
-          <div class="addon-price">+$45 flat</div>
-          <div class="addon-desc">Logo, name, or custom text laser-cut into the board.</div>
-        </div>
+
         <div class="addon-tile" id="tile-juice" onclick="toggleAddon('juice', this)">
           <input type="checkbox" id="add-juice" />
           <div class="addon-title"><span class="addon-check" id="chk-juice">✓</span>Juice Groove</div>
@@ -736,7 +744,7 @@
         <div class="addon-tile" id="tile-rush" onclick="toggleAddon('rush', this)">
           <input type="checkbox" id="add-rush" />
           <div class="addon-title"><span class="addon-check" id="chk-rush">✓</span>Rush Production</div>
-          <div class="addon-price">+$45 flat</div>
+          <div class="addon-price">+$300 flat</div>
           <div class="addon-desc">1-week turnaround instead of standard 2–3 weeks.</div>
         </div>
         <div class="addon-tile" id="tile-handle" onclick="toggleAddon('handle', this)">
@@ -1004,7 +1012,7 @@
 
 // ─── STATE ───────────────────────────────────────────────────────────────────
 var S_step = 1;
-var S_name = '', S_email = '';
+var S_name = '', S_email = '', S_company = '';
 
 var currentShape    = 'rectangle';
 var currentAccount  = 'retail';
@@ -1073,6 +1081,7 @@ function updateDots() {
 function validateStep1() {
   var name     = document.getElementById('r-name').value.trim();
   var email    = document.getElementById('r-email').value.trim();
+  var company  = document.getElementById('r-company').value.trim();
   var nameErr  = document.getElementById('err-r-name');
   var emailErr = document.getElementById('err-r-email');
   var valid    = true;
@@ -1081,9 +1090,13 @@ function validateStep1() {
   if (!name) { nameErr.textContent  = 'Name is required.'; valid = false; }
   if (!email || !email.includes('@')) { emailErr.textContent = 'Valid email is required.'; valid = false; }
   if (valid) {
-    S_name  = name;
-    S_email = email;
-    hsCapture([{ name: 'message', value: 'Started Richlite quote calculator.' }]);
+    S_name    = name;
+    S_email   = email;
+    S_company = company;
+    hsCapture([
+      { name: 'company', value: company },
+      { name: 'message', value: 'Started Richlite quote calculator.' }
+    ]);
     goToStep(2);
   }
 }
@@ -1134,20 +1147,36 @@ function updateLiveBar() {
 
 // ─── PRESET SIZES ────────────────────────────────────────────────────────────
 var RECT_PRESETS = [
-  { w:8,  l:12, desc:'Small serving board' },
-  { w:10, l:14, desc:'Personal board' },
-  { w:12, l:18, desc:'Home kitchen' },
-  { w:14, l:20, desc:"Chef's workhorse" },
-  { w:16, l:22, desc:'Restaurant prep' },
-  { w:18, l:24, desc:'Pro kitchen fave' },
-  { w:24, l:30, desc:'Commercial / large' },
+  { w:6,  l:10,  desc:'Appetizer &amp; snack board' },
+  { w:8,  l:10,  desc:'Small snack board' },
+  { w:8,  l:12,  desc:'Small serving board' },
+  { w:8,  l:14,  desc:'Slim serving board' },
+  { w:10, l:12,  desc:'Everyday prep board' },
+  { w:10, l:14,  desc:'Personal board' },
+  { w:10, l:16,  desc:'Home kitchen prep' },
+  { w:12, l:16,  desc:'Family prep board' },
+  { w:12, l:18,  desc:'Home kitchen standard' },
+  { w:14, l:18,  desc:"Chef's workhorse" },
+  { w:14, l:20,  desc:"Chef's favorite" },
+  { w:16, l:20,  desc:'Large prep board' },
+  { w:16, l:22,  desc:'Restaurant prep' },
+  { w:18, l:22,  desc:'Pro prep board' },
+  { w:18, l:24,  desc:'Pro kitchen standard' },
+  { w:20, l:24,  desc:'Commercial prep' },
+  { w:20, l:26,  desc:'Commercial large' },
+  { w:24, l:30,  desc:'Commercial XL' },
+  { w:24, l:36,  desc:'Butcher block size' },
 ];
 
 var ROUND_PRESETS = [
+  { d:8,  desc:'Small serving' },
   { d:10, desc:'Small charcuterie' },
   { d:12, desc:'Serving board' },
   { d:14, desc:'Pizza &amp; carving' },
-  { d:18, desc:'Entertaining' },
+  { d:16, desc:'Large serving' },
+  { d:18, desc:'Entertaining board' },
+  { d:20, desc:'Restaurant serving' },
+  { d:24, desc:'XL entertaining' },
   { d:30, desc:'The Manhole Cover · SKU GBC-MC-001' },
 ];
 
@@ -1290,7 +1319,7 @@ var MARKUP   = 4;
 var BASE_FEE = 25;
 var MINIMUM  = 75;
 
-var ADDON_PRICES = { engrave: 45, juice: 28, feet: 10, care: 24, giftbox: 16, rush: 45, handle: 35, hanghole: 8, waxfinish: 18 };
+var ADDON_PRICES = { juice: 28, feet: 10, care: 24, giftbox: 16, rush: 300, handle: 35, hanghole: 8, waxfinish: 18 };
 var REPEAT_DISC  = 0.10;
 var QTY_DISC     = function(q) { return q >= 11 ? 0.15 : q >= 6 ? 0.10 : q >= 2 ? 0.05 : 0; };
 
@@ -1528,22 +1557,62 @@ function setShape(shape, el) {
   wixResize();
 }
 
-// ─── COLLECTION & COLORS ─────────────────────────────────────────────────────
+// ─── ALL COLORS DATA ─────────────────────────────────────────────────────────────────
+var COLLECTION_LABELS = {
+  'heritage':    'Heritage',
+  'northwest-a': 'Northwest',
+  'northwest-b': 'NW Premium',
+};
+
+var ALL_COLORS = [
+  { collection: 'heritage',    name: 'Natural (R50)',     hex: '#D4C5A9' },
+  { collection: 'heritage',    name: 'Slate',             hex: '#7A8B8B' },
+  { collection: 'northwest-a', name: 'Black Diamond',     hex: '#2E2E2E' },
+  { collection: 'northwest-a', name: 'Grays Harbor',      hex: '#6B7A7A' },
+  { collection: 'northwest-a', name: 'Maple Valley',      hex: '#8B6B4A' },
+  { collection: 'northwest-b', name: 'Blue Canyon',       hex: '#4A6B8A' },
+  { collection: 'northwest-b', name: 'Browns Point',      hex: '#7A4A2A' },
+  { collection: 'northwest-b', name: 'Chocolate Glacier', hex: '#4A3020' },
+  { collection: 'northwest-b', name: 'Redstone',          hex: '#8A3A2A' },
+];
+
+function renderAllColors() {
+  var grid = document.getElementById('color-grid');
+  if (!grid) return;
+  var activeColl = document.getElementById('sel-collection') ? document.getElementById('sel-collection').value : '';
+  grid.innerHTML = ALL_COLORS.map(function(c) {
+    var greyed = (activeColl && c.collection !== activeColl) ? ' color-greyed' : '';
+    return '<div class="color-swatch' + greyed + '" data-collection="' + c.collection + '" data-colorname="' + c.name + '" onclick="selectColorDirect(\'' + c.collection + '\',\'' + c.name + '\',this)">' +
+      '<div class="swatch-dot" style="background:' + c.hex + ';"></div>' +
+      '<div class="swatch-name">' + c.name + '</div>' +
+      '<div class="swatch-coll-label">' + COLLECTION_LABELS[c.collection] + '</div>' +
+      '</div>';
+  }).join('');
+}
+
+// ─── COLLECTION & COLORS ───────────────────────────────────────────────
 function updateCollection() {
   var key  = document.getElementById('sel-collection').value;
   var info = document.getElementById('collection-info');
-  var grid = document.getElementById('color-grid');
   document.getElementById('sel-color').value = '';
-  if (!key) {
-    info.innerHTML = '';
-    grid.innerHTML = '<div style="font-size:14px;color:#555;padding:8px 0;">Select a collection above to see colors</div>';
-    return;
-  }
+  document.querySelectorAll('.color-swatch').forEach(function(s) { s.classList.remove('selected'); });
+  var noteEl = document.getElementById('color-note');
+  if (noteEl) { noteEl.textContent = ''; noteEl.style.display = 'none'; }
+  document.getElementById('err-collection').classList.remove('visible');
+  // Filter swatches: grey out non-matching collection
+  document.querySelectorAll('.color-swatch').forEach(function(sw) {
+    if (!key || sw.dataset.collection === key) {
+      sw.classList.remove('color-greyed');
+    } else {
+      sw.classList.add('color-greyed');
+    }
+  });
+  if (!key) { info.innerHTML = ''; return; }
   var meta = COLLECTION_META[key];
   info.innerHTML = '<div style="font-size:14px;color:#888;margin-bottom:6px;">' + meta.desc + '</div>' + meta.badges +
     '<div class="richlite-expand" style="margin-top:14px;">' +
     '<div class="richlite-expand-header" onclick="toggleRichlite()">' +
-    '<span class="richlite-expand-title">What is Richlite\u00ae?</span>' +
+    '<span class="richlite-expand-title">What is Richlite®?</span>' +
     '<span id="richlite-arrow" class="richlite-arrow">▼</span></div>' +
     '<div id="richlite-body" class="richlite-expand-body"><ul>' +
     '<li>Made from recycled paper fiber + phenolic resin — no wood grain, no warping, no bacteria harboring</li>' +
@@ -1553,27 +1622,39 @@ function updateCollection() {
     '<li>Used in commercial kitchens and Michelin-starred restaurants worldwide</li>' +
     '<li>The only cutting board material GBC builds with — because nothing else performs like it</li>' +
     '</ul></div></div>';
-  grid.innerHTML = meta.colors.map(function(c, i) {
-    return '<div class="color-swatch" onclick="selectColor(\'' + key + '\',' + i + ',this)">' +
-      '<div class="swatch-dot" style="background:' + c.hex + ';"></div>' +
-      '<div class="swatch-name">' + c.name + '</div></div>';
-  }).join('');
-  var noteEl = document.getElementById('color-note');
-  if (noteEl) { noteEl.textContent = ''; noteEl.style.display = 'none'; }
   setTimeout(wixResize, 50);
 }
 
-function selectColor(collKey, colorIdx, el) {
+function selectColorDirect(collKey, colorName, el) {
+  // Auto-select matching collection if not already set
+  var selCollect = document.getElementById('sel-collection');
+  if (selCollect.value !== collKey) {
+    selCollect.value = collKey;
+    updateCollection();
+    // Re-find el after filter update
+    document.querySelectorAll('.color-swatch').forEach(function(sw) {
+      if (sw.dataset.colorname === colorName) { el = sw; }
+    });
+  }
   document.querySelectorAll('.color-swatch').forEach(function(s) { s.classList.remove('selected'); });
   el.classList.add('selected');
+  // Find colorIdx for calculatePrice compatibility
+  var colors = COLLECTION_META[collKey].colors;
+  var colorIdx = 0;
+  for (var i = 0; i < colors.length; i++) { if (colors[i].name === colorName) { colorIdx = i; break; } }
   document.getElementById('sel-color').value = collKey + '::' + colorIdx;
-  var colorName = COLLECTION_META[collKey].colors[colorIdx].name;
+  document.getElementById('err-color').classList.remove('visible');
   updateSVGColor(colorName);
   var noteEl = document.getElementById('color-note');
   if (noteEl && COLOR_NOTES[colorName]) {
     noteEl.textContent   = '"' + COLOR_NOTES[colorName] + '"';
     noteEl.style.display = 'block';
   }
+}
+
+function selectColor(collKey, colorIdx, el) {
+  var colorName = COLLECTION_META[collKey].colors[colorIdx].name;
+  selectColorDirect(collKey, colorName, el);
 }
 
 // ─── QUANTITY ─────────────────────────────────────────────────────────────────
@@ -1645,7 +1726,7 @@ function calculatePrice() {
   var baseCost  = BASE_FEE;
 
   var addonTotal = 0, addonNames = [];
-  ['engrave','juice','feet','care','giftbox','rush','handle','hanghole','waxfinish'].forEach(function(k) {
+  ['juice','feet','care','giftbox','rush','handle','hanghole','waxfinish'].forEach(function(k) {
     if (activeAddons[k]) { addonTotal += ADDON_PRICES[k]; addonNames.push(k); }
   });
 
@@ -1947,9 +2028,8 @@ function resetCalc() {
   setAccount('retail');
   document.getElementById('sel-collection').value = '';
   document.getElementById('sel-color').value = '';
-  document.getElementById('color-grid').innerHTML =
-    '<div style="font-size:14px;color:#555;padding:8px 0;">Select a collection above to see colors</div>';
   document.getElementById('collection-info').innerHTML = '';
+  renderAllColors();
   document.querySelectorAll('.addon-tile').forEach(function(t) { t.classList.remove('selected'); });
   document.querySelectorAll('.addon-check').forEach(function(c) { c.style.color = 'transparent'; });
   document.querySelectorAll('.qty-pill').forEach(function(p) { p.classList.remove('active'); });
@@ -1965,9 +2045,10 @@ function resetCalc() {
   document.getElementById('quote-form').reset();
   document.getElementById('quote-content').style.display = '';
   document.getElementById('quote-success').style.display  = 'none';
-  document.getElementById('r-name').value  = '';
-  document.getElementById('r-email').value = '';
-  S_name = ''; S_email = '';
+  document.getElementById('r-name').value    = '';
+  document.getElementById('r-email').value   = '';
+  if (document.getElementById('r-company')) document.getElementById('r-company').value = '';
+  S_name = ''; S_email = ''; S_company = '';
   document.getElementById('lb-estimate').textContent = '—';
   buildTiles();
   selectRectTile(2);
@@ -1976,8 +2057,9 @@ function resetCalc() {
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
+renderAllColors();
 buildTiles();
-selectRectTile(2);
+selectRectTile(10); // default: 14x20 (Most Popular)
 updateLiveBar();
 wixResize();
 window.addEventListener('load', function() { setTimeout(wixResize, 100); });
