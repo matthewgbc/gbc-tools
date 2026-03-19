@@ -19,20 +19,48 @@
     }
     .calc-wrap { max-width: 940px; margin: 0 auto; }
 
-    /* ── HEADER ── */
-    .calc-header { text-align: center; margin-bottom: 44px; }
-    .eyebrow-tag {
-      display: inline-block; font-size: 11px; font-weight: 700;
-      letter-spacing: 0.22em; text-transform: uppercase; color: #C8952A; margin-bottom: 12px;
+    /* ── CALC HERO ── */
+    .calc-hero {
+      position: relative;
+      background: linear-gradient(160deg, #1e1a13 0%, #151515 55%, #1c1c1c 100%);
+      border-radius: 16px;
+      padding: 52px 48px 36px;
+      margin-bottom: 20px;
+      overflow: hidden;
     }
-    .calc-header h1 {
-      font-size: clamp(28px, 5vw, 44px); font-weight: 800;
-      line-height: 1.08; color: #fff; margin-bottom: 14px;
+    .calc-hero-glow {
+      position: absolute; top: 0; right: 0;
+      width: 420px; height: 100%;
+      background: radial-gradient(ellipse at 90% 20%, rgba(200,149,42,0.10) 0%, transparent 65%);
+      pointer-events: none;
     }
-    .calc-header p { font-size: 18px; color: #999; max-width: 560px; margin: 0 auto; line-height: 1.65; }
+    .hero-inner { position: relative; z-index: 1; }
+    .hero-eyebrow {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.28em;
+      text-transform: uppercase; color: #C8952A; margin-bottom: 10px;
+    }
+    .hero-sub-label {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: #3a3a3a; margin-bottom: 14px;
+    }
+    .hero-h1 {
+      font-size: clamp(32px, 5.5vw, 56px); font-weight: 800;
+      color: #fff; line-height: 1.02; margin-bottom: 18px; letter-spacing: -0.02em;
+    }
+    .hero-desc {
+      font-size: 15px; color: #666; line-height: 1.72; max-width: 460px; margin-bottom: 36px;
+    }
+    .calc-meta {
+      display: flex; gap: 28px; flex-wrap: wrap;
+      margin-top: 24px; padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      font-size: 12px; color: #555;
+    }
+    .meta-label { font-weight: 700; color: #666; margin-bottom: 3px; letter-spacing: 0.06em; font-size: 10px; text-transform: uppercase; }
+    @media(max-width: 560px) { .calc-hero { padding: 36px 24px 28px; } }
 
     /* ── STEP INDICATOR ── */
-    .steps-labeled { display: flex; align-items: flex-start; justify-content: center; margin-bottom: 40px; }
+    .steps-labeled { display: flex; align-items: flex-start; justify-content: center; margin-bottom: 0; }
     .step-col { display: flex; flex-direction: column; align-items: center; gap: 8px; }
     .step-dot {
       width: 34px; height: 34px; border-radius: 50%; border: 2px solid #2a2a2a;
@@ -79,6 +107,8 @@
     }
     textarea:focus { outline: none; border-color: #C8952A; }
     textarea::placeholder { color: #444; }
+    input.field-error-active { border-color: #c0392b !important; }
+    .field-error { font-size: 12px; color: #c0392b; margin-top: 6px; min-height: 16px; }
 
     /* ── RELATIONSHIP CARDS ── */
     .rel-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
@@ -336,85 +366,78 @@
 <body>
 <div class="calc-wrap">
 
-  <!-- HEADER -->
-  <div class="calc-header" id="calcHeader">
-    <div class="eyebrow-tag">Gauntt Board Company · Made in the Middle</div>
-    <h1>Media Production<br>Quote Calculator</h1>
-    <p>Build a custom production package and generate a shareable quote for your partnership.</p>
-  </div>
+  <!-- HERO ZONE — gradient, contains headline + steps + metadata -->
+  <div class="calc-hero" id="calcHeader">
+    <div class="calc-hero-glow"></div>
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Gauntt Board Company · Made in the Middle</div>
+      <div class="hero-sub-label">Media Production Quote Calculator</div>
+      <h1 class="hero-h1">Build a Custom<br>Production <span style="color:#C8952A;">Package.</span></h1>
+      <p class="hero-desc">We're documenting the kitchens, pitmasters, and craft behind Kansas City's food culture. Tell us about your company and we'll build a production package around your story.</p>
 
-  <!-- STEP INDICATOR -->
-  <div class="steps-labeled" id="stepsIndicator">
-    <div class="step-col active" data-step="1">
-      <div class="step-dot active">1</div>
-      <span>Partner</span>
-    </div>
-    <div class="step-connector"></div>
-    <div class="step-col" data-step="2">
-      <div class="step-dot">2</div>
-      <span>Scope</span>
-    </div>
-    <div class="step-connector"></div>
-    <div class="step-col" data-step="3">
-      <div class="step-dot">3</div>
-      <span>Post Prod</span>
-    </div>
-    <div class="step-connector"></div>
-    <div class="step-col" data-step="4">
-      <div class="step-dot">4</div>
-      <span>Social</span>
-    </div>
-    <div class="step-connector"></div>
-    <div class="step-col" data-step="5">
-      <div class="step-dot">5</div>
-      <span>Partnership</span>
-    </div>
-    <div class="step-connector"></div>
-    <div class="step-col" data-step="6">
-      <div class="step-dot">6</div>
-      <span>Quote</span>
+      <!-- Step indicators live inside the hero -->
+      <div class="steps-labeled" id="stepsIndicator">
+        <div class="step-col active" data-step="1">
+          <div class="step-dot active">1</div>
+          <span>Partner</span>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-col" data-step="2">
+          <div class="step-dot">2</div>
+          <span>Scope</span>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-col" data-step="3">
+          <div class="step-dot">3</div>
+          <span>Post Prod</span>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-col" data-step="4">
+          <div class="step-dot">4</div>
+          <span>Social</span>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-col" data-step="5">
+          <div class="step-dot">5</div>
+          <span>Partnership</span>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-col" data-step="6">
+          <div class="step-dot">6</div>
+          <span>Quote</span>
+        </div>
+      </div>
+
+      <!-- Series / Production / Market strip -->
+      <div class="calc-meta">
+        <div><div class="meta-label">Series</div>Made in the Middle · Season 1</div>
+        <div><div class="meta-label">Production</div>Crystal Daisy Productions</div>
+        <div><div class="meta-label">Market</div>Kansas City · National Distribution</div>
+      </div>
     </div>
   </div>
 
   <!-- ─── STEP 1: PARTNER DETAILS ─── -->
   <div class="step-panel active" id="step1">
-    <div class="card" style="padding:0;overflow:hidden;">
-      <!-- Hero zone -->
-      <div style="padding:44px 36px 32px;background:linear-gradient(160deg,#1e1a13 0%,#161616 60%,#1c1c1c 100%);border-bottom:1px solid #2a2a2a;position:relative;">
-        <div style="position:absolute;top:0;right:0;width:280px;height:100%;background:radial-gradient(ellipse at 90% 30%,rgba(200,149,42,0.07) 0%,transparent 70%);pointer-events:none;"></div>
-        <div style="font-size:10px;font-weight:700;letter-spacing:0.28em;text-transform:uppercase;color:#C8952A;margin-bottom:20px;">Made in the Middle · GBC Partnership</div>
-        <h2 style="font-size:clamp(30px,5vw,46px);font-weight:800;color:#fff;line-height:1.05;margin-bottom:16px;letter-spacing:-0.02em;">Build a Custom<br>Production<br><span style="color:#C8952A;">Package.</span></h2>
-        <p style="font-size:15px;color:#777;line-height:1.7;max-width:420px;margin:0;">We're documenting the kitchens, pitmasters, and craft behind Kansas City's food culture. Tell us about your company and we'll build a production package around your story.</p>
-        <div style="margin-top:24px;padding-top:20px;border-top:1px solid #2a2a2a;display:flex;gap:24px;flex-wrap:wrap;">
-          <div style="font-size:12px;color:#555;">
-            <div style="font-weight:700;color:#888;margin-bottom:3px;">SERIES</div>Made in the Middle · Season 1
-          </div>
-          <div style="font-size:12px;color:#555;">
-            <div style="font-weight:700;color:#888;margin-bottom:3px;">PRODUCTION</div>Crystal Daisy Productions
-          </div>
-          <div style="font-size:12px;color:#555;">
-            <div style="font-weight:700;color:#888;margin-bottom:3px;">MARKET</div>Kansas City · National Distribution
-          </div>
-        </div>
+    <div class="card">
+      <div class="card-title">Your Details</div>
+      <div class="field">
+        <label>Company Name</label>
+        <input type="text" id="partnerName" placeholder="e.g. Q39 BBQ" oninput="clearFieldError(this)" />
+        <div class="field-error" id="errPartnerName"></div>
       </div>
-      <!-- Form zone -->
-      <div style="padding:30px 36px 28px;">
-        <div class="field">
-          <label>Company Name</label>
-          <input type="text" id="partnerName" placeholder="e.g. Gauntt Board Company" />
-        </div>
-        <div class="field">
-          <label>Your Name <span class="sub">optional</span></label>
-          <input type="text" id="contactName" placeholder="e.g. Your Name" />
-        </div>
-        <div class="field" style="margin-bottom:0;">
-          <label>Email <span class="sub">we'll send the quote here</span></label>
-          <input type="text" id="contactEmail" placeholder="e.g. you@yourbusiness.com" />
-        </div>
+      <div class="field">
+        <label>Your Name <span class="sub">optional</span></label>
+        <input type="text" id="contactName" placeholder="e.g. Rob Magee" />
+      </div>
+      <div class="field" style="margin-bottom:0;">
+        <label>Email <span class="sub">we'll send the quote here</span></label>
+        <input type="text" id="contactEmail" placeholder="e.g. you@yourbusiness.com" oninput="clearFieldError(this)" />
+        <div class="field-error" id="errContactEmail"></div>
       </div>
     </div>
     <div class="nav-row">
-      <button class="btn btn-primary" onclick="goToStep(2)" style="padding:16px 32px;font-size:16px;">Build My Package →</button>
+      <button class="btn btn-primary" onclick="validateAndAdvance()" style="padding:16px 32px;font-size:16px;">Build My Package →</button>
     </div>
   </div>
 
@@ -696,7 +719,7 @@
     <div class="card">
       <div class="card-title">Actions</div>
       <div class="action-row">
-        <button class="btn btn-primary" onclick="copyLink()">📋 Copy Shareable Link</button>
+        <button class="btn btn-primary" onclick="emailQuote()">✉ Email Me This Quote</button>
         <button class="btn btn-ghost" onclick="window.print()">🖨 Print / Save PDF</button>
         <button class="btn btn-secondary" id="editBtn" onclick="goToStep(5)">← Edit Quote</button>
       </div>
@@ -781,6 +804,34 @@ function livebar() {
 }
 
 function costSplit() { livebar(); }
+
+// ─── STEP 1 VALIDATION ───────────────────────────────────
+function validateAndAdvance() {
+  const name  = $('partnerName').value.trim();
+  const email = $('contactEmail').value.trim();
+  let valid = true;
+  if (!name) {
+    $('partnerName').classList.add('field-error-active');
+    $('errPartnerName').textContent = 'Company name is required.';
+    valid = false;
+  }
+  if (!email) {
+    $('contactEmail').classList.add('field-error-active');
+    $('errContactEmail').textContent = 'Email is required to receive your quote.';
+    valid = false;
+  } else if (!email.includes('@') || !email.includes('.')) {
+    $('contactEmail').classList.add('field-error-active');
+    $('errContactEmail').textContent = 'Please enter a valid email address.';
+    valid = false;
+  }
+  if (valid) goToStep(2);
+}
+
+function clearFieldError(el) {
+  el.classList.remove('field-error-active');
+  const errEl = $('err' + el.id.charAt(0).toUpperCase() + el.id.slice(1));
+  if (errEl) errEl.textContent = '';
+}
 
 // ─── NAVIGATION ──────────────────────────────────────────
 function goToStep(n) {
@@ -1042,6 +1093,52 @@ function copyLink() {
   navigator.clipboard.writeText(url)
     .then(() => toast('Link copied to clipboard!'))
     .catch(() => { prompt('Copy this link:', url); });
+}
+
+function emailQuote() {
+  const company = S.partner || 'Partner';
+  const t = total(), disc = mitmDiscount();
+  let body = `GBC Media Production Quote\n`;
+  body += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+  body += `Company: ${company}\n`;
+  if (S.contact) body += `Contact: ${S.contact}\n`;
+  if (S.email)   body += `Email: ${S.email}\n`;
+  body += `\n— PACKAGE DETAILS —\n`;
+  body += `Production Crew: ${S.shootLabel} — ${fmt(S.shootPrice)}\n`;
+  body += `Full YouTube Episode (5–7 min) — Included\n`;
+  body += `60-Second Website Teaser — Included\n`;
+  if (S.delivs.masterbundle) {
+    body += `Master Bundle (3 reels + interview) — ${fmt(800)}\n`;
+  } else if (S.delivs.bundle) {
+    body += `Full Bundle (3 reels) — ${fmt(550)}\n`;
+  } else {
+    const SKIP = ['episode','teaser','bundle','masterbundle'];
+    Object.keys(S.delivs).forEach(k => {
+      if (S.delivs[k] && !SKIP.includes(k)) body += `${DELIV_LABELS[k]} — ${fmt(DELIV_PRICES[k])}\n`;
+    });
+  }
+  if (S.voPrice > 0) body += `Post Production Session — ${fmt(S.voPrice)}\n`;
+  body += `Extended Edit Pass (up to 3 revisions) — Included\n`;
+  body += `Thumbnail & YouTube Metadata — Included\n`;
+  Object.keys(S.addons).forEach(k => {
+    if (S.addons[k] && k !== 'thumbnail' && k !== 'extended') body += `${ADDON_LABELS[k]} — ${fmt(ADDON_PRICES[k])}\n`;
+  });
+  if (S.socialPrice > 0) body += `Social Media Management (${S.socialLabel}) — ${fmt(S.socialPrice)}\n`;
+  body += `\n`;
+  if (disc > 0) body += `Crystal Daisy Partner Rate Discount: -${fmt(disc)}\n`;
+  body += `TOTAL: ${fmt(t)}\n`;
+  body += `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+  body += `Production: Crystal Daisy Productions\nSeries: Made in the Middle · Season 1\nMarket: Kansas City · National Distribution\n`;
+  body += `\nReady to move forward? Contact Matt at matthew@gbckc.com or reply to this email.\n`;
+  body += `gbckc.com\n`;
+
+  const subject = `Your GBC Media Production Quote — ${company}`;
+  const to = S.email || 'matthew@gbckc.com';
+  const cc = S.email ? 'matthew@gbckc.com' : '';
+  const sep = S.email ? '&' : '?';
+  const mailtoBase = `mailto:${to}?${cc ? 'cc=' + encodeURIComponent(cc) + '&' : ''}subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailtoBase;
+  toast('Opening your email client...');
 }
 
 function toast(msg) {
