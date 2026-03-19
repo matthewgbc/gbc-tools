@@ -138,7 +138,7 @@
     .option-tiles.cols-4 { grid-template-columns: repeat(4, 1fr); }
     @media(max-width: 620px) { .option-tiles.cols-4 { grid-template-columns: 1fr 1fr; } }
     .option-tile {
-      border: 2px solid #2a2a2a; border-radius: 10px; padding: 16px 12px;
+      border: 2px solid #2a2a2a; border-radius: 10px; padding: 11px 12px;
       cursor: pointer; transition: all 0.2s; background: #141414; text-align: center;
     }
     .option-tile:hover { border-color: #555; }
@@ -400,21 +400,16 @@
         <div class="step-connector"></div>
         <div class="step-col" data-step="3">
           <div class="step-dot">3</div>
-          <span>Post Prod</span>
+          <span>Social</span>
         </div>
         <div class="step-connector"></div>
         <div class="step-col" data-step="4">
           <div class="step-dot">4</div>
-          <span>Social</span>
+          <span>Partnership</span>
         </div>
         <div class="step-connector"></div>
         <div class="step-col" data-step="5">
           <div class="step-dot">5</div>
-          <span>Partnership</span>
-        </div>
-        <div class="step-connector"></div>
-        <div class="step-col" data-step="6">
-          <div class="step-dot">6</div>
           <span>Quote</span>
         </div>
       </div>
@@ -542,33 +537,6 @@
       </div>
     </div>
 
-    <div class="nav-row">
-      <button class="btn btn-secondary" onclick="goToStep(1)">← Back</button>
-      <button class="btn btn-primary" onclick="goToStep(3)">Continue →</button>
-    </div>
-  </div>
-
-  <!-- ─── STEP 3: POST PRODUCTION & ADD-ONS ─── -->
-  <div class="step-panel" id="step3">
-    <div class="card">
-      <div class="card-title">Post Production Sessions</div>
-      <div class="field">
-        <label>Recording sessions for narration, reels, or on-camera content <span class="sub">Tim records in post — narration, VO, or short-form audio</span></label>
-        <div class="option-tiles cols-4" id="voTiles">
-          <div class="option-tile selected" data-price="0" data-label="None" onclick="selectVO(this)">
-            <div class="ot-label">None</div>
-            <div class="ot-price">$0</div>
-            <div class="ot-desc">No post production session</div>
-          </div>
-          <div class="option-tile" data-price="175" data-label="1 Session" onclick="selectVO(this)">
-            <div class="ot-label">1 Session</div>
-            <div class="ot-price">$175</div>
-            <div class="ot-desc">Up to 60 min — narration, reels, or VO</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="card">
       <div class="card-title">Production Add-Ons</div>
       <div class="field">
@@ -583,6 +551,11 @@
             <div class="addon-title"><span class="addon-check" style="background:#C8952A;border-color:#C8952A;color:#111;">✓</span>Extended Edit Pass <span class="incl-badge">Included</span></div>
             <div class="addon-price"><span class="addon-incl">Always included</span></div>
             <div class="addon-desc">Up to 3 revision passes included — we get it right</div>
+          </div>
+          <div class="addon-tile" data-key="postprod" data-price="175" onclick="toggleAddon(this)">
+            <div class="addon-title"><span class="addon-check">✓</span>Post Production Session</div>
+            <div class="addon-price">+$175</div>
+            <div class="addon-desc">Up to 60 min — Tim narration, VO, or short-form audio recording</div>
           </div>
           <div class="addon-tile" data-key="music" data-price="200" onclick="toggleAddon(this)">
             <div class="addon-title"><span class="addon-check">✓</span>Licensed Music Track</div>
@@ -599,14 +572,13 @@
     </div>
 
     <div class="nav-row">
-      <button class="btn btn-secondary" onclick="goToStep(2)">← Back</button>
-      <button class="btn btn-primary" onclick="goToStep(4)">Continue →</button>
+      <button class="btn btn-secondary" onclick="goToStep(1)">← Back</button>
+      <button class="btn btn-primary" onclick="goToStep(3)">Continue →</button>
     </div>
   </div>
 
-  <!-- ─── STEP 4: SOCIAL MEDIA ─── -->
-  <div class="step-panel" id="step4">
-
+  <!-- ─── STEP 3: SOCIAL MEDIA ─── -->
+  <div class="step-panel" id="step3">
     <div class="card">
       <div class="card-title">Social Media Management</div>
       <div class="field">
@@ -620,64 +592,63 @@
             </div>
             <div class="so-price">$0</div>
           </div>
-          <div class="social-option" data-price="1050" data-label="Launch Package" onclick="selectSocial(this)">
+          <div class="social-option" data-price="1313" data-label="Launch Package" onclick="selectSocial(this)">
             <div class="so-radio"></div>
             <div class="so-info">
               <div class="so-name">Launch Package <span class="so-freq">one-time</span></div>
               <div class="so-desc">Premiere window coverage — built around the episode drop</div>
               <div class="so-includes">4-week post schedule · countdown content (T-14 to launch) · premiere day engagement · ICYMI clips Days 2–7 · partner repost kit</div>
             </div>
-            <div class="so-price">+$1,050</div>
+            <div class="so-price">+$1,313</div>
           </div>
-          <div class="social-option" data-price="2250" data-label="Monthly Management" onclick="selectSocial(this)">
+          <div class="social-option" data-price="2813" data-label="Monthly Management" onclick="selectSocial(this)">
             <div class="so-radio"></div>
             <div class="so-info">
               <div class="so-name">Monthly Management <span class="so-freq">per month</span></div>
               <div class="so-desc">Instagram + Facebook · 8–12 posts/mo · key events covered</div>
               <div class="so-includes">Content calendar · American Royal / FIFA 2026 / GKCRA / Big 12 coverage · MITM clip repurposing · monthly analytics report · B2B posts 2×/mo</div>
             </div>
-            <div class="so-price">+$2,250</div>
+            <div class="so-price">+$2,813</div>
           </div>
-          <div class="social-option" data-price="3600" data-label="Full Service" onclick="selectSocial(this)">
+          <div class="social-option" data-price="4500" data-label="Full Service" onclick="selectSocial(this)">
             <div class="so-radio"></div>
             <div class="so-info">
               <div class="so-name">Full Service <span class="so-freq">per month</span></div>
-              <div class="so-desc">All platforms · full engagement management · quarterly strategy</div>
-              <div class="so-includes">Everything in Monthly + TikTok (3–4/mo) · DMs + comments + replies · story sequences · competitor monitoring · bi-weekly check-ins</div>
+              <div class="so-desc">All platforms · full engagement management · agency-level execution</div>
+              <div class="so-includes">Everything in Monthly + TikTok (3–4/mo) · agency partnership (Paige Communications / KES Studios) at GBC partner rate · DMs + comments + replies · story sequences · bi-weekly strategy check-ins</div>
             </div>
-            <div class="so-price">+$3,600</div>
+            <div class="so-price">+$4,500</div>
           </div>
         </div>
       </div>
     </div>
 
     <div class="nav-row">
-      <button class="btn btn-secondary" onclick="goToStep(3)">← Back</button>
-      <button class="btn btn-primary" onclick="goToStep(5)">Continue →</button>
+      <button class="btn btn-secondary" onclick="goToStep(2)">← Back</button>
+      <button class="btn btn-primary" onclick="goToStep(4)">Continue →</button>
     </div>
   </div>
 
-  <!-- ─── STEP 5: WANT TO BECOME A GBC PARTNER? ─── -->
-  <div class="step-panel" id="step5">
-
+  <!-- ─── STEP 4: PARTNERSHIP ─── -->
+  <div class="step-panel" id="step4">
     <div class="card" style="padding:0;overflow:hidden;">
       <div style="padding:36px 32px 28px;background:linear-gradient(160deg,#1a1a14 0%,#161616 100%);border-bottom:1px solid #2a2a2a;position:relative;">
         <div style="position:absolute;top:0;right:0;width:260px;height:100%;background:radial-gradient(ellipse at 80% 40%,rgba(200,149,42,0.06) 0%,transparent 70%);pointer-events:none;"></div>
         <div style="font-size:10px;font-weight:700;letter-spacing:0.25em;text-transform:uppercase;color:#C8952A;margin-bottom:14px;">Partnership Model</div>
         <h3 style="font-size:clamp(22px,4vw,32px);font-weight:800;color:#fff;line-height:1.1;margin-bottom:12px;letter-spacing:-0.01em;">Is this a<br>Collaboration Campaign?</h3>
-        <p style="font-size:14px;color:#666;line-height:1.65;max-width:460px;margin:0;">Our production partner Crystal Daisy Productions extends a preferred rate to brands featured in our series. Current GBC partners qualify — standard rate applies for all other productions.</p>
+        <p style="font-size:14px;color:#666;line-height:1.65;max-width:460px;margin:0;">Current GBC partners receive a preferred production rate. Standard rate applies to all other productions — no discount applied.</p>
       </div>
       <div style="padding:24px 32px 28px;">
         <div class="rel-cards">
           <div class="rel-card selected" data-partner="yes" onclick="selectPartnerType(this)">
             <div class="rc-icon">🤝</div>
             <div class="rc-title">Yes — Collaboration Campaign</div>
-            <div class="rc-desc">Current GBC partner — Crystal Daisy's preferred partner rate applies to this production</div>
+            <div class="rc-desc">Current GBC partner — preferred partner rate applies to this production</div>
           </div>
           <div class="rel-card" data-partner="no" onclick="selectPartnerType(this)">
             <div class="rc-icon">📄</div>
             <div class="rc-title">Standard Production</div>
-            <div class="rc-desc">Crystal Daisy Productions standard rate — no partner discount applied</div>
+            <div class="rc-desc">Standard production rate — full cost applies, no partner discount</div>
           </div>
         </div>
       </div>
@@ -692,13 +663,13 @@
     </div>
 
     <div class="nav-row">
-      <button class="btn btn-secondary" onclick="goToStep(4)">← Back</button>
+      <button class="btn btn-secondary" onclick="goToStep(3)">← Back</button>
       <button class="btn btn-primary" onclick="buildAndShowQuote()">Generate Quote →</button>
     </div>
   </div>
 
-  <!-- ─── STEP 6: QUOTE SUMMARY ─── -->
-  <div class="step-panel" id="step6">
+  <!-- ─── STEP 5: QUOTE SUMMARY ─── -->
+  <div class="step-panel" id="step5">
 
     <div class="share-banner" id="shareBanner">
       <p>📋 <strong>Shared Production Quote</strong> — This quote was created by Gauntt Board Company. Review the production scope and partnership investment below.</p>
@@ -732,7 +703,7 @@
       <div class="action-row">
         <button class="btn btn-primary" onclick="emailQuote()">✉ Email Me This Quote</button>
         <button class="btn btn-ghost" onclick="printAndEmail()">🖨 Print / Save PDF</button>
-        <button class="btn btn-secondary" id="editBtn" onclick="goToStep(5)">← Edit Quote</button>
+        <button class="btn btn-secondary" id="editBtn" onclick="goToStep(4)">← Edit Quote</button>
       </div>
     </div>
 
@@ -767,8 +738,6 @@ const S = {
   shootLabel: 'Full Day',
   delivs: { episode: true, teaser: true },
   delivPrice: 0,
-  voPrice: 0,
-  voLabel: 'None',
   addons: {},
   addonPrice: 0,
   socialPrice: 0,
@@ -789,8 +758,8 @@ const DELIV_LABELS  = {
   masterbundle: 'Master Bundle (all reels + interview)',
 };
 const BUNDLE_KEYS    = ['reel','tiktok','shorts'];
-const ADDON_PRICES   = { music:200, motion:250, extended:0, thumbnail:0 };
-const ADDON_LABELS   = { music:'Licensed Music Track', motion:'Motion Graphics & Overlays', extended:'Extended Edit Pass', thumbnail:'Thumbnail & YouTube Metadata' };
+const ADDON_PRICES   = { music:200, motion:250, extended:0, thumbnail:0, postprod:175 };
+const ADDON_LABELS   = { music:'Licensed Music Track', motion:'Motion Graphics & Overlays', extended:'Extended Edit Pass', thumbnail:'Thumbnail & YouTube Metadata', postprod:'Post Production Session' };
 const MITM_DISCOUNT  = 0.20;
 
 // ─── HUBSPOT ─────────────────────────────────────────────
@@ -831,13 +800,12 @@ function buildQuoteText() {
       if (S.delivs[k] && !SKIP.includes(k)) txt += `${DELIV_LABELS[k]} — ${fmt(DELIV_PRICES[k])}\n`;
     });
   }
-  if (S.voPrice > 0) txt += `Post Production Session — ${fmt(S.voPrice)}\n`;
   txt += `Extended Edit Pass (up to 3 revisions) — Included\n`;
   Object.keys(S.addons).forEach(k => {
     if (S.addons[k] && k !== 'thumbnail' && k !== 'extended') txt += `${ADDON_LABELS[k]} — ${fmt(ADDON_PRICES[k])}\n`;
   });
   if (S.socialPrice > 0) txt += `Social Media Management (${S.socialLabel}) — ${fmt(S.socialPrice)}\n`;
-  if (disc > 0) txt += `Crystal Daisy Partner Rate: -${fmt(disc)}\n`;
+  if (disc > 0) txt += `Preferred Partner Rate: -${fmt(disc)}\n`;
   txt += `TOTAL: ${fmt(t)}`;
   return txt;
 }
@@ -845,14 +813,14 @@ function buildQuoteText() {
 // ─── HELPERS ─────────────────────────────────────────────
 const $ = id => document.getElementById(id);
 const fmt = n => '$' + Math.round(n).toLocaleString();
-const rawTotal = () => S.shootPrice + S.delivPrice + S.voPrice + S.addonPrice + S.socialPrice;
+const rawTotal = () => S.shootPrice + S.delivPrice + S.addonPrice + S.socialPrice;
 const mitmDiscount = () => S.isPartner ? Math.round(rawTotal() * MITM_DISCOUNT) : 0;
 const total = () => rawTotal() - mitmDiscount();
 
 function livebar() {
   const raw = rawTotal(), disc = mitmDiscount(), t = total();
   $('lbTotal').textContent = fmt(t);
-  $('lbRight').textContent = S.isPartner ? 'Crystal Daisy partner rate' : 'Standard rate';
+  $('lbRight').textContent = S.isPartner ? 'Preferred partner rate' : 'Standard rate';
   const stdEl = $('lbStandard'), savEl = $('lbSavings');
   if (disc > 0) {
     stdEl.textContent = fmt(raw);
@@ -1014,13 +982,6 @@ function toggleMasterBundle(el) {
 }
 
 // ─── STEP 3 ──────────────────────────────────────────────
-function selectVO(el) {
-  document.querySelectorAll('#voTiles .option-tile').forEach(t => t.classList.remove('selected'));
-  el.classList.add('selected');
-  S.voPrice = +el.dataset.price;
-  S.voLabel = el.dataset.label;
-  livebar();
-}
 
 function toggleAddon(el) {
   const k = el.dataset.key;
@@ -1054,7 +1015,7 @@ function buildAndShowQuote() {
     { name: 'message', value: buildQuoteText() },
     { name: 'hs_lead_status', value: 'IN_PROGRESS' }
   ]);
-  goToStep(6);
+  goToStep(5);
 }
 
 const SHOOT_DETAIL = {
@@ -1079,7 +1040,7 @@ function renderQuote(isShared) {
   let html = '';
 
   // Partnership type + shoot
-  html += li(S.isPartner ? 'Collaboration Campaign — Crystal Daisy partner rate' : 'Standard Production — Crystal Daisy standard rate', 'Production Rate', false);
+  html += li(S.isPartner ? 'Collaboration Campaign — Preferred partner rate' : 'Standard Production — Standard production rate', 'Production Rate', false);
   html += li('Production Crew — ' + S.shootLabel, fmt(S.shootPrice), false);
   if (SHOOT_DETAIL[S.shootLabel]) html += liSub(SHOOT_DETAIL[S.shootLabel]);
 
@@ -1108,12 +1069,6 @@ function renderQuote(isShared) {
     });
   }
 
-  // Voice over
-  if (S.voPrice > 0) {
-    html += li('Voice Over — ' + S.voLabel, fmt(S.voPrice), false);
-    html += liSub('Tim Gauntt narration · studio-recorded · delivered as mixed audio + synced video');
-  }
-
   // Thumbnail + Extended Edit always included
   html += li(ADDON_LABELS.thumbnail, 'Included', true);
   html += liSub('Custom thumbnail design · title variants · YouTube description + tags optimized');
@@ -1122,7 +1077,9 @@ function renderQuote(isShared) {
 
   // Add-ons
   Object.keys(S.addons).forEach(k => {
-    if (S.addons[k] && k !== 'thumbnail' && k !== 'extended') html += li(ADDON_LABELS[k], fmt(ADDON_PRICES[k]), false);
+    if (!S.addons[k] || k === 'thumbnail' || k === 'extended') return;
+    html += li(ADDON_LABELS[k], fmt(ADDON_PRICES[k]), false);
+    if (k === 'postprod') html += liSub('Up to 60 min · Tim narration, VO, or short-form audio recording');
   });
 
   // Social media
@@ -1130,14 +1087,14 @@ function renderQuote(isShared) {
 
   // MITM discount
   const raw = rawTotal(), disc = mitmDiscount();
-  if (disc > 0) html += `<div class="li-row"><div class="li-name" style="color:#C8952A">Crystal Daisy Partner Rate (applied to standard ${fmt(raw)})</div><div class="li-val" style="color:#C8952A">−${fmt(disc)}</div></div>`;
+  if (disc > 0) html += `<div class="li-row"><div class="li-name" style="color:#C8952A">Preferred Partner Rate (applied to standard ${fmt(raw)})</div><div class="li-val" style="color:#C8952A">−${fmt(disc)}</div></div>`;
 
   html += `<div class="li-row li-total"><div class="li-name">Total Production Cost</div><div class="li-val">${fmt(t)}</div></div>`;
   $('lineItems').innerHTML = html;
 
   $('qRateNote').textContent = S.isPartner
-    ? 'Production by Crystal Daisy Productions · GBC partner rate applied · Valid 30 days from quote date.'
-    : 'Production by Crystal Daisy Productions · Standard rate · Valid 30 days from quote date.';
+    ? 'Preferred partner rate applied · Valid 30 days from quote date.'
+    : 'Standard production rate · Valid 30 days from quote date.';
 
   const nb = $('notesBox');
   if (S.notes) { nb.textContent = S.notes; nb.style.display = 'block'; }
@@ -1165,7 +1122,6 @@ function copyLink() {
     p: S.partner, c: S.contact, e: S.email, ip: S.isPartner,
     sp: S.shootPrice, sl: S.shootLabel,
     d: S.delivs, dp: S.delivPrice,
-    vo: S.voPrice, vl: S.voLabel,
     a: S.addons, ap: S.addonPrice,
     sc: S.socialPrice, scl: S.socialLabel,
     pct: S.contribPct, n: S.notes
@@ -1216,8 +1172,6 @@ function loadFromHash() {
     S.shootLabel  = d.sl || 'Full Day';
     S.delivs      = d.d  || { episode: true, teaser: true };
     S.delivPrice  = d.dp || 0;
-    S.voPrice     = d.vo || 0;
-    S.voLabel     = d.vl || 'None';
     S.addons       = d.a   || {};
     S.addonPrice   = d.ap  || 0;
     S.socialPrice  = d.sc  || 0;
@@ -1226,8 +1180,8 @@ function loadFromHash() {
     S.notes       = d.n  || '';
 
     $('step1').classList.remove('active');
-    $('step6').classList.add('active');
-    S.step = 6;
+    $('step5').classList.add('active');
+    S.step = 5;
     updateDots();
     renderQuote(true);
   } catch(e) {
