@@ -152,7 +152,7 @@
     .deliv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     @media(max-width: 560px) { .deliv-grid { grid-template-columns: 1fr; } }
     .deliv-tile {
-      border: 2px solid #2a2a2a; border-radius: 10px; padding: 14px 16px;
+      border: 2px solid #2a2a2a; border-radius: 10px; padding: 10px 12px;
       cursor: pointer; transition: all 0.2s; background: #141414;
     }
     .deliv-tile:hover { border-color: #444; }
@@ -187,7 +187,7 @@
     .addon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     @media(max-width: 560px) { .addon-grid { grid-template-columns: 1fr; } }
     .addon-tile {
-      border: 2px solid #2a2a2a; border-radius: 10px; padding: 14px 16px;
+      border: 2px solid #2a2a2a; border-radius: 10px; padding: 10px 12px;
       cursor: pointer; transition: all 0.2s; background: #141414;
     }
     .addon-tile:hover { border-color: #444; }
@@ -429,12 +429,12 @@
       <div class="card-title">Your Details</div>
       <div class="field">
         <label>Company Name</label>
-        <input type="text" id="partnerName" placeholder="e.g. Q39 BBQ" oninput="clearFieldError(this)" />
+        <input type="text" id="partnerName" placeholder="e.g. Burnt End BBQ" oninput="clearFieldError(this)" />
         <div class="field-error" id="errPartnerName"></div>
       </div>
       <div class="field">
         <label>Your Name <span class="sub">optional</span></label>
-        <input type="text" id="contactName" placeholder="e.g. Rob Magee" />
+        <input type="text" id="contactName" placeholder="e.g. Your Name" />
       </div>
       <div class="field" style="margin-bottom:0;">
         <label>Email <span class="sub">we'll send the quote here</span></label>
@@ -481,91 +481,82 @@
     <div class="card">
       <div class="card-title">Content Deliverables</div>
       <div class="field">
-        <label>What gets produced and delivered <span class="sub">pick individually, or choose a bundle</span></label>
-
-        <div style="margin-bottom:10px;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#555;">Always Included</div>
-        <div class="deliv-grid" style="margin-bottom:18px;">
-          <div class="deliv-tile always-on selected" data-key="episode" data-price="0">
-            <div class="deliv-title"><span class="deliv-check" style="background:#C8952A;border-color:#C8952A;color:#111;">✓</span>Full YouTube Episode <span class="incl-badge">Always Included</span></div>
-            <div class="deliv-price">Included in base</div>
-            <div class="deliv-desc">5–7 min edited documentary episode for YouTube Premiere · color-graded + mixed</div>
-          </div>
-          <div class="deliv-tile always-on selected" data-key="teaser" data-price="0">
-            <div class="deliv-title"><span class="deliv-check" style="background:#C8952A;border-color:#C8952A;color:#111;">✓</span>60-Second Website Teaser <span class="incl-badge">Always Included</span></div>
-            <div class="deliv-price">Included in base</div>
-            <div class="deliv-desc">Cinematic 60s cut for partner website or homepage embed</div>
-          </div>
+        <!-- Always Included bar -->
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:10px 14px;background:#141414;border:1px solid #2a2a2a;border-radius:8px;margin-bottom:12px;">
+          <span style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#555;flex-shrink:0;">Always Included</span>
+          <span style="font-size:13px;color:#C8952A;">✓ Full YouTube Episode (5–7 min)</span>
+          <span style="color:#2a2a2a;">|</span>
+          <span style="font-size:13px;color:#C8952A;">✓ 60-Second Website Teaser</span>
         </div>
 
-        <div style="margin-bottom:10px;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#555;">Add Reels</div>
-        <div class="deliv-grid" style="margin-bottom:18px;">
+        <!-- Reels — 3 column -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;">
           <div class="deliv-tile" data-key="reel" data-price="200" onclick="toggleDeliv(this)">
             <div class="deliv-title"><span class="deliv-check">✓</span>Instagram Reel</div>
             <div class="deliv-price">+$200</div>
-            <div class="deliv-desc">15–30s vertical cut, optimized for Instagram</div>
+            <div class="deliv-desc">15–30s vertical</div>
           </div>
           <div class="deliv-tile" data-key="tiktok" data-price="200" onclick="toggleDeliv(this)">
             <div class="deliv-title"><span class="deliv-check">✓</span>TikTok Cut</div>
             <div class="deliv-price">+$200</div>
-            <div class="deliv-desc">30–45s vertical format for TikTok</div>
+            <div class="deliv-desc">30–45s vertical</div>
           </div>
           <div class="deliv-tile" data-key="shorts" data-price="200" onclick="toggleDeliv(this)">
             <div class="deliv-title"><span class="deliv-check">✓</span>YouTube Shorts</div>
             <div class="deliv-price">+$200</div>
-            <div class="deliv-desc">45–60s cut for YouTube Shorts</div>
-          </div>
-          <div class="deliv-tile" data-key="interview" data-price="300" onclick="toggleDeliv(this)">
-            <div class="deliv-title"><span class="deliv-check">✓</span>Interview Session</div>
-            <div class="deliv-price">+$300</div>
-            <div class="deliv-desc">Partner films on-camera content with Tim on location</div>
+            <div class="deliv-desc">45–60s cut</div>
           </div>
         </div>
 
-        <div style="margin-bottom:10px;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#555;">Or Choose a Bundle</div>
+        <!-- Bundles -->
         <div class="deliv-grid">
           <div class="deliv-tile bundle-tile" data-key="bundle" data-price="550" onclick="toggleBundle(this)">
             <div class="deliv-title"><span class="deliv-check">✓</span>Full Bundle <span class="save-badge">Save $50</span></div>
             <div class="deliv-price" style="color:#5a9a5a">+$550</div>
-            <div class="deliv-desc">All 3 reels — Instagram + TikTok + YouTube Shorts — all platforms covered</div>
+            <div class="deliv-desc">All 3 reels — all platforms covered</div>
           </div>
           <div class="deliv-tile bundle-tile" data-key="masterbundle" data-price="800" onclick="toggleMasterBundle(this)">
             <div class="deliv-title"><span class="deliv-check">✓</span>Master Bundle <span class="save-badge">Save $100</span></div>
             <div class="deliv-price" style="color:#5a9a5a">+$800</div>
-            <div class="deliv-desc">All 3 reels + Interview Session — every platform + on-camera partner content</div>
+            <div class="deliv-desc">All 3 reels + Interview Session</div>
           </div>
         </div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">Production Add-Ons</div>
+      <div class="card-title">Recording Sessions & Add-Ons</div>
       <div class="field">
-        <label>Optional production upgrades</label>
         <div class="addon-grid">
-          <div class="addon-tile always-on selected" data-key="thumbnail" data-price="0">
-            <div class="addon-title"><span class="addon-check" style="background:#C8952A;border-color:#C8952A;color:#111;">✓</span>Thumbnail & YouTube Metadata <span class="incl-badge">Included</span></div>
-            <div class="addon-price"><span class="addon-incl">Always included</span></div>
-            <div class="addon-desc">Custom thumbnail, title options, description, tags</div>
-          </div>
-          <div class="addon-tile always-on selected" data-key="extended" data-price="0">
-            <div class="addon-title"><span class="addon-check" style="background:#C8952A;border-color:#C8952A;color:#111;">✓</span>Extended Edit Pass <span class="incl-badge">Included</span></div>
-            <div class="addon-price"><span class="addon-incl">Always included</span></div>
-            <div class="addon-desc">Up to 3 revision passes included — we get it right</div>
+          <div class="deliv-tile" data-key="interview" data-price="300" onclick="toggleDeliv(this)" style="border-radius:10px;">
+            <div class="deliv-title"><span class="deliv-check">✓</span>Interview Session</div>
+            <div class="deliv-price">+$300</div>
+            <div class="deliv-desc">On-camera partner content with Tim on location</div>
           </div>
           <div class="addon-tile" data-key="postprod" data-price="175" onclick="toggleAddon(this)">
             <div class="addon-title"><span class="addon-check">✓</span>Post Production Session</div>
             <div class="addon-price">+$175</div>
-            <div class="addon-desc">Up to 60 min — Tim narration, VO, or short-form audio recording</div>
+            <div class="addon-desc">Up to 60 min — Tim narration, VO, or audio recording</div>
+          </div>
+          <div class="addon-tile always-on selected" data-key="thumbnail" data-price="0">
+            <div class="addon-title"><span class="addon-check" style="background:#C8952A;border-color:#C8952A;color:#111;">✓</span>Thumbnail & YouTube Metadata <span class="incl-badge">Included</span></div>
+            <div class="addon-price"><span class="addon-incl">Always included</span></div>
+            <div class="addon-desc">Custom thumbnail, title variants, tags</div>
+          </div>
+          <div class="addon-tile always-on selected" data-key="extended" data-price="0">
+            <div class="addon-title"><span class="addon-check" style="background:#C8952A;border-color:#C8952A;color:#111;">✓</span>Extended Edit Pass <span class="incl-badge">Included</span></div>
+            <div class="addon-price"><span class="addon-incl">Always included</span></div>
+            <div class="addon-desc">Up to 3 revision passes — we get it right</div>
           </div>
           <div class="addon-tile" data-key="music" data-price="200" onclick="toggleAddon(this)">
             <div class="addon-title"><span class="addon-check">✓</span>Licensed Music Track</div>
             <div class="addon-price">+$200</div>
-            <div class="addon-desc">Cleared license for all platforms — YouTube, Instagram, TikTok</div>
+            <div class="addon-desc">Cleared for YouTube, Instagram, TikTok</div>
           </div>
           <div class="addon-tile" data-key="motion" data-price="250" onclick="toggleAddon(this)">
             <div class="addon-title"><span class="addon-check">✓</span>Motion Graphics & Overlays</div>
             <div class="addon-price">+$250</div>
-            <div class="addon-desc">Lower thirds, branded titles, animated transitions</div>
+            <div class="addon-desc">Lower thirds, branded titles, transitions</div>
           </div>
         </div>
       </div>
