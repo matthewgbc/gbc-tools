@@ -1112,10 +1112,38 @@ const NETWORK = {
     intel:{
       founded:"1943",
       knownFor:"Richlite recycled paper composite · Martin Guitar uses Richlite fretboards · Epicurean Kitchenware expanding into BBQ (competitive watch)",
-      youtube:"Full Maker Series (11 videos)",
+      youtube:"Full Maker Series (11 videos — see Maker Series tab)",
       story:"Sustainability over natural wood — key MITM narrative angle",
       openOpp:"Channy collab · Maker story feature · Tacoma episode (Jun 2026)"
-    }
+    },
+    catalog:{
+      description:"GBC is a certified Richlite fabricator. All Richlite sheets are food-safe, non-porous, heat-resistant, and made from 100% post-consumer recycled paper + phenolic resin. Produced since 1943 in Tacoma, WA. GBC orders direct at fabricator pricing — no distributor markup.",
+      specs:"Thicknesses: 5/16\", 3/8\", ½\", ¾\", 1\", 1¼\", 1½\", 2\" · Sheet sizes: 4×8, 4×10, 5×10 · Colors: Natural, Black Diamond, Slate, Graphite, Forest, Wine, Charcoal + custom",
+      leadTime:"~2 weeks from order (standard)",
+      minOrder:"Single sheet — certified fabricator pricing, no minimum",
+      reorderContact:"Brendan Rohan — brendan@richlite.com (call overdue as of Mar 2026)",
+      sheets:[
+        {color:"Natural",thickness:"½\"",size:"4×8",price:534.40,sku:"RL-NAT-48-12",notes:"Most versatile — warm tone, standard orders"},
+        {color:"Natural",thickness:"1\"",size:"4×8",price:1068.80,sku:"RL-NAT-48-1",notes:"Heavy-duty countertops"},
+        {color:"Black Diamond",thickness:"½\"",size:"4×8",price:572.16,sku:"RL-BD-48-12",notes:"Premium matte black — high-end commercial"},
+        {color:"Black Diamond",thickness:"1\"",size:"4×8",price:1144.32,sku:"RL-BD-48-1",notes:"Thick slab countertop / bar surface"},
+        {color:"Black Diamond",thickness:"½\"",size:"5×10",price:894.00,sku:"RL-BD-510-12",notes:"Large format — high-volume or wide boards"},
+        {color:"Slate",thickness:"5/16\"",size:"4×10",price:447.20,sku:"RL-SL-410-516",notes:"Thin — decorative, engraving, catering boards"}
+      ]
+    },
+    makerSeries:[
+      {num:1,title:"Make It With Paper",url:"https://www.youtube.com/watch?v=rPVJCiXmOBw",cat:"Maker / Craft",priority:"P3",notes:"Paper-focused maker — unique positioning"},
+      {num:2,title:"Everyday Objects Re-Invented by Designers Harvey & John",url:"https://www.youtube.com/watch?v=skQuFPPc5lc",cat:"Design / Product",priority:"P3",notes:"Designer duo — product design angle"},
+      {num:3,title:"How One Couple Restored a Historical WWII Radar Bunker",url:"https://www.youtube.com/watch?v=umFdZVieZpU",cat:"Restoration / Heritage",priority:"P3",notes:"Strong storytelling — history + craft angle"},
+      {num:4,title:"Learn What it Takes to Build Custom Kitchens with Jack Trench",url:"https://www.youtube.com/watch?v=HFv182fz3nc",cat:"Kitchen / Commercial",priority:"P2",notes:"Custom kitchen builder — direct overlap with GBC commercial surface work"},
+      {num:5,title:"Richlite Maker Series: Shape Studio",url:"https://www.youtube.com/watch?v=LK4uHKcNbUU",cat:"Maker Series",priority:"P1",notes:"First branded 'Maker Series' label — study format for GBC pitch"},
+      {num:6,title:"Why Martin Guitar Chooses Richlite Fretboards Over Ebony",url:"https://www.youtube.com/watch?v=CP06KHlUIrw",cat:"Materials / Sustainability",priority:"P1",notes:"Martin Guitar — flagship Richlite brand story; sustainability over natural wood = GBC's sales argument"},
+      {num:7,title:"Richlite Manufacturer Spotlight: Grow Anthology",url:"https://www.youtube.com/watch?v=C5uNFXfPV70",cat:"Manufacturer Spotlight",priority:"P3",notes:"Spotlight format — study for Maker pitch"},
+      {num:8,title:"Richlite Manufacturer Spotlight: Semihandmade",url:"https://www.youtube.com/watch?v=yj5eGNweL4k",cat:"Manufacturer Spotlight",priority:"P2",notes:"Cabinet/kitchen brand — closest to GBC's commercial surface customer"},
+      {num:9,title:"Richlite Manufacturer Spotlight: Shinbudo",url:"https://www.youtube.com/watch?v=VVPc33SnUL8",cat:"Manufacturer Spotlight",priority:"P3",notes:"Martial arts / specialty goods — unique application angle"},
+      {num:10,title:"Richlite Manufacturer Spotlight: Epicurean Kitchenware",url:"https://www.youtube.com/watch?v=1t9R2MNEBOk",cat:"Manufacturer Spotlight",priority:"P1",notes:"Cutting boards / kitchenware — DIRECT competitor/analog to GBC product line"},
+      {num:11,title:"Richlite Manufacturer Spotlight: Twig Case Co.",url:"https://www.youtube.com/watch?v=MUuGiGCATS4",cat:"Manufacturer Spotlight",priority:"P3",notes:"Accessories / cases — material versatility angle"}
+    ]
   },
   mccray: {
     id:"mccray", name:"McCray Lumber", emoji:"🪵",
@@ -2655,6 +2683,8 @@ function buildMediaPanel(p) {
 ══════════════════════════════════════════════════════════════════ */
 function renderNetworkEntity(n) {
   const tabs = ['Overview','Contacts','Expenses','Opportunities','Intelligence','Social & Brand'];
+  if (n.catalog) tabs.push('Product Catalog');
+  if (n.makerSeries) tabs.push('Maker Series');
   const tabKey = 'network-'+n.id;
   const tabBtns = tabs.map(t=>`<button class="tab-btn" data-tab="${t}" onclick="showTab('${tabKey}','${t}')">${t}</button>`).join('');
 
@@ -2728,7 +2758,65 @@ function renderNetworkEntity(n) {
     ${n.intel&&n.intel.openOpp?`<div class="info-row" style="margin-top:10px"><span class="info-key" style="font-weight:600;color:var(--amber)">Open Opp</span><span class="info-val" style="color:var(--amber)">${n.intel.openOpp}</span></div>`:''}
   </div>`;
 
-  const panels=[overviewHTML,contactsHTML,expensesHTML,oppsHTML,intelHTML,socialHTML].map((html,i)=>
+  const catalogHTML=n.catalog?`
+    <div class="info-card" style="margin-bottom:12px">
+      <h4>Material Overview</h4>
+      <div class="notes-box">${n.catalog.description}</div>
+      <div class="info-row" style="margin-top:8px"><span class="info-key">Specs</span><span class="info-val">${n.catalog.specs}</span></div>
+      <div class="info-row"><span class="info-key">Lead Time</span><span class="info-val">${n.catalog.leadTime}</span></div>
+      <div class="info-row"><span class="info-key">Min Order</span><span class="info-val">${n.catalog.minOrder}</span></div>
+      <div class="info-row"><span class="info-key">Reorder</span><span class="info-val">${n.catalog.reorderContact}</span></div>
+    </div>
+    <div class="info-card">
+      <h4>Sheet Price List <span style="font-size:12px;color:var(--muted);font-weight:400">— certified fabricator pricing</span></h4>
+      <table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:8px">
+        <thead><tr style="border-bottom:1px solid var(--border)">
+          <th style="padding:8px 6px;color:var(--muted);text-align:left;font-weight:600">Color</th>
+          <th style="padding:8px 6px;color:var(--muted);text-align:left;font-weight:600">Thickness</th>
+          <th style="padding:8px 6px;color:var(--muted);text-align:left;font-weight:600">Sheet</th>
+          <th style="padding:8px 6px;color:var(--muted);text-align:right;font-weight:600">Price</th>
+          <th style="padding:8px 6px;color:var(--muted);text-align:left;font-weight:600">SKU</th>
+          <th style="padding:8px 6px;color:var(--muted);text-align:left;font-weight:600">Notes</th>
+        </tr></thead>
+        <tbody>${n.catalog.sheets.map(s=>`<tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:8px 6px;color:var(--text);font-weight:600">${s.color}</td>
+          <td style="padding:8px 6px;font-family:monospace;color:var(--amber)">${s.thickness}</td>
+          <td style="padding:8px 6px;color:var(--text)">${s.size}</td>
+          <td style="padding:8px 6px;font-weight:700;color:var(--green);text-align:right">${fmt$(s.price)}</td>
+          <td style="padding:8px 6px;font-size:11px;color:var(--muted)">${s.sku}</td>
+          <td style="padding:8px 6px;font-size:12px;color:var(--muted)">${s.notes||''}</td>
+        </tr>`).join('')}</tbody>
+      </table>
+    </div>`:'';
+
+  const makerSeriesHTML=n.makerSeries?`
+    <div class="info-card">
+      <h4 style="margin-bottom:4px">Richlite Maker Series — ${n.makerSeries.length} Videos</h4>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Research assets for MITM EP4 · Maker Series pitch · Tacoma trip brief · P1 = transcribe first</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        ${n.makerSeries.map(v=>{
+          const prCls=v.priority==='P1'?'tag-hot':v.priority==='P2'?'tag-soon':'tag-later';
+          return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;display:flex;align-items:flex-start;gap:10px">
+            <span style="background:var(--bg);border-radius:4px;padding:3px 8px;font-size:11px;font-weight:700;color:var(--muted);min-width:22px;text-align:center;flex-shrink:0">#${v.num}</span>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">
+                <a href="${v.url}" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none">${v.title} ↗</a>
+                <span class="pill ${prCls}" style="font-size:10px;flex-shrink:0">${v.priority}</span>
+              </div>
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                <span style="font-size:11px;color:var(--amber);background:rgba(224,124,36,0.12);border-radius:3px;padding:2px 6px;flex-shrink:0">${v.cat}</span>
+                <span style="font-size:12px;color:var(--muted)">${v.notes}</span>
+              </div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`:'';
+
+  const panelList=[overviewHTML,contactsHTML,expensesHTML,oppsHTML,intelHTML,socialHTML];
+  if (n.catalog) panelList.push(catalogHTML);
+  if (n.makerSeries) panelList.push(makerSeriesHTML);
+  const panels=panelList.map((html,i)=>
     `<div class="tab-panel" data-tab="${tabs[i]}">${html}</div>`).join('');
 
   return `
