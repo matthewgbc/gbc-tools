@@ -21,7 +21,8 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;}
-a{color:inherit;text-decoration:none;}
+a{color:var(--amber);text-decoration:none;}
+a:hover{text-decoration:underline;}
 button{font-family:inherit;cursor:pointer;}
 
 /* ─── SIDEBAR ─── */
@@ -74,7 +75,8 @@ hr.sidebar-divider{border:none;border-top:1px solid var(--border);margin:6px 0;}
 .pill-purple{background:rgba(168,85,247,.15);color:var(--purple);border:1px solid rgba(168,85,247,.3);}
 
 /* ─── ALERTS ─── */
-.alert{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;border-radius:8px;margin-bottom:8px;font-size:13px;line-height:1.5;}
+.alert{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;border-radius:8px;margin-bottom:8px;font-size:13px;line-height:1.5;cursor:pointer;transition:opacity .15s;}
+.alert:hover{opacity:.85;}
 .alert-red{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);color:#fca5a5;}
 .alert-yellow{background:rgba(234,179,8,.12);border:1px solid rgba(234,179,8,.3);color:#fde68a;}
 .alert-icon{font-size:15px;flex-shrink:0;margin-top:1px;}
@@ -102,7 +104,8 @@ hr.sidebar-divider{border:none;border-top:1px solid var(--border);margin:6px 0;}
 .data-table th{padding:9px 14px;text-align:left;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border);background:var(--surface2);}
 .data-table td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:middle;}
 .data-table tr:last-child td{border-bottom:none;}
-.data-table tbody tr:hover{background:rgba(255,255,255,.02);}
+.data-table tbody tr{cursor:pointer;}
+.data-table tbody tr:hover{background:rgba(255,255,255,.03);}
 .clickable-name{color:var(--amber);cursor:pointer;font-weight:500;}
 .clickable-name:hover{text-decoration:underline;}
 
@@ -126,8 +129,8 @@ hr.sidebar-divider{border:none;border-top:1px solid var(--border);margin:6px 0;}
 .kanban-col-title{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;}
 .kanban-col-count{font-size:11px;font-weight:600;color:var(--text-muted);background:var(--surface2);padding:1px 7px;border-radius:10px;}
 .kanban-cards{padding:10px;display:flex;flex-direction:column;gap:8px;}
-.kanban-card{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:12px;transition:border-color .15s;}
-.kanban-card:hover{border-color:var(--amber-dim);}
+.kanban-card{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:12px;transition:border-color .15s,box-shadow .15s;}
+.kanban-card:hover{border-color:var(--amber-dim);box-shadow:0 2px 12px rgba(224,124,36,.08);}
 .kc-ep{font-size:10px;font-weight:700;color:var(--text-muted);margin-bottom:4px;}
 .kc-title{font-size:13px;font-weight:600;margin-bottom:6px;}
 .kc-partner{font-size:12px;color:var(--amber);cursor:pointer;margin-bottom:8px;}
@@ -165,7 +168,7 @@ hr.sidebar-divider{border:none;border-top:1px solid var(--border);margin:6px 0;}
 .pstat-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;}
 
 /* Tabs */
-.tabs-bar{display:flex;gap:2px;padding:0 24px;background:var(--surface);border-bottom:1px solid var(--border);}
+.tabs-bar{display:flex;gap:2px;padding:0 24px;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;}
 .tab-btn{padding:11px 16px;font-size:13px;font-weight:500;color:var(--text-muted);background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .15s;white-space:nowrap;}
 .tab-btn:hover{color:var(--text);}
 .tab-btn.active{color:var(--amber);border-bottom-color:var(--amber);}
@@ -204,24 +207,32 @@ hr.sidebar-divider{border:none;border-top:1px solid var(--border);margin:6px 0;}
 .contact-fields{display:flex;flex-direction:column;gap:4px;}
 .contact-field{font-size:12px;display:flex;gap:6px;align-items:center;color:var(--text-muted);}
 .contact-field span{color:var(--text);}
+.contact-field a{color:var(--amber);}
 
 /* Invoices tab */
 .invoice-row{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid var(--border);font-size:13px;}
 .invoice-row:last-child{border-bottom:none;}
-.inv-id{font-family:monospace;font-size:12px;color:var(--text-muted);width:140px;flex-shrink:0;}
+.inv-id{font-family:monospace;font-size:12px;color:var(--amber);width:140px;flex-shrink:0;}
+.inv-id:hover{text-decoration:underline;cursor:pointer;}
 .inv-date{font-size:12px;color:var(--text-muted);width:80px;flex-shrink:0;}
 .inv-amount{font-weight:700;width:90px;text-align:right;flex-shrink:0;}
 .inv-amount.overdue{color:var(--red);}
 .inv-items{flex:1;font-size:12px;color:var(--text-muted);line-height:1.4;}
 
 /* Opportunities tab */
-.opp-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:10px;}
+.opp-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:10px;cursor:pointer;transition:border-color .15s;}
+.opp-card:hover{border-color:var(--amber-dim);}
+.opp-card.expanded .opp-expand-body{display:block;}
 .opp-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
 .opp-type-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;}
 .opp-title{font-size:14px;font-weight:600;flex:1;}
 .opp-value{font-size:14px;font-weight:700;color:var(--amber);}
 .opp-desc{font-size:13px;color:var(--text-muted);line-height:1.5;margin-bottom:8px;}
 .opp-footer{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted);}
+.opp-expand-body{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
+.opp-complete-btn{background:var(--surface3);border:1px solid var(--border2);color:var(--text-muted);font-size:11px;font-weight:600;padding:4px 10px;border-radius:5px;cursor:pointer;transition:all .15s;}
+.opp-complete-btn:hover{border-color:var(--green);color:var(--green);}
+.opp-complete-btn.done{border-color:var(--green);color:var(--green);}
 
 /* Media tab */
 .episode-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:16px;}
@@ -229,6 +240,8 @@ hr.sidebar-divider{border:none;border-top:1px solid var(--border);margin:6px 0;}
 .episode-card .ep-status{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:13px;color:var(--text-muted);}
 .episode-card a{color:var(--amber);font-size:13px;}
 .episode-card a:hover{text-decoration:underline;}
+.watch-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);color:#fca5a5;font-size:12px;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;transition:background .15s;margin-top:8px;}
+.watch-btn:hover{background:rgba(239,68,68,.2);text-decoration:none;}
 .media-assets-table{width:100%;border-collapse:collapse;font-size:12px;}
 .media-assets-table th{padding:8px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--text-muted);border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.06em;background:var(--surface2);}
 .media-assets-table td{padding:9px 12px;border-bottom:1px solid var(--border);}
@@ -254,7 +267,8 @@ hr.sidebar-divider{border:none;border-top:1px solid var(--border);margin:6px 0;}
 .rev-table th{padding:10px 16px;text-align:left;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border);background:var(--surface2);}
 .rev-table td{padding:11px 16px;border-bottom:1px solid var(--border);vertical-align:middle;}
 .rev-table tr:last-child td{border-bottom:none;}
-.rev-table tbody tr:hover{background:rgba(255,255,255,.02);}
+.rev-table tbody tr{cursor:pointer;}
+.rev-table tbody tr:hover{background:rgba(255,255,255,.03);}
 .rev-total-row td{font-weight:700;background:var(--surface2);border-top:1px solid var(--border2);}
 .progress-bar{width:80px;height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;}
 .progress-fill{height:100%;border-radius:3px;background:var(--amber);}
@@ -280,6 +294,38 @@ hr.sidebar-divider{border:none;border-top:1px solid var(--border);margin:6px 0;}
 .health-flag.red{color:var(--red);}
 .health-touch{font-size:12px;color:var(--text-muted);}
 
+/* ─── PRODUCT CATALOG ─── */
+.catalog-section{margin-bottom:28px;}
+.catalog-section-title{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);padding:8px 0;border-bottom:1px solid var(--border);margin-bottom:14px;}
+.catalog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.catalog-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;transition:border-color .15s;}
+.catalog-card:hover{border-color:var(--amber-dim);}
+.catalog-card-name{font-size:13px;font-weight:600;margin-bottom:4px;}
+.catalog-card-price{font-size:14px;font-weight:700;color:var(--amber);margin-bottom:8px;}
+.catalog-card-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;}
+.catalog-partner-chip{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;background:var(--amber-glow);color:var(--amber);border:1px solid var(--amber-dim);cursor:pointer;transition:background .15s;}
+.catalog-partner-chip:hover{background:rgba(224,124,36,.25);}
+.catalog-status-chip{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;}
+.catalog-status-active{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.25);}
+.catalog-status-custom{background:rgba(59,130,246,.12);color:var(--blue);border:1px solid rgba(59,130,246,.25);}
+.catalog-status-new{background:rgba(168,85,247,.12);color:var(--purple);border:1px solid rgba(168,85,247,.25);}
+.catalog-status-disc{background:rgba(107,114,128,.12);color:var(--grey);border:1px solid rgba(107,114,128,.25);}
+
+/* ─── PARTNER KANBAN VIEW ─── */
+.partner-kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+.pk-col{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.pk-col-header{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.pk-col-title{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;}
+.pk-col-count{font-size:11px;font-weight:600;color:var(--text-muted);background:var(--surface2);padding:1px 7px;border-radius:10px;}
+.pk-cards{padding:10px;display:flex;flex-direction:column;gap:8px;}
+.pk-card{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:14px;cursor:pointer;transition:border-color .15s,box-shadow .15s;}
+.pk-card:hover{border-color:var(--amber-dim);box-shadow:0 2px 14px rgba(224,124,36,.1);}
+.pk-card-name{font-size:14px;font-weight:700;color:var(--amber);margin-bottom:4px;}
+.pk-card-name:hover{text-decoration:underline;}
+.pk-card-rev{font-size:13px;font-weight:600;color:var(--green);margin-bottom:3px;}
+.pk-card-last{font-size:11px;color:var(--text-muted);margin-bottom:8px;}
+.pk-card-meta{display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
+
 /* ─── MISC ─── */
 .section-title{font-size:16px;font-weight:700;margin-bottom:16px;}
 .empty-state{text-align:center;padding:40px;color:var(--text-muted);font-size:13px;}
@@ -289,7 +335,7 @@ hr.sidebar-divider{border:none;border-top:1px solid var(--border);margin:6px 0;}
 .dot-sep{color:var(--text-dim);margin:0 2px;}
 
 /* Responsive kpi */
-@media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr);}.two-col{grid-template-columns:1fr;}.kanban{grid-template-columns:repeat(2,1fr);}.overview-grid{grid-template-columns:1fr;}}
+@media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr);}.two-col{grid-template-columns:1fr;}.kanban{grid-template-columns:repeat(2,1fr);}.overview-grid{grid-template-columns:1fr;}.catalog-grid{grid-template-columns:repeat(2,1fr);}.partner-kanban{grid-template-columns:repeat(2,1fr);}}
 </style>
 </head>
 <body>
@@ -304,6 +350,9 @@ hr.sidebar-divider{border:none;border-top:1px solid var(--border);margin:6px 0;}
   <div class="sidebar-section-label">Dashboard</div>
   <div class="nav-item active" id="nav-cmd" onclick="showView('command')">
     <span class="nav-icon">⚡</span>Command Center
+  </div>
+  <div class="nav-item" id="nav-kanban" onclick="showView('kanban')">
+    <span class="nav-icon">🗂</span>Partner Kanban
   </div>
   <div class="nav-item" id="nav-mitm" onclick="showView('mitm')">
     <span class="nav-icon">🎬</span>MITM Pipeline
@@ -329,7 +378,12 @@ hr.sidebar-divider{border:none;border-top:1px solid var(--border);margin:6px 0;}
     <span class="nav-icon">🔄</span>Relationship Health
   </div>
 
-  <div class="sidebar-footer">GBC OS · v2.0 · Mar 2026</div>
+  <div class="sidebar-section-label">Catalog</div>
+  <div class="nav-item" id="nav-catalog" onclick="showView('catalog')">
+    <span class="nav-icon">📦</span>Product Catalog
+  </div>
+
+  <div class="sidebar-footer">GBC OS · v2.1 · Mar 2026</div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════ MAIN -->
@@ -353,38 +407,48 @@ const PARTNERS = {
     mediaAssetsOnFile:14,
     notes:"30-day content gap rule. ⚠️ ($4,794.98) outstanding — #1152028 ($493.76) + #2242026_2 ($4,301.22 overdue since Feb 27). Follow up with Patrick Peluso at patrick@q39kc.com. Intro required before contacting Paige Comms or Crux Marketing. MITM in-store display approved for Lawrence; Overland Park TBD. Lee's Summit is the 4th location opening 2026 — no GBC product placed yet. Q39 starting their own YouTube channel via Crux.",
     contacts:[
-      {name:"Kelly McGee",role:"Owner",primary:true,email:"—",phone:"—",outreach:"In-person / Tim only"},
+      {name:"Kelly McGee",role:"Owner",primary:true,email:"",phone:"",outreach:"In-person / Tim only"},
       {name:"Andrew Kneessy",role:"Brand Expansion / Liaison",primary:false,email:"andrew.kneessy@q39kc.com",phone:"913-375-4709",outreach:"Email"},
       {name:"Patrick Peluso",role:"Chef / Invoice Contact",primary:false,email:"patrick@q39kc.com",phone:"816-588-3864",outreach:"Email — invoice follow-up"},
       {name:"Joel Hatzfeld",role:"Operations / EoM Orders",primary:false,email:"Joel@q39kc.com",phone:"816-489-7732",outreach:"Email (monthly cadence)"},
       {name:"Carrie Powell",role:"Knife Orders",primary:false,email:"Carrie@q39kc.com",phone:"816-715-1454",outreach:"Email"},
-      {name:"Scott Kautzi",role:"Retail Board Orders",primary:false,email:"scottk@q39kc.com",phone:"—",outreach:"Email"}
+      {name:"Scott Kautzi",role:"Retail Board Orders",primary:false,email:"scottk@q39kc.com",phone:"",outreach:"Email"}
     ],
     locations:[
       {name:"Q39 Midtown (Flagship)",address:"1000 W 39th St, Kansas City, MO 64111",phone:"(816) 255-3753",status:"Active",
-       products:[{sku:"GBC-MC-001",name:"The Manhole Cover",qty:4,unitPrice:299,installed:"Jan 2024",replaceBy:null},{sku:"GBC-CB-001",name:"Small Cutting Board 8×12",qty:12,unitPrice:89,installed:"Mar 2024",replaceBy:null}],flags:["upsell"]},
+       products:[
+         {sku:"GBC-Q39-PLAT",name:"Q39 Sandwich Platters (custom Richlite)",qty:9,unitPrice:null,installed:"2025",replaceBy:null},
+         {sku:"GBC-Q39-FAM",name:"Q39 Family Platters (custom Richlite)",qty:15,unitPrice:null,installed:"2025",replaceBy:null},
+         {sku:"GBC-BB-EOM",name:'12"×18"×1¼" Butcher Block w/JG — EoM Program',qty:4,unitPrice:null,installed:"2025",replaceBy:null},
+         {sku:"GBC-CB-001",name:"Small Cutting Board 8×12",qty:12,unitPrice:89,installed:"Mar 2024",replaceBy:null}
+       ],flags:["upsell"]},
       {name:"Q39 Overland Park",address:"11051 Antioch Rd, Overland Park, KS 66210",phone:"(913) 951-4500",status:"Active — MITM Display TBD",
-       products:[{sku:"GBC-MC-001",name:"The Manhole Cover",qty:2,unitPrice:299,installed:"Jun 2024",replaceBy:null}],flags:["upsell","new"]},
-      {name:"Q39 Lawrence",address:"4821 W 6th St, Lawrence, KS 66049",phone:"—",status:"Active — MITM Display Approved ✓",
-       products:[{sku:"GBC-RL-001",name:"Richlite Sandwich Boards",qty:6,unitPrice:89,installed:"Feb 2026",replaceBy:null},{sku:"GBC-RL-002",name:"Champion Platters (Richlite)",qty:15,unitPrice:82,installed:"Jun 2025",replaceBy:null}],flags:["new","upsell"]},
-      {name:"Q39 Lee's Summit",address:"Lee's Summit, MO — Opening 2026",phone:"—",status:"Opening 2026 — No GBC product yet",products:[],flags:["new"]}
+       products:[
+         {sku:"GBC-Q39-PLAT",name:"Q39 Sandwich Platters (custom Richlite)",qty:70,unitPrice:null,installed:"2025",replaceBy:null}
+       ],flags:["upsell","new"]},
+      {name:"Q39 Lawrence",address:"4821 W 6th St, Lawrence, KS 66049",phone:"",status:"Active — MITM Display Approved ✓",
+       products:[
+         {sku:"GBC-Q39-PLAT",name:"Q39 Richlite Replacement Platter Boards",qty:6,unitPrice:null,installed:"Feb 2026",replaceBy:null},
+         {sku:"GBC-BB-EOM",name:'12"×18"×1¼" Butcher Block w/JG — EoM Program',qty:5,unitPrice:null,installed:"2025",replaceBy:null}
+       ],flags:["new","upsell"]},
+      {name:"Q39 Lee's Summit",address:"Lee's Summit, MO — Opening 2026",phone:"",status:"Opening 2026 — No GBC product yet",products:[],flags:["new"]}
     ],
     invoices:[
-      {id:"#2242026_2",date:"Feb 2026",amount:4301.22,status:"overdue",items:"Q39 Lawrence | Richlite Sandwich Boards + Champion Platters — OVERDUE since Feb 27"},
+      {id:"#2242026_2",date:"Feb 2026",amount:4301.22,status:"overdue",items:"Q39 Richlite Replacement Platter Boards — OVERDUE since Feb 27"},
       {id:"#1152028",date:"Feb 2026",amount:493.76,status:"overdue",items:"Q39 Richlite Replacement Platter Boards"},
       {id:"#2242026",date:"Feb 2026",amount:276.51,status:"paid",items:"Thrasher PD Cutting Boards (Scott Kautzi)"},
       {id:"#1032025_3",date:"Oct 2025",amount:204.13,status:"paid",items:"Q39 Retail Boards (Scott Kautzi)"},
-      {id:"#6032025",date:"Jun 2025",amount:1234.41,status:"paid",items:"Q39 | Richlite New Champion Platters — 15 × 12×15 Richlite boards w/JG"},
-      {id:"#5092025",date:"May 2025",amount:1843.38,status:"paid",items:"Q39 | Richlite Sandwich Platters — 79 units"},
-      {id:"#5152025_2",date:"May 2025",amount:410.37,status:"paid",items:"Q39 | Richlite Champion Platter Sauce Engravings"},
+      {id:"#6032025",date:"Jun 2025",amount:1234.41,status:"paid",items:'Q39 Richlite New Champion Platters — 15 × 12×15 Richlite boards w/JG'},
+      {id:"#5092025",date:"May 2025",amount:1843.38,status:"paid",items:"Q39 Richlite Sandwich Platters — 79 units"},
+      {id:"#5152025_2",date:"May 2025",amount:410.37,status:"paid",items:"Q39 Richlite Champion Platter Sauce Engravings"},
       {id:"#01212025",date:"Jan 2025",amount:541.56,status:"paid",items:"EoM Boards & Knives — Nov+Dec (Joel Hatzfeld)"},
       {id:"#111523",date:"Nov 2023",amount:2528.29,status:"paid",items:"November Q39 Invoice (Danielle Wilson)"},
       {id:"#Q39RLite2",date:"Sep 2023",amount:4970.54,status:"paid",items:"Q39 Richlite Order (2/2) — flagship install"}
     ],
     opportunities:[
-      {type:"hot",title:"Collect Overdue Balance",desc:"($4,794.98) outstanding on #2242026_2 + #1152028. Follow up with Patrick Peluso — patrick@q39kc.com.",value:"$4,794.98",owner:"Matt"},
+      {type:"hot",title:"Collect Overdue Balance",desc:"($4,794.98) outstanding on #2242026_2 + #1152028. Follow up with Patrick Peluso.",value:"$4,794.98",owner:"Matt"},
       {type:"upsell",title:"Lee's Summit Opening — First Install",desc:"4th location opening 2026. Zero GBC product. Be first in — propose signature install package.",value:"$2,800 est.",owner:"Matt"},
-      {type:"upsell",title:"Full Board Set — OP + Lawrence",desc:"Overland Park has Manhole Cover only. Lawrence now has Richlite boards — expand with Manhole Cover.",value:"$3,200 est.",owner:"Matt"},
+      {type:"upsell",title:"Customized Trophy Base — EoY Award",desc:"Customized Trophy Base for Q39 EOY Award delivered (Joel Hatzfeld). Upsell opportunity for 2026 award program.",value:"Custom",owner:"Matt"},
       {type:"replace",title:"Board Refresh — Midtown (18 mo.)",desc:"Midtown boards installed Mar 2024 — approaching 18-month window. Propose refresh order.",value:"$1,068 est.",owner:"Matt"}
     ],
     media:{
@@ -415,11 +479,15 @@ const PARTNERS = {
     ],
     locations:[
       {name:"Burnt End BBQ — Prairie Village",address:"7539 Mission Rd, Prairie Village, KS 66208",phone:"(913) 383-2022",status:"Active",
-       products:[{sku:"GBC-MC-001",name:"The Manhole Cover",qty:2,unitPrice:299,installed:"Oct 2024",replaceBy:null},{sku:"GBC-CB-001",name:"Small Cutting Board 8×12",qty:6,unitPrice:89,installed:"Oct 2024",replaceBy:null}],flags:["upsell"]},
-      {name:"Burnt End BBQ — Westport (New)",address:"510 Westport Rd, Kansas City, MO 64111",phone:"—",status:"New Location — No GBC product yet",products:[],flags:["new"]}
+       products:[
+         {sku:"GBC-BE-TRAY-CC",name:"Burnt End BBQ Tray Inserts Crown Center",qty:1,unitPrice:1558.97,installed:"Oct 2024",replaceBy:null},
+         {sku:"GBC-BE-TRAY-DS",name:"Burnt End BBQ Tray Inserts De Soto (PB&J)",qty:1,unitPrice:1083.21,installed:"Aug 2024",replaceBy:null},
+         {sku:"GBC-BE-TRAY",name:"Burnt End BBQ Tray Inserts",qty:1,unitPrice:369.55,installed:"Jun 2024",replaceBy:null}
+       ],flags:["upsell"]},
+      {name:"Burnt End BBQ — Westport (New)",address:"510 Westport Rd, Kansas City, MO 64111",phone:"",status:"New Location — No GBC product yet",products:[],flags:["new"]}
     ],
     invoices:[
-      {id:"#10212024_BEBBQ",date:"Oct 2024",amount:1558.97,status:"paid",items:"Burnt End BBQ Inserts | Crown Center Location"},
+      {id:"#10212024_BEBBQ",date:"Oct 2024",amount:1558.97,status:"paid",items:"Burnt End BBQ Tray Inserts | Crown Center Location"},
       {id:"#08062024",date:"Aug 2024",amount:1083.21,status:"paid",items:"Burnt End BBQ Tray Inserts De Soto | PB&J Restaurants"},
       {id:"#6282024",date:"Jun 2024",amount:369.55,status:"paid",items:"Burnt End BBQ Tray Inserts | PB&J Restaurants Inc."},
       {id:"#BE-QUOTE-20",date:"Mar 2026",amount:null,status:"draft",items:"Quote pending — 20 boards (Smokey request Mar 19)"}
@@ -433,7 +501,7 @@ const PARTNERS = {
     media:{
       episode:"S1E2",epStatus:"LIVE",launchDate:"Mar 19 2026",url:"https://youtu.be/2CNrRJxBfBA",
       assets:[
-        {type:"Full Episode",platform:"YouTube",status:"LIVE",notes:"https://youtu.be/2CNrRJxBfBA"},
+        {type:"Full Episode",platform:"YouTube",status:"LIVE",notes:"https://youtu.be/2CNrRJxBfBA",url:"https://youtu.be/2CNrRJxBfBA"},
         {type:"Nachos Reel",platform:"Instagram",status:"LIVE",notes:"Launched 11:30AM Mar 19"},
         {type:"Short-Form Clips (8+)",platform:"All",status:"BLOCKED",notes:"⚠️ Blocked until licensing signed"},
         {type:"Partner Social Kit",platform:"Burnt End Social",status:"BLOCKED",notes:"⚠️ Blocked — Tim must get signature"},
@@ -453,21 +521,23 @@ const PARTNERS = {
     mediaAssetsOnFile:2,
     notes:"30-day content gap rule. Always 'MMB' — Meat Mitch Barbecue. Licensing not yet sent. Tim must decide reshoot vs. existing assets by Mar 21. Existing edit features Becca (GM) NOT Mitch Benjamin (owner). Mitch grew on YouTube — strong collab opportunity. Becca Stout (GM, Culinary Virtue) is outreach contact.",
     contacts:[
-      {name:"Mitch Benjamin",role:"Owner",primary:true,email:"—",phone:"Tim has direct number",outreach:"Tim / Direct"},
-      {name:"Becca Stout",role:"GM, Culinary Virtue",primary:false,email:"beccas@culinaryvirtue.com",phone:"—",outreach:"Email"},
-      {name:"Michelle Twibell",role:"Operations",primary:false,email:"michelle@meatmitch.com",phone:"—",outreach:"Email"}
+      {name:"Mitch Benjamin",role:"Owner",primary:true,email:"",phone:"Tim has direct number",outreach:"Tim / Direct"},
+      {name:"Becca Stout",role:"GM, Culinary Virtue",primary:false,email:"beccas@culinaryvirtue.com",phone:"",outreach:"Email"},
+      {name:"Michelle Twibell",role:"Operations",primary:false,email:"michelle@meatmitch.com",phone:"",outreach:"Email"}
     ],
     locations:[
       {name:"Meat Mitch BBQ — Leawood",address:"3620 W. 95th Street, Leawood, KS 66206",phone:"(913) 363-6328",status:"Active",
        products:[
-         {sku:"GBC-CB-001",name:"Small Cutting Board 8×12",qty:4,unitPrice:89,installed:"Aug 2025",replaceBy:null},
-         {sku:"GBC-HEAT-001",name:"Richlite+Wood Heat Lamp Butcher Block",qty:1,unitPrice:546.43,installed:"Oct 2025",replaceBy:"~Oct 2026"}
+         {sku:"GBC-HEAT-001",name:"Richlite+Wood Catering Butcher Block w/Heat Lamp",qty:1,unitPrice:498,installed:"Oct 2025",replaceBy:"~Oct 2026"},
+         {sku:"GBC-MOB-001",name:"Mobile Butcher Counter | Richlite Replacement",qty:1,unitPrice:350,installed:"Aug 2025",replaceBy:null},
+         {sku:"GBC-PT-001",name:'27" Prep Table',qty:1,unitPrice:164.59,installed:"Oct 2024",replaceBy:null},
+         {sku:"GBC-MM-VIP",name:"MM_VIP_Block",qty:1,unitPrice:855,installed:"Feb 2024",replaceBy:null}
        ],flags:["replace","upsell"]}
     ],
     invoices:[
-      {id:"#1032025",date:"Oct 2025",amount:546.43,status:"paid",items:"Richlite+Wood Mobile Catering Butcher Block w/Heat Lamp"},
-      {id:"#8282025",date:"Aug 2025",amount:384.04,status:"paid",items:"Mobile Butcher Counter | Richlite Replacement"},
-      {id:"#10102024",date:"Oct 2024",amount:164.59,status:"paid",items:'27" Prep Table - Meat Mitch | GBC'},
+      {id:"#1032025",date:"Oct 2025",amount:498,status:"paid",items:"Richlite+Wood Catering Butcher Block w/Heat Lamp"},
+      {id:"#8282025",date:"Aug 2025",amount:350,status:"paid",items:"Mobile Butcher Counter | Richlite Replacement"},
+      {id:"#10102024",date:"Oct 2024",amount:164.59,status:"paid",items:'27" Prep Table — Meat Mitch | GBC'},
       {id:"#20624_Inv#1",date:"Feb 2024",amount:855.00,status:"paid",items:"MM_VIP_Block (Michelle Twibell)"},
       {id:"#000025",date:"Sep 2023",amount:792.21,status:"paid",items:"Meat Mitch 9/27 Event Invoice (Becca Stout)"},
       {id:"#MMBB3",date:"Oct 2023",amount:233.17,status:"paid",items:"G|B|C — Meat Mitch Butcher Block (Becca Stout)"}
@@ -475,7 +545,7 @@ const PARTNERS = {
     opportunities:[
       {type:"hot",title:"Send MITM Licensing Agreement",desc:"Not sent. Must be signed before any episode posts. Send to Becca Stout — confirm with Mitch. Tim decides reshoot by Mar 21.",value:"Content unlock",owner:"Matt"},
       {type:"replace",title:"Heat Lamp Block Replacement Window",desc:"Oct 2025 install → replacement window Oct 2026. Quote proactively + pitch as catalog expansion.",value:"$600 est.",owner:"Tim + Matt"},
-      {type:"upsell",title:"Manhole Cover + Full Set — Leawood",desc:"Only 4 small boards + 1 specialty piece. Propose Manhole Cover + medium boards.",value:"$1,200 est.",owner:"Matt"},
+      {type:"upsell",title:"Man Haul! Cutting Board + Full Set — Leawood",desc:"Propose Man Haul! Cutting Board + medium boards to round out the Leawood install.",value:"$1,200 est.",owner:"Matt"},
       {type:"newprod",title:"Heat Lamp Block — Catalog Expansion",desc:"Becca commissioned the original. Use Meat Mitch as case study for full product line launch.",value:"Product line",owner:"Tim"}
     ],
     media:{
@@ -492,32 +562,35 @@ const PARTNERS = {
     mitm:"EP8 — Target TBD", mitmStatus:"PLANNING",
     licensing:"Not started", licensingClass:"yellow",
     mediaAssetsOnFile:0,
-    notes:"Texas opening announced Mar 18. Ben Fuentes said 'get through this phase then let's figure this out' — 2–3 weeks. Partnership framework email due Mar 21. World Cup FIFA 2026 window closes Mar 28. Aug 2024: 400-unit flagship order. Jul 2025: $6,221 order (400× teardrops + 10× butcher blocks).",
+    notes:"Texas opening announced Mar 18. Ben Fuentes said 'get through this phase then let's figure this out' — 2–3 weeks. Partnership framework email due Mar 21. World Cup FIFA 2026 window closes Mar 28. Jul 2025: $6,221.16 order (400× Tear Drop Cutouts + 10× 12×18 Butcher Block Wholesale). Sep 2025: $1,396.60 order (20× 12×18 Butcher Block). Customer ID: XV8MWVTS310X5CQB9TR4NCX1TG.",
     contacts:[
-      {name:"Ben Fuentes",role:"Primary Invoice Contact",primary:true,email:"Ben.Fuentes@boothcreekwagyu.com",phone:"—",outreach:"Email"},
-      {name:"Mike French",role:"KC Market Manager",primary:false,email:"—",phone:"816-516-3294",outreach:"Phone / Text"},
-      {name:"Accounting Dept",role:"Invoicing",primary:false,email:"invoices@boothcreekwagyu.com",phone:"—",outreach:"Email"}
+      {name:"Ben Fuentes",role:"Primary Invoice Contact",primary:true,email:"Ben.Fuentes@boothcreekwagyu.com",phone:"",outreach:"Email"},
+      {name:"Mike French",role:"KC Market Manager",primary:false,email:"",phone:"816-516-3294",outreach:"Phone / Text"},
+      {name:"Accounting Dept",role:"Invoicing",primary:false,email:"invoices@boothcreekwagyu.com",phone:"",outreach:"Email"}
     ],
     locations:[
       {name:"Booth Creek — Prairie Village",address:"Prairie Village, KS",phone:"913-295-8811",status:"Active",
        products:[
-         {sku:"GBC-TD-001",name:'6"×11" Teardrop Cutout',qty:400,unitPrice:12.75,installed:"Aug 2024",replaceBy:null},
-         {sku:"GBC-BB-001",name:'12"×18" Butcher Block',qty:10,unitPrice:89,installed:"Jul 2025",replaceBy:null}
+         {sku:"GBC-TD-001",name:'6"×11" Tear Drop Cutout Wholesale',qty:400,unitPrice:14.06,installed:"Jul 2025",replaceBy:null},
+         {sku:"GBC-BB-12x18",name:'12"×18" Butcher Block Wholesale',qty:10,unitPrice:69.83,installed:"Jul 2025",replaceBy:null}
        ],flags:[]},
       {name:"Booth Creek — Overland Park",address:"Overland Park, KS",phone:"913-228-0585",status:"Active",
-       products:[{sku:"GBC-BB-001",name:'12"×18" Butcher Block',qty:1,unitPrice:196.63,installed:"Jun 2025",replaceBy:null}],flags:["upsell"]},
-      {name:"Booth Creek — Texas (New)",address:"Texas — Location TBD",phone:"—",status:"Opening 2026 — Announced Mar 18",products:[],flags:["new"]}
+       products:[
+         {sku:"GBC-BB-12x18",name:'12"×18" Butcher Block Wholesale',qty:20,unitPrice:69.83,installed:"Sep 2025",replaceBy:null},
+         {sku:"GBC-BB-1618",name:'16"×18"×1¾" Maple End Grain Butcher Block',qty:1,unitPrice:224,installed:"Jun 2025",replaceBy:null}
+       ],flags:["upsell"]},
+      {name:"Booth Creek — Texas (New)",address:"Texas — Location TBD",phone:"",status:"Opening 2026 — Announced Mar 18",products:[],flags:["new"]}
     ],
     invoices:[
-      {id:"#9032025",date:"Sep 2025",amount:1396.60,status:"paid",items:"BCW Retailed Cutting Boards — 20× 12×18 Butcher Block Wholesale"},
-      {id:"#7292025",date:"Jul 2025",amount:6221.16,status:"paid",items:'Gift Box & Retailed Cutting Boards — 400× 6"×11" Teardrop + 10× Butcher Block'},
-      {id:"#6302025",date:"Jun 2025",amount:196.63,status:"paid",items:'GBC Butcher Block | Booth Creek Events — 16"×18" Maple End Grain'}
+      {id:"#9032025",date:"Sep 2025",amount:1396.60,status:"paid",items:'BCW — 20× 12"×18" Butcher Block Wholesale'},
+      {id:"#7292025",date:"Jul 2025",amount:6221.16,status:"paid",items:'Gift Box & Boards — 400× 6"×11" Tear Drop Cutout + 10× 12"×18" Butcher Block + Cherry/Maple retail boards'},
+      {id:"#6302025",date:"Jun 2025",amount:196.63,status:"paid",items:'GBC Butcher Block | Booth Creek Events — 16"×18"×1¾" Maple End Grain'}
     ],
     opportunities:[
       {type:"hot",title:"Partnership Email — Due Mar 21",desc:"Send partnership framework to Ben Fuentes before Mar 21. World Cup window closes Mar 28 — tie in GBC × Booth Creek co-brand.",value:"Strategic",owner:"Matt"},
       {type:"newprod",title:"Texas Opening — Launch Partner",desc:"Texas location announced Mar 18. Clean slate — position GBC as launch partner.",value:"$4,000 est.",owner:"Matt"},
       {type:"upsell",title:"World Cup 2026 Co-Branded Boards",desc:"FIFA World Cup 2026 in KC. Booth Creek × GBC limited-edition board = premium event product. Pitch before Mar 28.",value:"$5,000+ est.",owner:"Matt"},
-      {type:"upsell",title:"Complete Overland Park Line",desc:"OP has 1 butcher block only. Full line-up should mirror Prairie Village.",value:"$890 est.",owner:"Matt"}
+      {type:"upsell",title:"Cherry Collection — Retail Expansion",desc:"Jul 2025 order included multiple Cherry and Maple retail models. Expand into full Cherry Collection offering.",value:"$890 est.",owner:"Matt"}
     ],
     media:{episode:null,epStatus:null,launchDate:null,url:null,assets:[]}
   },
@@ -530,20 +603,26 @@ const PARTNERS = {
     mitm:"N/A", mitmStatus:"N/A",
     licensing:"N/A", licensingClass:"",
     mediaAssetsOnFile:0,
-    notes:"⚠️ Dec 2025 order was ~74% below standard pricing (gross $21,104.50, discounts ($13,625.00), net $7,479.50 per invoice, paid as two $8,206.88 installments). Claire Gerhardt at Claire.Gerhardt@dallasmavs.com. 50-unit gift box order: Maple End Grain Butcher Block + knife + conditioner + arched board + custom box. DO NOT re-engage at same pricing. Rebuild at 2026 Richlite prices first.",
+    notes:"⚠️ Dec 2025 order was ~74% below standard pricing (gross $21,104.50, discounts ($13,625.00), net $16,413.77 paid across two invoices). Claire Gerhardt at Claire.Gerhardt@dallasmavs.com. 50-unit gift box order: 50× Arched Maple 9×12 w/JG + 50× 16×18×1¾ Maple End Grain Butcher Block + 50× Professional SS Chef Knife 8\" + 50× Urban Carpenter Conditioner + 50× Custom Built & Printed Box. DO NOT re-engage at same pricing. Rebuild at 2026 Richlite prices first.",
     contacts:[
       {name:"Claire Gerhardt",role:"Corporate Procurement",primary:true,email:"Claire.Gerhardt@dallasmavs.com",phone:"214-658-7147",outreach:"Email"}
     ],
     locations:[
-      {name:"American Airlines Center / Corp Office",address:"Dallas, TX",phone:"—",status:"One-time gift order — 2025",
-       products:[{sku:"GBC-GIFT-001",name:"2025 Exclusive Gift Box (50 units)",qty:50,unitPrice:164.13,installed:"Dec 2025",replaceBy:null}],flags:[]}
+      {name:"American Airlines Center / Corp Office",address:"Dallas, TX",phone:"",status:"One-time gift order — 2025",
+       products:[
+         {sku:"GBC-ARCH-9x12",name:"Arched Maple Cutting Board 9\"×12\"×¾\" w/JG",qty:50,unitPrice:18.26,installed:"Dec 2025",replaceBy:null},
+         {sku:"GBC-BB-1618",name:"16\"×18\"×1¾\" Maple End Grain Butcher Block",qty:50,unitPrice:250,installed:"Dec 2025",replaceBy:null},
+         {sku:"GBC-KNIFE-8SS",name:"Professional Stainless Steel Chef Knife 8\"",qty:50,unitPrice:80,installed:"Dec 2025",replaceBy:null},
+         {sku:"GBC-COND",name:"Urban Carpenter™ Wood Conditioner",qty:50,unitPrice:12,installed:"Dec 2025",replaceBy:null},
+         {sku:"GBC-GIFTBOX",name:"Custom Built & Printed Box",qty:50,unitPrice:40,installed:"Dec 2025",replaceBy:null}
+       ],flags:[]}
     ],
     invoices:[
-      {id:"#10102026",date:"Dec 2025",amount:8206.89,status:"paid",items:"Dallas Mavericks | 2025 Exclusive Gift Box Experience — Part 1"},
-      {id:"#10102026_Part2",date:"Dec 2025",amount:8206.88,status:"paid",items:"Dallas Mavericks | 2025 Exclusive Gift Box Experience — Part 2"}
+      {id:"#10102026",date:"Dec 2025",amount:8206.89,status:"paid",items:"Dallas Mavericks | 2025 Exclusive Gift Box Experience — Part 1 of 2"},
+      {id:"#10102026_Part2",date:"Dec 2025",amount:8206.88,status:"paid",items:"Dallas Mavericks | 2025 Exclusive Gift Box Experience — Part 2 of 2"}
     ],
     opportunities:[
-      {type:"hot",title:"Rebuild Quote at 2026 Pricing",desc:"Original order had ~74% discount ($13,625 off $21,104). Rebuild at correct Richlite pricing before any re-engagement.",value:"Pricing correction",owner:"Matt"},
+      {type:"hot",title:"Rebuild Quote at 2026 Pricing",desc:"Original order had ~74% discount ($13,625 off $21,104.50 gross). Rebuild at correct pricing before any re-engagement.",value:"Pricing correction",owner:"Matt"},
       {type:"upsell",title:"2026 Gift Program Re-engage",desc:"After pricing correction: reach out to Claire with MITM EP2 link and new 2026 program options.",value:"$20K+ est.",owner:"Matt"}
     ],
     media:{episode:null,epStatus:null,launchDate:null,url:null,assets:[]}
@@ -557,21 +636,23 @@ const PARTNERS = {
     mitm:"S1E7 (was EP5) — HARD BLOCKED", mitmStatus:"BLOCKED",
     licensing:"UNSIGNED — HARD BLOCK", licensingClass:"red",
     mediaAssetsOnFile:0,
-    notes:"HARD BLOCK — licensing agreement must be signed before any episode work proceeds. Colin Shipley-Gates is the contact. 4 invoices in 2025 for Richlite catering boards and butcher blocks.",
+    notes:"HARD BLOCK — licensing agreement must be signed before any episode work proceeds. Colin Shipley-Gates is the contact. 4 invoices in 2025: 24\"×18\"×½\" Richlite Catering Board ($265) + Design Services ($30) + Omtech Co2 Laser Usage ($60) + Butcher Block orders.",
     contacts:[
-      {name:"Colin Shipley-Gates",role:"Owner / Contact",primary:true,email:"cshipleygates@gmail.com",phone:"816-365-1519",outreach:"Email / Text"}
+      {name:"Colin Shipley-Gates",role:"Owner / Contact",primary:true,email:"colinshipleygates@gmail.com",phone:"816-365-1519",outreach:"Email / Text"}
     ],
     locations:[
-      {name:"Gates BBQ",address:"Kansas City, MO",phone:"—",status:"Active — No MITM until license signed",
+      {name:"Gates BBQ",address:"Kansas City, MO",phone:"",status:"Active — No MITM until license signed",
        products:[
-         {sku:"GBC-RL-003",name:'24"×18" Richlite Catering Board',qty:1,unitPrice:290.77,installed:"May 2025",replaceBy:null},
-         {sku:"GBC-BB-002",name:'24"×24"×6" Maple End Grain Butcher Block',qty:2,unitPrice:600,installed:"May–Jul 2025",replaceBy:null}
+         {sku:"GBC-RL-003",name:'24"×18"×½" Richlite Catering Board',qty:1,unitPrice:265,installed:"May 2025",replaceBy:null},
+         {sku:"GBC-SVC-DESIGN",name:"Design Services",qty:1,unitPrice:30,installed:"Apr 2025",replaceBy:null},
+         {sku:"GBC-SVC-LASER",name:"Omtech Co2 Laser Usage",qty:1,unitPrice:60,installed:"Apr 2025",replaceBy:null},
+         {sku:"GBC-BB-24x6",name:'24"×24"×6" Solid Maple End Grain Butcher Block',qty:2,unitPrice:600,installed:"May–Jul 2025",replaceBy:null}
        ],flags:[]}
     ],
     invoices:[
       {id:"#4152025",date:"Apr 2025",amount:543.14,status:"paid",items:'6" Butcher Block | Gates BBQ'},
-      {id:"#5152025",date:"May 2025",amount:859.97,status:"paid",items:'6" Butcher Block | Gates BBQ | Double Sided — 24"×24"×6"'},
-      {id:"#5302025",date:"May 2025",amount:290.77,status:"paid",items:'24"×18"×1/2" Richlite Catering Board'},
+      {id:"#5152025",date:"May 2025",amount:859.97,status:"paid",items:'Butcher Block | Gates BBQ | Double Sided — 24"×24"×6"'},
+      {id:"#5302025",date:"May 2025",amount:290.77,status:"paid",items:'24"×18"×½" Richlite Catering Board'},
       {id:"#6052025",date:"Jun 2025",amount:95.84,status:"paid",items:'Gates BBQ | Engraving for 24"×18" Richlite Catering Board'}
     ],
     opportunities:[
@@ -683,6 +764,75 @@ const PIPELINE_DEALS = {
   ]
 };
 
+/* ──────────────────────────────────────────────
+   PRODUCT CATALOG DATA
+────────────────────────────────────────────── */
+const CATALOG = [
+  {cat:"Richlite Surfaces", products:[
+    {name:'Richlite® Catering Board 24"×18"×½"',price:"$265",status:"active",partners:["gates"],desc:"B2B commercial kitchen catering surface"},
+    {name:"Richlite+Wood Catering Butcher Block w/Heat Lamp",price:"$498+",status:"custom",partners:["meatmitch"],desc:"Specialty heat-lamp integrated butcher block"},
+    {name:"Mobile Butcher Counter | Richlite Replacement",price:"$350+",status:"custom",partners:["meatmitch"],desc:"Custom mobile counter surface replacement"},
+    {name:'Richlite® Black Diamond Sheet ¼"×60"×120"',price:"Wholesale",status:"active",partners:[],desc:"Raw material sheet — Black Diamond grade"},
+    {name:'Richlite® Black Diamond Sheet ½"×60"×120"',price:"Wholesale",status:"active",partners:[],desc:"Raw material sheet — Black Diamond grade, ½\""}
+  ]},
+  {cat:"Butcher Blocks", products:[
+    {name:'12"×18"×1¼" Butcher Block w/JG',price:"$54–$243",status:"active",partners:["q39","boothcreek"],desc:"EoM program board — engraving included"},
+    {name:'16"×18"×1¾" Maple End Grain Butcher Block',price:"$224",status:"active",partners:["boothcreek","dallasmavs"],desc:"Maple end grain, large format"},
+    {name:'18"×24"×1¼" Large Butcher Block w/JG',price:"Custom",status:"active",partners:[],desc:"Large format engraved butcher block"},
+    {name:'Solid Maple End Grain Butcher Block 24"×24"×6"',price:"$825",status:"active",partners:["gates"],desc:"Premium thick-cut end grain block"}
+  ]},
+  {cat:"Cutting Boards", products:[
+    {name:'6"×11" Tear Drop Cutout (Blank Board)',price:"$14+ wholesale",status:"active",partners:["boothcreek"],desc:"Wholesale — w/engraving $15+"},
+    {name:'8"×12" Small Cutting Board w/JG',price:"$28+ wholesale",status:"active",partners:["q39","meatmitch"],desc:"Engraved small board, most popular wholesale SKU"},
+    {name:'9"×12" Classic Cutting Board',price:"$40 wholesale",status:"active",partners:[],desc:"Classic proportions, wholesale ready"},
+    {name:'Arched Maple Cutting Board 9"×12"×¾" w/JG',price:"$184 retail",status:"active",partners:["dallasmavs"],desc:"Signature arch profile, engraved"},
+    {name:'10½"×16"×¾" Cutting Board w/JG',price:"Custom",status:"active",partners:[],desc:"Mid-large engraved board"},
+    {name:"Man Haul! Cutting Board",price:"Retail",status:"active",partners:[],desc:"Signature GBC product — flagship retail board"}
+  ]},
+  {cat:"Cherry Wood Collection (Wix Catalog)", products:[
+    {name:'MODEL 0021: Cherry 6"×11"×¾"',price:"$20.85/ea",status:"active",partners:["boothcreek"],desc:"Cherry hardwood, compact"},
+    {name:'MODEL 2021: Cherry 6"×11"×¾" (premium)',price:"$22.79/ea",status:"active",partners:["boothcreek"],desc:"Premium cherry, same footprint"},
+    {name:'MODEL 2068: Cherry 6"×14½"×¾"',price:"$24.47/ea",status:"active",partners:["boothcreek"],desc:"Cherry elongated format"},
+    {name:'MODEL 2034: Cherry 9"×12"×¾"',price:"$24.00/ea",status:"active",partners:["boothcreek"],desc:"Cherry square-ish format"},
+    {name:'MODEL 0066: Maple 7½"×13½"×¾"',price:"$23.19/ea",status:"active",partners:["boothcreek"],desc:"Maple mid format"},
+    {name:'MODEL 0005: Maple 8"×12"×¾"',price:"$23.00/ea",status:"active",partners:["boothcreek"],desc:"Maple standard"},
+    {name:'MODEL 2031: Cherry 10½"×16"×¾"',price:"$42.00/ea",status:"active",partners:["boothcreek"],desc:"Cherry large format"},
+    {name:'MODEL 2054: Cherry 11"×17"×1"',price:"$49.17/ea",status:"active",partners:["boothcreek"],desc:"Cherry thick large"},
+    {name:'MODEL 2073: Cherry 15"×20"×1¼"',price:"$103.61",status:"active",partners:["boothcreek"],desc:"Cherry XL"},
+    {name:'MODEL 2074: Cherry 18"×24"×1¼"',price:"$136.34/ea",status:"active",partners:["boothcreek"],desc:"Cherry jumbo"},
+    {name:'MODEL 2001: Cherry 12"×18"×1¼"',price:"$95.22/ea",status:"active",partners:["boothcreek"],desc:"Cherry standard large"},
+    {name:'MODEL 0216: Maple 12"×16"×1½"',price:"$94.00",status:"active",partners:["boothcreek"],desc:"Maple thick large"},
+    {name:'MODEL CWE05: Cafe Wood 8"×11"×1"',price:"$91.76",status:"active",partners:["boothcreek"],desc:"Cafe Wood specialty format"}
+  ]},
+  {cat:"Custom / Restaurant Programs", products:[
+    {name:"Q39 Family Platters",price:"Custom program",status:"custom",partners:["q39"],desc:"Custom Richlite platter — family serving size"},
+    {name:"Q39 Sandwich Platters",price:"Custom program",status:"custom",partners:["q39"],desc:"Custom Richlite platter — sandwich serving"},
+    {name:"Q39 EoM Boards Program",price:"Monthly",status:"custom",partners:["q39"],desc:"Employee of the Month board program — monthly cadence"}
+  ]},
+  {cat:"Accessories & Gifts", products:[
+    {name:"Man Haul! Golf Divot Tool",price:"Retail",status:"new",partners:[],desc:"New GBC branded golf accessory"},
+    {name:"GBC Rolling Tray (Richlite)",price:"$84",status:"active",partners:[],desc:"Richlite rolling tray"},
+    {name:"GBC Wall Mounted Bottle Opener",price:"$15 wholesale",status:"active",partners:[],desc:"Wall mount, branded"},
+    {name:"Urban Carpenter™ Wood Conditioner",price:"$12/unit",status:"active",partners:["dallasmavs"],desc:"Wood conditioning oil, 12 oz"},
+    {name:"Coochie® Wood Conditioner",price:"Retail",status:"active",partners:[],desc:"Alternative conditioner SKU"},
+    {name:"GBC Legends Grill Master Set",price:"Retail",status:"active",partners:[],desc:"Grill tool gift set"},
+    {name:"GBC Pitmaster's Trio",price:"Retail",status:"active",partners:[],desc:"3-piece pitmaster accessory set"}
+  ]},
+  {cat:"Knives", products:[
+    {name:'Professional Stainless Steel Chef Knife 8"',price:"$80 retail",status:"active",partners:["dallasmavs"],desc:"Full tang stainless, 8\" blade"},
+    {name:'Hammer Forged Santoku Chef Knife 12.75"',price:"$74 wholesale",status:"active",partners:[],desc:"Hammer forged, santoku profile"},
+    {name:"GBC Classic SS Pocket Knife",price:"Retail",status:"active",partners:[],desc:"Stainless steel pocket knife, GBC branded"},
+    {name:"GBC Folding Pocket Knife (Red Sandalwood / Olivewood)",price:"Retail",status:"active",partners:[],desc:"Folding knife, wood handle options"},
+    {name:"Full Tang Hunting Knife",price:"Retail",status:"active",partners:[],desc:"Full tang, hunting profile"}
+  ]},
+  {cat:"Services", products:[
+    {name:"Design Services",price:"$30–$200",status:"active",partners:["gates"],desc:"Layout + artwork design for custom orders"},
+    {name:"Omtech Co2 Laser Usage",price:"$18/hr",status:"active",partners:["gates"],desc:"Laser engraving machine time"},
+    {name:"Board Customization / Engraving",price:"Custom",status:"active",partners:["q39","boothcreek","dallasmavs"],desc:"Custom engraving + logo burns"},
+    {name:"Delivery",price:"Custom",status:"active",partners:[],desc:"Local KC delivery service"}
+  ]}
+];
+
 /* ══════════════════════════════════════════════════════════════════
    STATE + NAV
 ══════════════════════════════════════════════════════════════════ */
@@ -696,16 +846,17 @@ function showView(view, pid, vid) {
   currentPartner = pid || null;
   currentVendor = vid || null;
 
-  // Update sidebar nav highlights
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.partner-item').forEach(el => el.classList.remove('active'));
 
   if (view === 'command') document.getElementById('nav-cmd').classList.add('active');
+  else if (view === 'kanban') document.getElementById('nav-kanban').classList.add('active');
   else if (view === 'mitm') document.getElementById('nav-mitm').classList.add('active');
   else if (view === 'sales') document.getElementById('nav-sales').classList.add('active');
   else if (view === 'revenue') document.getElementById('nav-revenue').classList.add('active');
   else if (view === 'inventory') document.getElementById('nav-inventory').classList.add('active');
   else if (view === 'health') document.getElementById('nav-health').classList.add('active');
+  else if (view === 'catalog') document.getElementById('nav-catalog').classList.add('active');
 
   if (pid) {
     const el = document.getElementById('sidebar-p-'+pid);
@@ -719,9 +870,12 @@ function showView(view, pid, vid) {
   renderView();
 }
 
-function switchPartner(pid) {
+function switchPartner(pid, tab) {
   if (!PARTNERS[pid]) return;
   showView('partner', pid);
+  if (tab) {
+    setTimeout(() => { showTab('partner-'+pid, tab); }, 10);
+  }
 }
 
 function switchVendor(vid) {
@@ -732,6 +886,7 @@ function switchVendor(vid) {
 function renderView() {
   const root = document.getElementById('view-root');
   if (currentView === 'command') root.innerHTML = renderCommandCenter();
+  else if (currentView === 'kanban') root.innerHTML = renderPartnerKanban();
   else if (currentView === 'mitm') root.innerHTML = renderMITM();
   else if (currentView === 'sales') root.innerHTML = renderSales();
   else if (currentView === 'partner' && currentPartner) root.innerHTML = renderPartner(PARTNERS[currentPartner]);
@@ -739,8 +894,8 @@ function renderView() {
   else if (currentView === 'revenue') root.innerHTML = renderRevenue();
   else if (currentView === 'inventory') root.innerHTML = renderInventory();
   else if (currentView === 'health') root.innerHTML = renderHealth();
+  else if (currentView === 'catalog') root.innerHTML = renderCatalog();
 
-  // Activate first tab in partner/vendor views
   if (currentView === 'partner' || currentView === 'vendor') {
     const firstTab = document.querySelector('.tab-btn');
     if (firstTab) {
@@ -754,6 +909,15 @@ function showTab(key, tab) {
   currentTab[key] = tab;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.dataset.tab === tab));
+}
+
+function toggleOpp(el) {
+  el.closest('.opp-card').classList.toggle('expanded');
+}
+
+function markOppDone(btn) {
+  btn.textContent = '✓ Marked Complete';
+  btn.classList.add('done');
 }
 
 /* ══════════════════════════════════════════════════════════════════
@@ -778,9 +942,22 @@ function dueCls(due) {
   if (due === 'OVERDUE') return 'sc-due-red';
   return 'sc-due-yellow';
 }
-function partnerClickSpan(pid, name) {
-  if (!pid || !PARTNERS[pid]) return `<span style="color:var(--text-muted)">${name}</span>`;
-  return `<span class="clickable-name" onclick="switchPartner('${pid}')">${name}</span>`;
+function partnerName(pid) {
+  const names = {q39:'Q39 BBQ',burntend:'Burnt End BBQ',meatmitch:'Meat Mitch BBQ',boothcreek:'Booth Creek Wagyu',dallasmavs:'Dallas Mavericks',gates:'Gates BBQ'};
+  return names[pid] || pid;
+}
+function emailLink(e) {
+  if (!e || e === '—' || e === '') return e || '—';
+  return `<a href="mailto:${e}" style="color:var(--amber)">${e}</a>`;
+}
+function phoneLink(p) {
+  if (!p || p === '—' || p === '') return p || '—';
+  const digits = p.replace(/\D/g,'');
+  return `<a href="tel:${digits}" style="color:var(--amber)">${p}</a>`;
+}
+function mapsLink(addr) {
+  if (!addr || addr === '—' || addr === '') return addr || '—';
+  return `<a href="https://maps.google.com/?q=${encodeURIComponent(addr)}" target="_blank" style="color:var(--amber)">${addr}</a>`;
 }
 
 /* ══════════════════════════════════════════════════════════════════
@@ -806,7 +983,7 @@ function renderCommandCenter() {
   }).join('');
 
   const healthRows = Object.values(PARTNERS).map(p => {
-    return `<tr>
+    return `<tr onclick="switchPartner('${p.id}')" style="cursor:pointer">
       <td><span class="clickable-name" onclick="switchPartner('${p.id}')">${p.name}</span></td>
       <td><span style="font-size:11px;color:var(--text-muted)">${p.tier}</span></td>
       <td style="font-weight:600">${fmt$(p.lifetimeRevenue)}</td>
@@ -821,15 +998,18 @@ function renderCommandCenter() {
     const allEps = [ep1, ...EPISODES];
     return allEps.map(ep => {
       const partnerClick = PARTNERS[ep.partner]
-        ? `<span class="mitm-ep-partner" onclick="switchPartner('${ep.partner}')">${ep.title}</span>`
+        ? `<span class="mitm-ep-partner" onclick="switchPartner('${ep.partner}','Media &amp; Campaigns')">${ep.title}</span>`
         : `<span style="color:var(--text-muted);font-size:12px">${ep.title}</span>`;
       const statusCls = ep.status === 'POST-LAUNCH' ? 'pill-green' : ep.status === 'PRE-PROD' ? 'pill-amber' : ep.status === 'PLANNING' ? 'pill-blue' : 'pill-red';
       const licNote = ep.licBlock ? `<span class="mitm-lic-block">⚠️ Lic unsigned</span>` : '';
+      const statusClick = PARTNERS[ep.partner]
+        ? `onclick="switchPartner('${ep.partner}','Media &amp; Campaigns')" style="cursor:pointer"`
+        : '';
       return `<div class="mitm-mini-row">
         <span class="mitm-ep-num">${ep.num}</span>
         <span class="mitm-ep-title">${partnerClick}</span>
         ${licNote}
-        <span class="mitm-ep-status"><span class="pill ${statusCls}" style="font-size:10px">${ep.status}</span></span>
+        <span class="mitm-ep-status"><span class="pill ${statusCls}" style="font-size:10px" ${statusClick}>${ep.status}</span></span>
       </div>`;
     }).join('');
   })();
@@ -841,13 +1021,13 @@ function renderCommandCenter() {
     </div>
     <div class="content">
 
-      <div class="alert alert-red">
+      <div class="alert alert-red" onclick="switchPartner('burntend','Media &amp; Campaigns')">
         <span class="alert-icon">🚨</span>
-        <div><strong>Burnt End licensing UNSIGNED</strong> — blocks all EP2 short-form + partner social. Tim must get Smokey to sign this week.</div>
+        <div><strong>Burnt End licensing UNSIGNED</strong> — blocks all EP2 short-form + partner social. Tim must get Smokey to sign this week. <span style="font-size:11px;opacity:.7">(Click to view)</span></div>
       </div>
-      <div class="alert alert-yellow">
+      <div class="alert alert-yellow" onclick="switchPartner('q39','Invoices')">
         <span class="alert-icon">⚠️</span>
-        <div>Richlite reorder call overdue (Brendan) + price change pending (Channy). Q39 ($4,794.98) outstanding.</div>
+        <div>Richlite reorder call overdue (Brendan) + price change pending (Channy). Q39 ($4,794.98) outstanding — click to view invoices.</div>
       </div>
 
       <div class="kpi-grid">
@@ -886,6 +1066,7 @@ function renderCommandCenter() {
         <div class="panel">
           <div class="panel-header">
             <span class="panel-title">Partner Health</span>
+            <span style="font-size:11px;color:var(--text-muted);margin-left:auto">Click row → partner profile</span>
           </div>
           <table class="data-table">
             <thead><tr><th>Partner</th><th>Tier</th><th>Lifetime Rev</th><th>Outstanding</th><th>Last Order</th><th>Status</th></tr></thead>
@@ -897,6 +1078,7 @@ function renderCommandCenter() {
       <div class="mitm-mini">
         <div class="mitm-mini-header">
           <span style="font-size:13px;font-weight:600">🎬 MITM Episode Tracker</span>
+          <span style="font-size:11px;color:var(--text-muted);margin-left:8px">Click partner name or status badge → Media tab</span>
         </div>
         <div class="mitm-mini-list">${mitmRows}</div>
       </div>
@@ -905,10 +1087,68 @@ function renderCommandCenter() {
 }
 
 /* ══════════════════════════════════════════════════════════════════
+   PARTNER KANBAN VIEW
+══════════════════════════════════════════════════════════════════ */
+function renderPartnerKanban() {
+  const cols = [
+    {key:'vip', label:'VIP Active', color:'var(--green)', partners:[
+      {pid:'q39', rev:'$29,413', lastOrder:'Feb 2026', badge:'pill-green', badgeText:'Active'},
+      {pid:'burntend', rev:'$3,012', lastOrder:'Oct 2024', badge:'pill-yellow', badgeText:'Lic Pending'}
+    ]},
+    {key:'reengage', label:'Re-Engage', color:'var(--amber)', partners:[
+      {pid:'boothcreek', rev:'$7,814', lastOrder:'Sep 2025', badge:'pill-amber', badgeText:'Re-Engage'},
+      {pid:'dallasmavs', rev:'$16,414', lastOrder:'Dec 2025', badge:'pill-grey', badgeText:'Dormant'}
+    ]},
+    {key:'mitm', label:'MITM Pipeline', color:'var(--blue)', partners:[
+      {pid:'meatmitch', rev:'$2,975', lastOrder:'Oct 2025', badge:'pill-amber', badgeText:'EP5 Pre-Prod'},
+      {pid:'gates', rev:'$1,790', lastOrder:'Jun 2025', badge:'pill-red', badgeText:'Hard Blocked'}
+    ]},
+    {key:'prospects', label:'Prospects', color:'var(--grey)', partners:[
+      {pid:null, name:'JE Dunn', rev:'—', lastOrder:'Never', badge:'pill-blue', badgeText:'Flagship Prospect', emoji:'🏗️'},
+      {pid:null, name:'Chef Thompson', rev:'Investor', lastOrder:'Active', badge:'pill-green', badgeText:'Investor+Client', emoji:'👨‍🍳'},
+      {pid:null, name:'PFG', rev:'—', lastOrder:'Never', badge:'pill-grey', badgeText:'Food Distributor', emoji:'🚚'}
+    ]}
+  ];
+
+  const colsHTML = cols.map(col => {
+    const cards = col.partners.map(p => {
+      const name = p.pid ? PARTNERS[p.pid].name : p.name;
+      const emoji = p.pid ? PARTNERS[p.pid].emoji : (p.emoji || '🏢');
+      const clickAttr = p.pid ? `onclick="switchPartner('${p.pid}')"` : '';
+      return `<div class="pk-card" ${clickAttr}>
+        <div class="pk-card-name">${emoji} ${name}</div>
+        <div class="pk-card-rev">${p.rev}</div>
+        <div class="pk-card-last">Last order: ${p.lastOrder}</div>
+        <div class="pk-card-meta">
+          <span class="pill ${p.badge}" style="font-size:10px">${p.badgeText}</span>
+        </div>
+      </div>`;
+    }).join('');
+
+    return `<div class="pk-col">
+      <div class="pk-col-header">
+        <span class="pk-col-title" style="color:${col.color}">${col.label}</span>
+        <span class="pk-col-count">${col.partners.length}</span>
+      </div>
+      <div class="pk-cards">${cards}</div>
+    </div>`;
+  }).join('');
+
+  return `
+    <div class="topbar">
+      <div class="topbar-title">🗂 Partner Kanban</div>
+      <div style="font-size:12px;color:var(--text-muted)">Click any card to open partner profile</div>
+    </div>
+    <div class="content">
+      <div class="partner-kanban">${colsHTML}</div>
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════════════════════
    MITM PIPELINE
 ══════════════════════════════════════════════════════════════════ */
 function renderMITM() {
-  const ep1 = {num:"EP1",title:"Q39 BBQ",partner:"q39",status:"POST-LAUNCH",licensing:"Pending (in-store display)",licBlock:false,notes:"LIVE ✅ Mar 12 2026 · https://youtu.be/"};
+  const ep1 = {num:"EP1",title:"Q39 BBQ",partner:"q39",status:"POST-LAUNCH",licensing:"Pending (in-store display)",licBlock:false,notes:"LIVE ✅ Mar 12 2026"};
   const allEps = [ep1, ...EPISODES];
 
   const cols = ['POST-LAUNCH','PRE-PROD','PLANNING','BLOCKED'];
@@ -919,19 +1159,22 @@ function renderMITM() {
     const eps = allEps.filter(e => e.status === col);
     const cards = eps.map(ep => {
       const partnerLink = PARTNERS[ep.partner]
-        ? `<div class="kc-partner" onclick="switchPartner('${ep.partner}')">${ep.partner === 'q39' ? 'Q39 BBQ' : ep.partner === 'burntend' ? 'Burnt End BBQ' : ep.partner === 'meatmitch' ? 'Meat Mitch BBQ' : ep.partner === 'gates' ? 'Gates BBQ' : ep.partner}</div>`
+        ? `<div class="kc-partner" onclick="switchPartner('${ep.partner}','Media &amp; Campaigns')">${PARTNERS[ep.partner].name}</div>`
         : ep.partner !== 'gbc' && ep.partner !== 'richlite' ? '' : `<div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">GBC Internal</div>`;
       const licBlock = ep.licBlock ? `<div class="kc-lic-block">⚠️ Licensing unsigned — content blocked</div>` : '';
       const licPillHtml = ep.licensing && ep.licensing !== 'n/a'
         ? `<span class="pill ${ep.licensing.includes('UNSIGNED') || ep.licensing.includes('NOT SENT') ? 'pill-red' : 'pill-yellow'}" style="font-size:10px">${ep.licensing}</span>`
         : '';
+      const ytNote = ep.notes && ep.notes.includes('youtu.be/2CNrRJxBfBA')
+        ? ep.notes.replace('https://youtu.be/2CNrRJxBfBA', '<a href="https://youtu.be/2CNrRJxBfBA" target="_blank" style="color:var(--amber)">youtu.be/2CNrRJxBfBA</a>')
+        : ep.notes;
       return `<div class="kanban-card">
         <div class="kc-ep">${ep.num}</div>
         <div class="kc-title">${ep.title}</div>
         ${partnerLink}
         <div class="kc-meta">${licPillHtml}</div>
         ${licBlock}
-        <div class="kc-notes">${ep.notes}</div>
+        <div class="kc-notes">${ytNote}</div>
       </div>`;
     }).join('');
     return `<div class="kanban-col">
@@ -1022,7 +1265,6 @@ function renderPartner(p) {
 
   const tabBtns = tabs.map(t => `<button class="tab-btn" data-tab="${t}" onclick="showTab('${tabKey}','${t}')">${t}</button>`).join('');
 
-  // Build each panel
   const overview = buildOverviewPanel(p);
   const locations = buildLocationsPanel(p);
   const products = buildProductsPanel(p);
@@ -1040,7 +1282,7 @@ function renderPartner(p) {
   return `
     <div class="topbar">
       <button class="back-btn" onclick="showView('command')">← Back</button>
-      <div class="topbar-title">${p.name}</div>
+      <div class="topbar-title">${p.emoji} ${p.name}</div>
       <div class="topbar-meta">
         <span class="pill ${p.statusPill}">${p.status}</span>
         ${p.tier === 'VIP' ? '<span class="meta-chip">⭐ VIP</span>' : `<span class="meta-chip">${p.tier}</span>`}
@@ -1110,16 +1352,18 @@ function buildLocationsPanel(p) {
             <td style="font-family:monospace;font-size:11px;color:var(--text-muted)">${pr.sku}</td>
             <td>${pr.name}</td>
             <td>${pr.qty}</td>
-            <td>${fmt$(pr.unitPrice)}</td>
+            <td>${pr.unitPrice ? fmt$(pr.unitPrice) : '—'}</td>
             <td style="color:var(--text-muted)">${pr.installed}</td>
             <td style="color:${pr.replaceBy ? 'var(--yellow)' : 'var(--text-muted)'}">${pr.replaceBy || '—'}</td>
           </tr>`).join('')}</tbody>
         </table>`
       : `<p class="no-product">No GBC products installed at this location yet.</p>`;
     const flagPills = (loc.flags||[]).map(f => `<span class="pill pill-blue" style="font-size:10px;margin-right:4px">${f}</span>`).join('');
+    const addrHtml = loc.address && loc.address !== '—' ? mapsLink(loc.address) : loc.address;
+    const phoneHtml = loc.phone && loc.phone !== '—' && loc.phone !== '' ? ' · ' + phoneLink(loc.phone) : '';
     return `<div class="location-card">
       <div class="location-name">${loc.name} ${flagPills}</div>
-      <div class="location-addr">${loc.address}${loc.phone && loc.phone !== '—' ? ' · ' + loc.phone : ''}</div>
+      <div class="location-addr">${addrHtml}${phoneHtml}</div>
       <div class="location-status"><span class="pill ${loc.status.includes('Active') ? 'pill-green' : loc.status.includes('Opening') ? 'pill-blue' : 'pill-grey'}" style="font-size:10px">${loc.status}</span></div>
       ${products}
     </div>`;
@@ -1138,7 +1382,7 @@ function buildProductsPanel(p) {
       <td style="font-weight:500">${pr.name}</td>
       <td style="font-size:12px;color:var(--text-muted)">${pr.location}</td>
       <td>${pr.qty}</td>
-      <td>${fmt$(pr.unitPrice)}</td>
+      <td>${pr.unitPrice ? fmt$(pr.unitPrice) : '—'}</td>
       <td style="color:var(--text-muted)">${pr.installed}</td>
       <td style="color:${pr.replaceBy ? 'var(--yellow)' : 'var(--text-muted)'}">${pr.replaceBy || '—'}</td>
     </tr>`).join('')}</tbody>
@@ -1156,8 +1400,8 @@ function buildContactsPanel(p) {
       </div>
       <div class="contact-role">${c.role}</div>
       <div class="contact-fields">
-        ${c.email && c.email !== '—' ? `<div class="contact-field">📧 <span>${c.email}</span></div>` : ''}
-        ${c.phone && c.phone !== '—' ? `<div class="contact-field">📱 <span>${c.phone}</span></div>` : ''}
+        ${c.email && c.email !== '—' && c.email !== '' ? `<div class="contact-field">📧 <span>${emailLink(c.email)}</span></div>` : ''}
+        ${c.phone && c.phone !== '—' && c.phone !== '' ? `<div class="contact-field">📱 <span>${phoneLink(c.phone)}</span></div>` : ''}
         <div class="contact-field">💬 <span>${c.outreach}</span></div>
       </div>
     </div>
@@ -1182,8 +1426,9 @@ function buildInvoicesPanel(p) {
     <div class="panel">
       ${p.invoices.map(inv => {
         const stPill = inv.status === 'paid' ? 'pill-green' : inv.status === 'overdue' ? 'pill-red' : 'pill-grey';
+        const sqLink = `https://squareup.com/dashboard/sales/transactions`;
         return `<div class="invoice-row">
-          <span class="inv-id">${inv.id}</span>
+          <a href="${sqLink}" target="_blank" class="inv-id" title="View in Square">${inv.id}</a>
           <span class="inv-date">${inv.date}</span>
           <span class="inv-amount ${inv.status === 'overdue' ? 'overdue' : ''}">${inv.amount != null ? fmt$(inv.amount) : 'Draft'}</span>
           <span class="inv-items">${inv.items}</span>
@@ -1195,7 +1440,7 @@ function buildInvoicesPanel(p) {
 
 function buildOppsPanel(p) {
   if (!p.opportunities || !p.opportunities.length) return `<div class="empty-state">No opportunities on file.</div>`;
-  return p.opportunities.map(o => `<div class="opp-card">
+  return p.opportunities.map((o, idx) => `<div class="opp-card" onclick="toggleOpp(this)">
     <div class="opp-header">
       <div class="opp-type-dot" style="background:${oppTypeColor(o.type)}"></div>
       <div class="opp-title">${o.title}</div>
@@ -1206,6 +1451,11 @@ function buildOppsPanel(p) {
       <span style="color:${oppTypeColor(o.type)};font-weight:600;font-size:11px;text-transform:uppercase">${o.type}</span>
       <span>·</span>
       <span>Owner: ${o.owner}</span>
+      <span style="margin-left:auto;font-size:11px;color:var(--text-dim)">Click to expand ▼</span>
+    </div>
+    <div class="opp-expand-body">
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;line-height:1.6">${o.desc}</div>
+      <button class="opp-complete-btn" onclick="event.stopPropagation(); markOppDone(this)">Mark Complete</button>
     </div>
   </div>`).join('');
 }
@@ -1215,7 +1465,12 @@ function buildMediaPanel(p) {
   if (!m || !m.episode) {
     return `<div class="empty-state">No MITM episode assigned yet.</div>`;
   }
-  const ytLink = m.url ? `<a href="${m.url}" target="_blank">${m.url}</a>` : '<span style="color:var(--text-muted)">URL TBD</span>';
+  let ytLink = '<span style="color:var(--text-muted)">URL TBD</span>';
+  let watchBtn = '';
+  if (m.url) {
+    ytLink = `<a href="${m.url}" target="_blank">${m.url}</a>`;
+    watchBtn = `<a href="${m.url}" target="_blank" class="watch-btn">▶ Watch Episode</a>`;
+  }
   const epCard = `<div class="episode-card">
     <h4>${m.episode} — ${p.name}</h4>
     <div class="ep-status">
@@ -1224,23 +1479,30 @@ function buildMediaPanel(p) {
       <span>·</span>
       ${ytLink}
     </div>
+    ${watchBtn}
   </div>`;
 
   let assetsHtml = '';
   if (m.assets && m.assets.length) {
     const rows = m.assets.map(a => {
       const stCls = a.status === 'LIVE' ? 'asset-status-live' : a.status === 'BLOCKED' ? 'asset-status-blocked' : a.status === 'APPROVED' ? 'asset-status-approved' : 'asset-status-pending';
+      let notesHtml = a.notes || '';
+      if (a.url) {
+        notesHtml = `<a href="${a.url}" target="_blank">${a.notes}</a>`;
+      } else if (notesHtml.includes('youtu.be/2CNrRJxBfBA')) {
+        notesHtml = notesHtml.replace('https://youtu.be/2CNrRJxBfBA', '<a href="https://youtu.be/2CNrRJxBfBA" target="_blank">youtu.be/2CNrRJxBfBA</a>');
+      }
       return `<tr>
         <td style="font-weight:500">${a.type}</td>
         <td style="color:var(--text-muted)">${a.platform}</td>
         <td><span class="${stCls}">${a.status}</span></td>
-        <td style="font-size:12px;color:var(--text-muted)">${a.notes}</td>
+        <td style="font-size:12px;color:var(--text-muted)">${notesHtml}</td>
       </tr>`;
     }).join('');
     assetsHtml = `<div class="panel" style="margin-top:16px">
       <div class="panel-header"><span class="panel-title">Content Assets</span></div>
       <table class="media-assets-table">
-        <thead><tr><th>Asset Type</th><th>Platform</th><th>Status</th><th>Notes</th></tr></thead>
+        <thead><tr><th>Asset Type</th><th>Platform</th><th>Status</th><th>Notes / Links</th></tr></thead>
         <tbody>${rows}</tbody>
       </table>
     </div>`;
@@ -1257,7 +1519,6 @@ function renderVendor(v) {
   const tabKey = 'vendor-'+v.id;
   const tabBtns = tabs.map(t => `<button class="tab-btn" data-tab="${t}" onclick="showTab('${tabKey}','${t}')">${t}</button>`).join('');
 
-  const statusColors = {green:'var(--green)',yellow:'var(--yellow)',blue:'var(--blue)',red:'var(--red)'};
   const statusPills = {green:'pill-green',yellow:'pill-yellow',blue:'pill-blue',red:'pill-red'};
   const stPill = statusPills[v.statusClass] || 'pill-grey';
 
@@ -1267,7 +1528,7 @@ function renderVendor(v) {
         <h4>Vendor Details</h4>
         <div class="info-row"><span class="info-key">Type</span><span class="info-val">${v.type}</span></div>
         <div class="info-row"><span class="info-key">Status</span><span class="info-val"><span class="pill ${stPill}">${v.status}</span></span></div>
-        ${v.location ? `<div class="info-row"><span class="info-key">Location</span><span class="info-val">${v.location}</span></div>` : ''}
+        ${v.location ? `<div class="info-row"><span class="info-key">Location</span><span class="info-val">${mapsLink(v.location)}</span></div>` : ''}
       </div>
       <div class="info-card">
         <h4>Notes</h4>
@@ -1321,9 +1582,10 @@ function renderVendor(v) {
    REVENUE & MARGINS
 ══════════════════════════════════════════════════════════════════ */
 function renderRevenue() {
+  const totalRev = Object.values(PARTNERS).reduce((s,p) => s + p.lifetimeRevenue, 0);
   const rows = Object.values(PARTNERS).map(p => {
-    const pct = (p.lifetimeRevenue / 61418 * 100).toFixed(1);
-    return `<tr>
+    const pct = (p.lifetimeRevenue / totalRev * 100).toFixed(1);
+    return `<tr onclick="switchPartner('${p.id}')" style="cursor:pointer">
       <td><span class="clickable-name" onclick="switchPartner('${p.id}')">${p.name}</span></td>
       <td><span class="pill ${p.statusPill}" style="font-size:10px">${p.status}</span></td>
       <td style="font-weight:600;color:var(--green)">${fmt$(p.lifetimeRevenue)}</td>
@@ -1338,7 +1600,6 @@ function renderRevenue() {
     </tr>`;
   });
 
-  const totalRev = Object.values(PARTNERS).reduce((s,p) => s + p.lifetimeRevenue, 0);
   const totalOut = Object.values(PARTNERS).reduce((s,p) => s + p.outstandingBalance, 0);
 
   return `
@@ -1377,7 +1638,6 @@ function renderInventory() {
   ];
 
   const cards = items.map(item => {
-    const stCls = item.stCls === 'yellow' ? 'yellow' : item.stCls === 'blue' ? 'blue' : item.stCls === 'red' ? 'red' : 'green';
     const dotColor = item.stCls === 'yellow' ? 'var(--yellow)' : item.stCls === 'blue' ? 'var(--blue)' : item.stCls === 'red' ? 'var(--red)' : 'var(--green)';
     const pillCls = `pill-${item.stCls}`;
     return `<div class="inv-item-card">
@@ -1457,10 +1717,56 @@ function renderHealth() {
 }
 
 /* ══════════════════════════════════════════════════════════════════
+   PRODUCT CATALOG
+══════════════════════════════════════════════════════════════════ */
+function renderCatalog() {
+  const totalProducts = CATALOG.reduce((s,c) => s + c.products.length, 0);
+
+  const sectionsHtml = CATALOG.map(cat => {
+    const cards = cat.products.map(prod => {
+      const partnerChips = prod.partners.map(pid => {
+        const name = partnerName(pid);
+        return `<span class="catalog-partner-chip" onclick="switchPartner('${pid}')">${name}</span>`;
+      }).join('');
+
+      const statusCls = prod.status === 'active' ? 'catalog-status-active'
+        : prod.status === 'custom' ? 'catalog-status-custom'
+        : prod.status === 'new' ? 'catalog-status-new'
+        : 'catalog-status-disc';
+      const statusLabel = prod.status === 'active' ? 'Active'
+        : prod.status === 'custom' ? 'Custom'
+        : prod.status === 'new' ? 'New'
+        : 'Discontinued';
+
+      return `<div class="catalog-card">
+        <div class="catalog-card-name">${prod.name}</div>
+        <div class="catalog-card-price">${prod.price}</div>
+        <div class="catalog-card-chips">
+          <span class="catalog-status-chip ${statusCls}">${statusLabel}</span>
+          ${partnerChips}
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);line-height:1.4">${prod.desc}</div>
+      </div>`;
+    }).join('');
+
+    return `<div class="catalog-section">
+      <div class="catalog-section-title">${cat.cat} <span style="font-size:11px;font-weight:400;color:var(--text-dim)">(${cat.products.length} items)</span></div>
+      <div class="catalog-grid">${cards}</div>
+    </div>`;
+  }).join('');
+
+  return `
+    <div class="topbar">
+      <div class="topbar-title">📦 Product Catalog</div>
+      <div style="font-size:12px;color:var(--text-muted)">${totalProducts} products · ${CATALOG.length} categories · Click partner chip → partner profile</div>
+    </div>
+    <div class="content">${sectionsHtml}</div>`;
+}
+
+/* ══════════════════════════════════════════════════════════════════
    SIDEBAR BUILD
 ══════════════════════════════════════════════════════════════════ */
 function buildSidebar() {
-  // Partners
   const partnerEl = document.getElementById('sidebar-partners');
   const partnerOrder = ['q39','burntend','meatmitch','boothcreek','dallasmavs','gates'];
   partnerEl.innerHTML = partnerOrder.map(pid => {
@@ -1476,7 +1782,6 @@ function buildSidebar() {
     </div>`;
   }).join('');
 
-  // Vendors
   const vendorEl = document.getElementById('sidebar-vendors');
   const vendorOrder = ['richlite','jedunn','mccray','adeo','crystaldaisy'];
   vendorEl.innerHTML = vendorOrder.map(vid => {
