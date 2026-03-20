@@ -1005,70 +1005,130 @@ const PIPELINE_DEALS = {
 /* ──────────────────────────────────────────────
    PRODUCT CATALOG DATA
 ────────────────────────────────────────────── */
+/* ─── SALES FUNNEL STRATEGY ───────────────────────────────────────
+   channel: "restaurant" | "interior-design" | "corporate" | "retail" | "material"
+   funnel:  "entry" | "upsell" | "big-ticket"
+
+   RESTAURANT CHANNEL
+     Entry (lead magnet):  Cutting boards & serving trays — low price, easy sell, gets product in-house
+     Upsell:               Butcher blocks, prep surfaces, custom platters
+     Big ticket:           Dining tables, bar tops, full custom commercial surfaces
+
+   INTERIOR DESIGN / ARCHITECT CHANNEL
+     Entry:                Countertops & surface samples
+     Big ticket:           Full kitchen installations, bar tops, commercial Richlite fabrication
+
+   CORPORATE GIFTING CHANNEL
+     Entry:                Branded cutting boards + knife sets
+     Upsell:               Premium gift sets, conditioners, custom boxes
+
+   RETAIL / DTC
+     Arched boards, cherry collection, accessories, online Wix sales
+─────────────────────────────────────────────────────────────────── */
+const SALES_FUNNEL = {
+  restaurant: {
+    label:"Restaurant & Hospitality",
+    color:"var(--amber)",
+    icon:"🍖",
+    stages:[
+      {stage:"entry",label:"Lead Magnet",color:"rgba(224,124,36,.15)",border:"rgba(224,124,36,.4)",desc:"Low price point — gets GBC product in-house. Easy yes.",skus:["GBC-CB-001","GBC-TD-001","GBC-CB-9x12","GBC-ARCH-9x12","GBC-CATERING-001"]},
+      {stage:"upsell",label:"Upsell",color:"rgba(234,179,8,.1)",border:"rgba(234,179,8,.4)",desc:"After first order — pitch prep surfaces, butcher blocks, custom programs.",skus:["GBC-BB-EOM","GBC-BB-1618","GBC-BB-1824","GBC-PT-001","GBC-Q39-FAM","GBC-Q39-SAND","GBC-HLB-001","GBC-MBC-001"]},
+      {stage:"big-ticket",label:"Big Ticket",color:"rgba(34,197,94,.1)",border:"rgba(34,197,94,.4)",desc:"Once trust is established — full surface installations, dining tables, bar tops, custom commercial Richlite.",skus:["GBC-BB-24x6","GBC-LEC-001"]}
+    ]
+  },
+  "interior-design":{
+    label:"Interior Design & Architecture",
+    color:"var(--blue)",
+    icon:"🏛️",
+    stages:[
+      {stage:"entry",label:"Entry",color:"rgba(59,130,246,.1)",border:"rgba(59,130,246,.4)",desc:"Surface samples + countertop consult — Richlite is the pitch. JE Dunn model.",skus:["GBC-CATERING-001","GBC-RL-NAT-4x8","GBC-RL-BD-4x8"]},
+      {stage:"big-ticket",label:"Big Ticket",color:"rgba(34,197,94,.1)",border:"rgba(34,197,94,.4)",desc:"Full fabrication — kitchen countertops, bar surfaces, commercial interiors.",skus:["GBC-RL-BD-5x10","GBC-RL-SL-4x10"]}
+    ]
+  },
+  corporate:{
+    label:"Corporate Gifting",
+    color:"var(--purple)",
+    icon:"🏢",
+    stages:[
+      {stage:"entry",label:"Entry",color:"rgba(168,85,247,.1)",border:"rgba(168,85,247,.4)",desc:"Branded boards + knife sets — engraved logo, custom box.",skus:["GBC-ARCH-9x12","GBC-CB-001","GBC-KNIFE-8SS","GBC-COND"]},
+      {stage:"upsell",label:"Upsell",color:"rgba(234,179,8,.1)",border:"rgba(234,179,8,.4)",desc:"Full gift programs — multiple SKUs, custom packaging, volume pricing.",skus:["GBC-BB-1618","GBC-TROPHY","GBC-SVC-ENGRAVE"]}
+    ]
+  }
+};
+
 const CATALOG = [
-  {cat:"Richlite Surfaces (B2B Commercial)", products:[
-    {sku:"GBC-MC-001",name:"The Manhole Cover",size:'30" round',material:"Richlite",wholesale:"$299",retail:"$499",margin:"~32%",status:"campaign",partners:[],desc:"ONE-TIME INFLUENCER CAMPAIGN PRODUCT — not actively sold or pitched. Do not list as flagship or include in sales decks."},
-    {sku:"GBC-CATERING-001",name:'Richlite® Catering Board 24"×18"×½"',size:'24"×18"×½"',material:"Richlite",wholesale:"$265",retail:"—",margin:"—",status:"active",partners:["gates"],desc:"B2B commercial kitchen catering surface"},
-    {sku:"GBC-HLB-001",name:"Richlite+Wood Catering Butcher Block w/Heat Lamp",size:"Custom",material:"Richlite+Wood",wholesale:"$498+",retail:"—",margin:"—",status:"custom",partners:["meatmitch"],desc:"Specialty heat-lamp integrated butcher block — product line candidate"},
-    {sku:"GBC-MBC-001",name:"Mobile Butcher Counter | Richlite Replacement",size:"Custom",material:"Richlite",wholesale:"$350+",retail:"—",margin:"—",status:"custom",partners:["meatmitch"],desc:"Custom mobile counter surface replacement"},
-    {sku:"GBC-RL-NAT-4x8",name:'Richlite® Sheet ½" Natural 4x8',size:'4×8×½"',material:"Richlite Natural",wholesale:"$534.40/sheet ($16.70/SqFt)",retail:"—",margin:"Material",status:"material",partners:[],desc:"Raw material — cost basis for fabrication"},
-    {sku:"GBC-RL-BD-4x8",name:'Richlite® Black Diamond Sheet 1" 4x8',size:'4×8×1"',material:"Richlite Black Diamond",wholesale:"$1,144.32/sheet ($35.76/SqFt)",retail:"—",margin:"Material",status:"material",partners:[],desc:"Raw material — Black Diamond grade, 1\" thick"},
-    {sku:"GBC-RL-BD-5x10",name:'Richlite® Black Diamond Sheet ½" 5x10',size:'5×10×½"',material:"Richlite Black Diamond",wholesale:"$894.00/sheet ($17.88/SqFt)",retail:"—",margin:"Material",status:"material",partners:[],desc:"Raw material — Black Diamond grade, 5x10 sheet"},
-    {sku:"GBC-RL-SL-4x10",name:'Richlite® Slate Sheet 5/16" 4x10',size:'4×10×5/16"',material:"Richlite Slate",wholesale:"$447.20/sheet",retail:"—",margin:"Material",status:"material",partners:[],desc:"Raw material — Slate grade"}
+  {cat:"Cutting Boards & Serving Trays", subtitle:"Restaurant lead magnet — easiest entry point for new partners", products:[
+    {sku:"GBC-CB-001",name:'8"×12" Small Cutting Board w/JG',size:'8"×12"',material:"Richlite/Maple",wholesale:"$28+",retail:"—",margin:"~35%",status:"active",channel:"restaurant",funnel:"entry",partners:["q39","meatmitch"],desc:"Most popular wholesale SKU — engraved with partner logo. The standard restaurant first order."},
+    {sku:"GBC-TD-001",name:'6"×11" Tear Drop Cutout',size:'6"×11"',material:"Various",wholesale:"$14–$15+ w/eng",retail:"—",margin:"—",status:"active",channel:"restaurant",funnel:"entry",partners:["boothcreek"],desc:"High-volume wholesale serving tray — Booth Creek 400-unit program. Ideal for high-turnover restaurants."},
+    {sku:"GBC-CB-9x12",name:'9"×12" Classic Cutting Board',size:'9"×12"',material:"Maple",wholesale:"$40",retail:"—",margin:"—",status:"active",channel:"restaurant",funnel:"entry",partners:[],desc:"Classic proportions, wholesale ready. Clean logo burn."},
+    {sku:"GBC-ARCH-9x12",name:'Arched Maple Cutting Board 9"×12"×¾" w/JG',size:'9"×12"×¾"',material:"Maple",wholesale:"$18.26",retail:"$184",margin:"—",status:"active",channel:["restaurant","corporate"],funnel:"entry",partners:["dallasmavs"],desc:"Signature arch profile, engraved — premium look for corporate gifting or upscale restaurant. Dallas Mavs 50-unit program."},
+    {sku:"GBC-CB-10x16",name:'10½"×16" Cutting Board w/JG',size:'10½"×16"',material:"Maple",wholesale:"Custom",retail:"—",margin:"—",status:"active",channel:"restaurant",funnel:"entry",partners:[],desc:"Mid-large format for heavier-use restaurant applications."},
+    {sku:"GBC-CATERING-001",name:'Richlite® Catering Board 24"×18"×½"',size:'24"×18"×½"',material:"Richlite",wholesale:"$265",retail:"—",margin:"~32%",status:"active",channel:["restaurant","interior-design"],funnel:"entry",partners:["gates"],desc:"Richlite catering surface — food-safe, heat-resistant, commercial grade. Gates BBQ program."},
+    {sku:"GBC-MANHAUL",name:"Man Haul! Cutting Board",size:"Signature",material:"Maple",wholesale:"—",retail:"Retail",margin:"—",status:"active",channel:"retail",funnel:"entry",partners:[],desc:"GBC signature retail board."},
+    {sku:"GBC-MC-001",name:"The Manhole Cover",size:'30" round',material:"Richlite",wholesale:"$299",retail:"$499",margin:"~32%",status:"campaign",channel:"retail",funnel:"entry",partners:[],desc:"⚠️ ONE-TIME INFLUENCER CAMPAIGN PRODUCT — do not pitch, do not list as active inventory or flagship in sales decks."}
   ]},
-  {cat:"Butcher Blocks", products:[
-    {sku:"GBC-BB-EOM",name:'12"×18"×1¼" Butcher Block w/JG',size:'12"×18"×1¼"',material:"Maple",wholesale:"$54–$244 (qty dep.)",retail:"—",margin:"—",status:"active",partners:["q39","boothcreek"],desc:"EoM program board — engraving included (Q39 monthly program)"},
-    {sku:"GBC-BB-1618",name:'16"×18"×1¾" Maple End Grain Butcher Block',size:'16"×18"×1¾"',material:"Maple End Grain",wholesale:"—",retail:"$224",margin:"—",status:"active",partners:["boothcreek","dallasmavs"],desc:"Maple end grain, large format"},
-    {sku:"GBC-BB-1824",name:'18"×24"×1¼" Large Butcher Block w/JG',size:'18"×24"×1¼"',material:"Maple",wholesale:"Custom",retail:"—",margin:"—",status:"active",partners:[],desc:"Large format engraved butcher block"},
-    {sku:"GBC-BB-24x6",name:'24"×24"×6" Solid Maple End Grain Butcher Block',size:'24"×24"×6"',material:"Maple End Grain",wholesale:"—",retail:"$825",margin:"—",status:"active",partners:["gates"],desc:"Premium thick-cut end grain block"},
-    {sku:"GBC-PT-001",name:'27" Prep Table',size:'27"',material:"Richlite/Maple",wholesale:"—",retail:"$164.59",margin:"—",status:"active",partners:["meatmitch"],desc:"Prep table surface"}
+  {cat:"Butcher Blocks & Prep Surfaces", subtitle:"Restaurant upsell — after first cutting board order", products:[
+    {sku:"GBC-BB-EOM",name:'12"×18"×1¼" Butcher Block w/JG',size:'12"×18"×1¼"',material:"Maple",wholesale:"$54–$244 (qty dep.)",retail:"—",margin:"—",status:"active",channel:"restaurant",funnel:"upsell",partners:["q39","boothcreek"],desc:"Q39 EoM Board Program board — recurring monthly (engraving included). Volume-price drops with qty."},
+    {sku:"GBC-BB-1618",name:'16"×18"×1¾" Maple End Grain Butcher Block',size:'16"×18"×1¾"',material:"Maple End Grain",wholesale:"—",retail:"$224",margin:"—",status:"active",channel:"restaurant",funnel:"upsell",partners:["boothcreek","dallasmavs"],desc:"Large format end grain — premium presentation for upscale restaurants + catering."},
+    {sku:"GBC-BB-1824",name:'18"×24"×1¼" Large Butcher Block w/JG',size:'18"×24"×1¼"',material:"Maple",wholesale:"Custom",retail:"—",margin:"—",status:"active",channel:"restaurant",funnel:"upsell",partners:[],desc:"Large format — statement piece for open kitchens."},
+    {sku:"GBC-BB-24x6",name:'24"×24"×6" Solid Maple End Grain Butcher Block',size:'24"×24"×6"',material:"Maple End Grain",wholesale:"—",retail:"$825",margin:"—",status:"active",channel:"restaurant",funnel:"big-ticket",partners:["gates"],desc:"Premium thick-cut end grain — flagship showpiece for high-end kitchens."},
+    {sku:"GBC-PT-001",name:'27" Prep Table Surface',size:'27"',material:"Richlite/Maple",wholesale:"~$165",retail:"—",margin:"—",status:"active",channel:"restaurant",funnel:"upsell",partners:["meatmitch"],desc:"Prep table Richlite surface — Meat Mitch custom."},
+    {sku:"GBC-HLB-001",name:"Richlite+Wood Catering Block w/Heat Lamp",size:"Custom",material:"Richlite+Wood",wholesale:"$498+",retail:"—",margin:"—",status:"custom",channel:"restaurant",funnel:"upsell",partners:["meatmitch"],desc:"Specialty heat-lamp integrated block — future product line candidate. Becca Stout (Meat Mitch) commissioned original; lasted 12–13 months."},
+    {sku:"GBC-MBC-001",name:"Mobile Butcher Counter | Richlite Replacement",size:"Custom",material:"Richlite",wholesale:"$350+",retail:"—",margin:"—",status:"custom",channel:"restaurant",funnel:"upsell",partners:["meatmitch"],desc:"Custom mobile counter surface — Meat Mitch replacement program."}
   ]},
-  {cat:"Cutting Boards", products:[
-    {sku:"GBC-CB-001",name:'8"×12" Small Cutting Board w/JG',size:'8"×12"',material:"Richlite/Maple",wholesale:"$28+",retail:"—",margin:"—",status:"active",partners:["q39","meatmitch"],desc:"Most popular wholesale SKU — engraved"},
-    {sku:"GBC-TD-001",name:'6"×11" Tear Drop Cutout (Blank Board)',size:'6"×11"',material:"Various",wholesale:"$14+ wholesale ($15+ w/engraving)",retail:"—",margin:"—",status:"active",partners:["boothcreek"],desc:"Wholesale — Booth Creek 400-unit program"},
-    {sku:"GBC-CB-9x12",name:'9"×12" Classic Cutting Board',size:'9"×12"',material:"Maple",wholesale:"$40",retail:"—",margin:"—",status:"active",partners:[],desc:"Classic proportions, wholesale ready"},
-    {sku:"GBC-ARCH-9x12",name:'Arched Maple Cutting Board 9"×12"×¾" w/JG',size:'9"×12"×¾"',material:"Maple",wholesale:"$18.26",retail:"$184",margin:"—",status:"active",partners:["dallasmavs"],desc:"Signature arch profile, engraved — Dallas Mavs 50 units"},
-    {sku:"GBC-CB-10x16",name:'10½"×16" Cutting Board w/JG',size:'10½"×16"',material:"Maple",wholesale:"Custom",retail:"—",margin:"—",status:"active",partners:[],desc:"Mid-large engraved board"},
-    {sku:"GBC-MANHAUL",name:"Man Haul! Cutting Board",size:"Signature",material:"Maple",wholesale:"—",retail:"Retail",margin:"—",status:"active",partners:[],desc:"GBC signature retail board"}
+  {cat:"Commercial Surfaces (Big Ticket)", subtitle:"Interior designers, architects, restaurant build-outs — Richlite fabrication", products:[
+    {sku:"GBC-SURF-COUNTER",name:"Richlite Countertop — Standard",size:"Custom",material:"Richlite",wholesale:"$65+/SqFt (32.8% margin std.)",retail:"—",margin:"32.8% std | 42.6% bulk",status:"active",channel:"interior-design",funnel:"big-ticket",partners:["jedunn"],desc:"Custom Richlite countertop fabrication. JE Dunn model: GBC fabricates, JE Dunn installs. Unit economics: $43.65 cost/SqFt → $65.00 sell."},
+    {sku:"GBC-SURF-BAR",name:"Bar Top Surface",size:"Custom",material:"Richlite",wholesale:"Custom",retail:"—",margin:"~32%",status:"active",channel:"interior-design",funnel:"big-ticket",partners:[],desc:"Richlite bar surface — restaurants + hospitality interiors."},
+    {sku:"GBC-SURF-DINING",name:"Dining Table Surface",size:"Custom",material:"Richlite/Maple",wholesale:"Custom",retail:"—",margin:"—",status:"active",channel:["restaurant","interior-design"],funnel:"big-ticket",partners:[],desc:"Custom dining table top — Richlite or hardwood. Restaurant interiors + private commissions."},
+    {sku:"GBC-LEC-001",name:"Live Edge Cherry Charcuterie Board",size:"Custom",material:"Cherry",wholesale:"—",retail:"$1,900",margin:"—",status:"custom",channel:["restaurant","retail"],funnel:"big-ticket",partners:[],desc:"Statement piece — reStart Inc. order (10× at $19K). Live edge, food-safe."}
   ]},
-  {cat:"Cherry / Maple Collection (Wix Catalog)", products:[
-    {sku:"MODEL 0021",name:'Cherry 6"×11"×¾"',size:'6"×11"×¾"',material:"Cherry",wholesale:"$20.85/ea",retail:"—",margin:"—",status:"active",partners:["boothcreek"],desc:"Cherry hardwood, compact"},
-    {sku:"MODEL 2021",name:'Cherry 6"×11"×¾" (premium)',size:'6"×11"×¾"',material:"Cherry",wholesale:"$22.79/ea",retail:"—",margin:"—",status:"active",partners:["boothcreek"],desc:"Premium cherry, same footprint"},
-    {sku:"MODEL 2068",name:'Cherry 6"×14½"×¾"',size:'6"×14½"×¾"',material:"Cherry",wholesale:"$24.47/ea",retail:"—",margin:"—",status:"active",partners:["boothcreek"],desc:"Cherry elongated format"},
-    {sku:"MODEL 2034",name:'Cherry 9"×12"×¾"',size:'9"×12"×¾"',material:"Cherry",wholesale:"$24.00/ea",retail:"—",margin:"—",status:"active",partners:["boothcreek"],desc:"Cherry square-ish format"},
-    {sku:"MODEL 0066",name:'Maple 7½"×13½"×¾"',size:'7½"×13½"×¾"',material:"Maple",wholesale:"$23.19/ea",retail:"—",margin:"—",status:"active",partners:["boothcreek"],desc:"Maple mid format"},
-    {sku:"MODEL 0005",name:'Maple 8"×12"×¾"',size:'8"×12"×¾"',material:"Maple",wholesale:"$23.00/ea",retail:"—",margin:"—",status:"active",partners:["boothcreek"],desc:"Maple standard"},
-    {sku:"MODEL 2031",name:'Cherry 10½"×16"×¾"',size:'10½"×16"×¾"',material:"Cherry",wholesale:"$42.00/ea",retail:"—",margin:"—",status:"active",partners:["boothcreek"],desc:"Cherry large format"},
-    {sku:"MODEL 2054",name:'Cherry 11"×17"×1"',size:'11"×17"×1"',material:"Cherry",wholesale:"$49.17/ea",retail:"—",margin:"—",status:"active",partners:["boothcreek"],desc:"Cherry thick large"},
-    {sku:"MODEL 2073",name:'Cherry 15"×20"×1¼"',size:'15"×20"×1¼"',material:"Cherry",wholesale:"$103.61",retail:"—",margin:"—",status:"active",partners:["boothcreek"],desc:"Cherry XL"},
-    {sku:"MODEL 2074",name:'Cherry 18"×24"×1¼"',size:'18"×24"×1¼"',material:"Cherry",wholesale:"$136.34/ea",retail:"—",margin:"—",status:"active",partners:["boothcreek"],desc:"Cherry jumbo"},
-    {sku:"MODEL 2001",name:'Cherry 12"×18"×1¼"',size:'12"×18"×1¼"',material:"Cherry",wholesale:"$95.22/ea",retail:"—",margin:"—",status:"active",partners:["boothcreek"],desc:"Cherry standard large"},
-    {sku:"MODEL 0216",name:'Maple 12"×16"×1½"',size:'12"×16"×1½"',material:"Maple",wholesale:"$94.00",retail:"—",margin:"—",status:"active",partners:["boothcreek"],desc:"Maple thick large"},
-    {sku:"MODEL CWE05",name:'Cafe Wood 8"×11"×1"',size:'8"×11"×1"',material:"Cafe Wood",wholesale:"$91.76",retail:"—",margin:"—",status:"active",partners:["boothcreek"],desc:"Cafe Wood specialty format"}
+  {cat:"Richlite Raw Material", subtitle:"Cost basis for all Richlite fabrication — not sold directly to end customers", products:[
+    {sku:"GBC-RL-NAT-4x8",name:'Richlite® Sheet ½" Natural 4×8',size:'4×8×½"',material:"Richlite Natural",wholesale:"$534.40/sheet ($16.70/SqFt)",retail:"—",margin:"Cost basis",status:"material",channel:"material",funnel:null,partners:[],desc:"Standard grade. Fabrication cost: $14/SqFt CNC + $10/SqFt overhead. Bulk discount: 20% off at 9,000+ lbs."},
+    {sku:"GBC-RL-BD-4x8",name:'Richlite® Black Diamond 1" 4×8',size:'4×8×1"',material:"Richlite Black Diamond",wholesale:"$1,144.32/sheet ($35.76/SqFt)",retail:"—",margin:"Cost basis",status:"material",channel:"material",funnel:null,partners:[],desc:"Premium grade, 1\" thick. For heavy-use commercial surfaces."},
+    {sku:"GBC-RL-BD-5x10",name:'Richlite® Black Diamond ½" 5×10',size:'5×10×½"',material:"Richlite Black Diamond",wholesale:"$894.00/sheet ($17.88/SqFt)",retail:"—",margin:"Cost basis",status:"material",channel:"material",funnel:null,partners:[],desc:"Large sheet Black Diamond grade."},
+    {sku:"GBC-RL-SL-4x10",name:'Richlite® Slate 5/16" 4×10',size:'4×10×5/16"',material:"Richlite Slate",wholesale:"$447.20/sheet",retail:"—",margin:"Cost basis",status:"material",channel:"material",funnel:null,partners:[],desc:"Slate grade, thinner profile."}
   ]},
-  {cat:"Custom / Restaurant Programs", products:[
-    {sku:"GBC-Q39-FAM",name:"Q39 Family Platters",size:"Custom",material:"Richlite",wholesale:"Custom program",retail:"—",margin:"—",status:"custom",partners:["q39"],desc:"Custom Richlite platter — family serving size (15 units in 2025)"},
-    {sku:"GBC-Q39-SAND",name:"Q39 Sandwich Platters",size:"Custom",material:"Richlite",wholesale:"Custom program",retail:"—",margin:"—",status:"custom",partners:["q39"],desc:"Custom Richlite platter — sandwich serving (70 + 9 units in 2025)"},
-    {sku:"GBC-Q39-EOM",name:"Q39 EoM Boards Program",size:'12"×18"×1¼"',material:"Maple",wholesale:"Monthly",retail:"—",margin:"—",status:"custom",partners:["q39"],desc:"Employee of the Month board program — recurring monthly (4x + 5x in 2025)"},
-    {sku:"GBC-LEC-001",name:"Live Edge Cherry Charcuterie",size:"Custom",material:"Cherry",wholesale:"—",retail:"$1,900",margin:"—",status:"custom",partners:[],desc:"Live edge charcuterie board — reStart Inc."},
-    {sku:"GBC-TROPHY",name:"Customized Trophy Base",size:"Custom",material:"Maple/Richlite",wholesale:"Custom",retail:"—",margin:"—",status:"custom",partners:["q39"],desc:"Q39 EOY Award trophy base (Joel Hatzfeld)"}
+  {cat:"Cherry / Maple Collection (Wix DTC)", subtitle:"Retail and B2B wholesale — Booth Creek bulk programs", products:[
+    {sku:"MODEL 0021",name:'Cherry 6"×11"×¾"',size:'6"×11"×¾"',material:"Cherry",wholesale:"$20.85/ea",retail:"—",margin:"—",status:"active",channel:"retail",funnel:"entry",partners:["boothcreek"],desc:"Cherry hardwood, compact serving board."},
+    {sku:"MODEL 2021",name:'Cherry 6"×11"×¾" (premium)',size:'6"×11"×¾"',material:"Cherry",wholesale:"$22.79/ea",retail:"—",margin:"—",status:"active",channel:"retail",funnel:"entry",partners:["boothcreek"],desc:"Premium cherry variant."},
+    {sku:"MODEL 2068",name:'Cherry 6"×14½"×¾"',size:'6"×14½"×¾"',material:"Cherry",wholesale:"$24.47/ea",retail:"—",margin:"—",status:"active",channel:"retail",funnel:"entry",partners:["boothcreek"],desc:"Elongated cherry format."},
+    {sku:"MODEL 2034",name:'Cherry 9"×12"×¾"',size:'9"×12"×¾"',material:"Cherry",wholesale:"$24.00/ea",retail:"—",margin:"—",status:"active",channel:"retail",funnel:"entry",partners:["boothcreek"],desc:""},
+    {sku:"MODEL 0066",name:'Maple 7½"×13½"×¾"',size:'7½"×13½"×¾"',material:"Maple",wholesale:"$23.19/ea",retail:"—",margin:"—",status:"active",channel:"retail",funnel:"entry",partners:["boothcreek"],desc:""},
+    {sku:"MODEL 0005",name:'Maple 8"×12"×¾"',size:'8"×12"×¾"',material:"Maple",wholesale:"$23.00/ea",retail:"—",margin:"—",status:"active",channel:"retail",funnel:"entry",partners:["boothcreek"],desc:""},
+    {sku:"MODEL 2031",name:'Cherry 10½"×16"×¾"',size:'10½"×16"×¾"',material:"Cherry",wholesale:"$42.00/ea",retail:"—",margin:"—",status:"active",channel:"retail",funnel:"upsell",partners:["boothcreek"],desc:""},
+    {sku:"MODEL 2054",name:'Cherry 11"×17"×1"',size:'11"×17"×1"',material:"Cherry",wholesale:"$49.17/ea",retail:"—",margin:"—",status:"active",channel:"retail",funnel:"upsell",partners:["boothcreek"],desc:""},
+    {sku:"MODEL 2073",name:'Cherry 15"×20"×1¼"',size:'15"×20"×1¼"',material:"Cherry",wholesale:"$103.61",retail:"—",margin:"—",status:"active",channel:"retail",funnel:"upsell",partners:["boothcreek"],desc:""},
+    {sku:"MODEL 2074",name:'Cherry 18"×24"×1¼"',size:'18"×24"×1¼"',material:"Cherry",wholesale:"$136.34/ea",retail:"—",margin:"—",status:"active",channel:"retail",funnel:"upsell",partners:["boothcreek"],desc:""},
+    {sku:"MODEL 2001",name:'Cherry 12"×18"×1¼"',size:'12"×18"×1¼"',material:"Cherry",wholesale:"$95.22/ea",retail:"—",margin:"—",status:"active",channel:"retail",funnel:"upsell",partners:["boothcreek"],desc:""},
+    {sku:"MODEL 0216",name:'Maple 12"×16"×1½"',size:'12"×16"×1½"',material:"Maple",wholesale:"$94.00",retail:"—",margin:"—",status:"active",channel:"retail",funnel:"upsell",partners:["boothcreek"],desc:""},
+    {sku:"MODEL CWE05",name:'Cafe Wood 8"×11"×1"',size:'8"×11"×1"',material:"Cafe Wood",wholesale:"$91.76",retail:"—",margin:"—",status:"active",channel:"retail",funnel:"entry",partners:["boothcreek"],desc:"Cafe Wood specialty format."}
   ]},
-  {cat:"Accessories & Gifts", products:[
-    {sku:"GBC-DIVOT-001",name:"Man Haul! Golf Divot Tool",size:"Standard",material:"Metal/Wood",wholesale:"—",retail:"Retail",margin:"—",status:"new",partners:[],desc:"NEW — GBC branded golf accessory"},
-    {sku:"GBC-TRAY-001",name:"GBC Rolling Tray (Richlite)",size:"Custom",material:"Richlite",wholesale:"—",retail:"$84",margin:"—",status:"active",partners:[],desc:"Richlite rolling tray"},
-    {sku:"GBC-OPENER-001",name:"GBC Wall Mounted Bottle Opener",size:"Standard",material:"Metal",wholesale:"$15",retail:"—",margin:"—",status:"active",partners:[],desc:"Wall mount, branded"},
-    {sku:"GBC-COND",name:"Urban Carpenter™ Wood Conditioner",size:"12 oz",material:"Oil",wholesale:"$12/unit",retail:"—",margin:"—",status:"active",partners:["dallasmavs"],desc:"Wood conditioning oil — Dallas Mavs 50 units"},
-    {sku:"GBC-COOCHIE",name:"Coochie® Wood Conditioner",size:"Standard",material:"Oil",wholesale:"—",retail:"Retail",margin:"—",status:"active",partners:[],desc:"Alternative conditioner SKU"}
+  {cat:"Custom Restaurant Programs", subtitle:"Recurring revenue — built around long-term partner relationships", products:[
+    {sku:"GBC-Q39-FAM",name:"Q39 Family Platters",size:"Custom",material:"Richlite",wholesale:"Custom program",retail:"—",margin:"—",status:"custom",channel:"restaurant",funnel:"upsell",partners:["q39"],desc:"Custom Richlite platter — family serving size (15 units in 2025). Recurring order."},
+    {sku:"GBC-Q39-SAND",name:"Q39 Sandwich Platters",size:"Custom",material:"Richlite",wholesale:"Custom program",retail:"—",margin:"—",status:"custom",channel:"restaurant",funnel:"upsell",partners:["q39"],desc:"Custom Richlite platter — sandwich serving (70 + 9 units in 2025). High volume."},
+    {sku:"GBC-Q39-EOM",name:"Q39 EoM Boards Program",size:'12"×18"×1¼"',material:"Maple",wholesale:"Monthly",retail:"—",margin:"—",status:"custom",channel:"restaurant",funnel:"upsell",partners:["q39"],desc:"Employee of Month recurring monthly board program — 4x + 5x units in 2025."},
+    {sku:"GBC-TROPHY",name:"Customized Trophy / Award Base",size:"Custom",material:"Maple/Richlite",wholesale:"Custom",retail:"—",margin:"—",status:"custom",channel:"corporate",funnel:"upsell",partners:["q39"],desc:"Q39 EOY Award trophy base (Joel Hatzfeld). Expandable to any corporate award program."}
   ]},
-  {cat:"Knives", products:[
-    {sku:"GBC-KNIFE-8SS",name:'Professional Stainless Steel Chef Knife 8"',size:'8"',material:"Stainless Steel",wholesale:"—",retail:"$80",margin:"—",status:"active",partners:["dallasmavs"],desc:"Full tang stainless, 8\" blade — Dallas Mavs 50 units"},
-    {sku:"GBC-KNIFE-SANT",name:'Hammer Forged Santoku Chef Knife 12.75"',size:'12.75"',material:"Hammer Forged Steel",wholesale:"$74",retail:"—",margin:"—",status:"active",partners:[],desc:"Hammer forged, santoku profile"}
+  {cat:"Corporate Gifting", subtitle:"High-value branded gift programs — Dallas Mavs model", products:[
+    {sku:"GBC-GIFT-BOARD",name:"Branded Cutting Board Gift Set",size:"Custom",material:"Maple",wholesale:"Custom",retail:"—",margin:"—",status:"active",channel:"corporate",funnel:"entry",partners:["dallasmavs"],desc:"Custom engraved board + box. Entry point for corporate gift programs. Dallas Mavs: 50 units Dec 2025."},
+    {sku:"GBC-GIFT-PREMIUM",name:"Premium Gift Set (Board + Knife + Conditioner)",size:"Custom",material:"Maple + SS",wholesale:"Custom",retail:"—",margin:"—",status:"active",channel:"corporate",funnel:"upsell",partners:["dallasmavs"],desc:"Full set — board + knife + conditioner + custom box. Dallas Mavs program: $21,104 gross (50 sets). ⚠️ Do not repeat at 74% discount level."},
+    {sku:"GBC-COND",name:"Urban Carpenter™ Wood Conditioner",size:"12 oz",material:"Oil",wholesale:"$12/unit",retail:"—",margin:"—",status:"active",channel:["corporate","retail"],funnel:"entry",partners:["dallasmavs"],desc:"Add-on / gift set component — 50 units for Dallas Mavs."},
+    {sku:"GBC-COOCHIE",name:"Coochie® Wood Conditioner",size:"Standard",material:"Oil",wholesale:"—",retail:"Retail",margin:"—",status:"active",channel:"retail",funnel:"entry",partners:[],desc:"Alternative conditioner SKU."}
   ]},
-  {cat:"Services", products:[
-    {sku:"GBC-SVC-DESIGN",name:"Design Services",size:"Per project",material:"—",wholesale:"$30–$200",retail:"—",margin:"—",status:"active",partners:["gates"],desc:"Layout + artwork design for custom orders"},
-    {sku:"GBC-SVC-LASER",name:"Omtech Co2 Laser Usage",size:"Per hour",material:"—",wholesale:"$18/hr",retail:"—",margin:"—",status:"active",partners:["gates"],desc:"Laser engraving machine time"},
-    {sku:"GBC-SVC-ENGRAVE",name:"Board Customization / Engraving",size:"Custom",material:"—",wholesale:"Custom",retail:"—",margin:"—",status:"active",partners:["q39","boothcreek","dallasmavs"],desc:"Custom engraving + logo burns"},
-    {sku:"GBC-SVC-DELIVERY",name:"Delivery",size:"Local KC",material:"—",wholesale:"Custom",retail:"—",margin:"—",status:"active",partners:[],desc:"Local KC delivery service"}
+  {cat:"Accessories", subtitle:"Retail + add-on revenue", products:[
+    {sku:"GBC-DIVOT-001",name:"Man Haul! Golf Divot Tool",size:"Standard",material:"Metal/Wood",wholesale:"—",retail:"Retail",margin:"—",status:"new",channel:"retail",funnel:"entry",partners:[],desc:"NEW — GBC branded golf accessory."},
+    {sku:"GBC-TRAY-001",name:"GBC Rolling Tray (Richlite)",size:"Custom",material:"Richlite",wholesale:"—",retail:"$84",margin:"—",status:"active",channel:"retail",funnel:"entry",partners:[],desc:"Richlite rolling tray — CNC carved."},
+    {sku:"GBC-OPENER-001",name:"GBC Wall Mounted Bottle Opener",size:'3¾"×10"×¾"',material:"Metal",wholesale:"$15",retail:"—",margin:"—",status:"active",channel:["retail","restaurant"],funnel:"entry",partners:[],desc:"Wall mount, branded — restaurant bar add-on."}
+  ]},
+  {cat:"Knives", subtitle:"Gift set component and standalone retail", products:[
+    {sku:"GBC-KNIFE-8SS",name:'Professional Stainless Steel Chef Knife 8"',size:'8"',material:"Stainless Steel",wholesale:"$80",retail:"$80",margin:"—",status:"active",channel:["corporate","retail"],funnel:"entry",partners:["dallasmavs"],desc:"Full tang stainless, 8\" blade — Dallas Mavs 50 units. Standard gift set component."},
+    {sku:"GBC-KNIFE-SANT",name:'Hammer Forged Santoku Chef Knife 12.75"',size:'12.75"',material:"Hammer Forged Steel",wholesale:"$74",retail:"—",margin:"—",status:"active",channel:["corporate","retail"],funnel:"upsell",partners:[],desc:"Hammer forged, santoku profile — premium gift upgrade."}
+  ]},
+  {cat:"Services", subtitle:"Revenue on every order — engraving, design, delivery", products:[
+    {sku:"GBC-SVC-DESIGN",name:"Design Services",size:"Per project",material:"—",wholesale:"$30–$200",retail:"—",margin:"High",status:"active",channel:["restaurant","corporate"],funnel:"entry",partners:["gates"],desc:"Layout + artwork design for custom orders."},
+    {sku:"GBC-SVC-LASER",name:"Omtech Co2 Laser Usage",size:"Per hour",material:"—",wholesale:"$18/hr",retail:"—",margin:"High",status:"active",channel:["restaurant","corporate"],funnel:"entry",partners:["gates"],desc:"Laser engraving machine time — Scissors & Scotch model."},
+    {sku:"GBC-SVC-ENGRAVE",name:"Board Customization / Engraving",size:"Custom",material:"—",wholesale:"Custom",retail:"—",margin:"High",status:"active",channel:["restaurant","corporate"],funnel:"entry",partners:["q39","boothcreek","dallasmavs"],desc:"Custom engraving + logo burns — included in most B2B programs."},
+    {sku:"GBC-SVC-DELIVERY",name:"Delivery (Local KC)",size:"Local KC",material:"—",wholesale:"Custom",retail:"—",margin:"—",status:"active",channel:["restaurant","corporate"],funnel:"entry",partners:[],desc:"Local KC delivery service."}
   ]}
 ];
 
@@ -1136,6 +1196,7 @@ let currentNetwork = null;
 let currentTab = {};
 let catalogView = 'table';
 let catalogFilter = 'All';
+let catalogChannelFilter = 'all';
 
 function showView(view, pid, nid) {
   currentView = view;
@@ -1896,7 +1957,15 @@ function renderCatalog() {
     ${catalogView==='table'?'⊞ Grid View':'☰ Table View'}
   </button>`;
 
-  const filteredCats=catalogFilter==='All'?CATALOG:CATALOG.filter(c=>c.cat===catalogFilter);
+  const filteredCats=(catalogFilter==='All'?CATALOG:CATALOG.filter(c=>c.cat===catalogFilter))
+    .map(cat=>({
+      ...cat,
+      products: catalogChannelFilter==='all' ? cat.products
+        : cat.products.filter(p=>{
+            const ch = Array.isArray(p.channel)?p.channel:[p.channel||''];
+            return ch.includes(catalogChannelFilter);
+          })
+    })).filter(cat=>cat.products.length>0);
 
   const sectionsHtml=filteredCats.map(cat=>{
     if (catalogView==='table') {
@@ -1904,6 +1973,9 @@ function renderCatalog() {
         const partnerChips=prod.partners.map(pid=>`<span class="catalog-partner-chip" onclick="switchPartner('${pid}')">${partnerName(pid)}</span>`).join('');
         const statusCls=prod.status==='active'?'catalog-status-active':prod.status==='custom'?'catalog-status-custom':prod.status==='new'?'catalog-status-new':prod.status==='material'?'catalog-status-material':prod.status==='campaign'?'catalog-status-campaign':'catalog-status-active';
         const statusLabel=prod.status==='active'?'Active':prod.status==='custom'?'Custom':prod.status==='new'?'New':prod.status==='material'?'Material':prod.status==='campaign'?'Campaign Only':'Active';
+        const funnelBadge = prod.funnel==='entry'?'<span style="font-size:10px;color:var(--amber);font-weight:600">Entry</span>'
+          :prod.funnel==='upsell'?'<span style="font-size:10px;color:var(--yellow);font-weight:600">Upsell</span>'
+          :prod.funnel==='big-ticket'?'<span style="font-size:10px;color:var(--green);font-weight:600">Big Ticket</span>':'<span style="font-size:10px;color:var(--text-dim)">—</span>';
         return `<tr>
           <td style="font-family:monospace;font-size:11px;color:var(--text-muted)">${prod.sku||'—'}</td>
           <td style="font-weight:500">${prod.name}</td>
@@ -1912,6 +1984,7 @@ function renderCatalog() {
           <td style="color:var(--amber);font-weight:500">${prod.wholesale||'—'}</td>
           <td>${prod.retail||'—'}</td>
           <td style="color:var(--green)">${prod.margin||'—'}</td>
+          <td>${funnelBadge}</td>
           <td>${partnerChips||'—'}</td>
           <td><span class="catalog-status-chip ${statusCls}">${statusLabel}</span></td>
         </tr>`;
@@ -1919,7 +1992,7 @@ function renderCatalog() {
       return `<div class="catalog-section">
         <div class="catalog-section-title">${cat.cat} <span style="font-size:11px;font-weight:400;color:var(--text-dim)">(${cat.products.length} items)</span></div>
         <div class="panel"><table class="catalog-table">
-          <thead><tr><th>SKU</th><th>Product</th><th>Size</th><th>Material</th><th>Wholesale</th><th>Retail</th><th>Margin</th><th>Partners</th><th>Status</th></tr></thead>
+          <thead><tr><th>SKU</th><th>Product</th><th>Size</th><th>Material</th><th>Wholesale</th><th>Retail</th><th>Margin</th><th>Funnel</th><th>Partners</th><th>Status</th></tr></thead>
           <tbody>${rows}</tbody>
         </table></div>
       </div>`;
@@ -1946,16 +2019,84 @@ function renderCatalog() {
     }
   }).join('');
 
+  const funnelHtml = `
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+      <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:14px">
+        <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);font-weight:700;margin-bottom:10px">🍖 Restaurant & Hospitality</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="background:rgba(224,124,36,.1);border:1px solid rgba(224,124,36,.35);border-radius:6px;padding:8px 10px">
+            <div style="font-size:11px;font-weight:700;color:var(--amber)">ENTRY — Lead Magnet</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Cutting boards & serving trays<br>Low price → easy yes → product in-house</div>
+          </div>
+          <div style="font-size:12px;color:var(--text-dim);text-align:center">↓</div>
+          <div style="background:rgba(234,179,8,.08);border:1px solid rgba(234,179,8,.3);border-radius:6px;padding:8px 10px">
+            <div style="font-size:11px;font-weight:700;color:var(--yellow)">UPSELL</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Butcher blocks, prep surfaces,<br>custom platters & programs</div>
+          </div>
+          <div style="font-size:12px;color:var(--text-dim);text-align:center">↓</div>
+          <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.3);border-radius:6px;padding:8px 10px">
+            <div style="font-size:11px;font-weight:700;color:var(--green)">BIG TICKET</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Dining tables, bar tops,<br>full custom commercial surfaces</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:14px">
+        <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);font-weight:700;margin-bottom:10px">🏛️ Interior Design & Architecture</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);border-radius:6px;padding:8px 10px">
+            <div style="font-size:11px;font-weight:700;color:var(--blue)">ENTRY</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Surface samples + countertop consult<br>Richlite is the pitch. JE Dunn model.</div>
+          </div>
+          <div style="font-size:12px;color:var(--text-dim);text-align:center">↓</div>
+          <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.3);border-radius:6px;padding:8px 10px">
+            <div style="font-size:11px;font-weight:700;color:var(--green)">BIG TICKET</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Full kitchen installations,<br>bar tops, commercial Richlite fab</div>
+          </div>
+          <div style="background:var(--surface3);border-radius:6px;padding:8px 10px;margin-top:4px">
+            <div style="font-size:11px;color:var(--text-muted)">Unit economics: $43.65 cost/SqFt<br>→ $65.00 sell = <span style="color:var(--green);font-weight:600">32.8% margin</span><br>Bulk (9K+ lbs): <span style="color:var(--green);font-weight:600">42.6% margin</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:14px">
+        <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);font-weight:700;margin-bottom:10px">🏢 Corporate Gifting</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);border-radius:6px;padding:8px 10px">
+            <div style="font-size:11px;font-weight:700;color:var(--purple)">ENTRY</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Branded cutting board + knife set<br>Engraved logo, custom box</div>
+          </div>
+          <div style="font-size:12px;color:var(--text-dim);text-align:center">↓</div>
+          <div style="background:rgba(234,179,8,.08);border:1px solid rgba(234,179,8,.3);border-radius:6px;padding:8px 10px">
+            <div style="font-size:11px;font-weight:700;color:var(--yellow)">UPSELL</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Full gift programs — multi-SKU,<br>custom packaging, volume pricing</div>
+          </div>
+          <div style="background:var(--surface3);border-radius:6px;padding:8px 10px;margin-top:4px">
+            <div style="font-size:11px;color:var(--text-muted)">Dallas Mavs model: $21,104 gross<br>⚠️ Do NOT repeat 74% discount level</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  const channelBtns = ['All','🍖 Restaurant','🏛️ Interior Design','🏢 Corporate','🛍️ Retail','⚗️ Material'].map((ch,i)=>{
+    const key = i===0?'all':i===1?'restaurant':i===2?'interior-design':i===3?'corporate':i===4?'retail':'material';
+    const active = (catalogChannelFilter||'all')===key;
+    return `<button class="catalog-filter-btn${active?' active':''}" onclick="catalogChannelFilter='${key}';renderView()">${ch}</button>`;
+  }).join('');
+
   return `
     <div class="topbar">
       <div class="topbar-title">📦 Product Catalog</div>
-      <div style="font-size:12px;color:var(--text-muted)">${totalProducts} products · ${CATALOG.length} categories · Click partner chip → partner profile</div>
+      <div style="font-size:12px;color:var(--text-muted)">${totalProducts} products · ${CATALOG.length} categories</div>
     </div>
     <div class="content">
-      <div class="catalog-controls">
+      <div class="catalog-controls" style="flex-wrap:wrap;gap:6px;margin-bottom:6px">
         ${filterBtns}
         ${toggleBtn}
       </div>
+      <div class="catalog-controls" style="flex-wrap:wrap;gap:6px;border-top:1px solid var(--border);padding-top:10px;margin-bottom:16px">
+        <span style="font-size:11px;color:var(--text-dim);padding:5px 0;align-self:center">Filter by channel:</span>
+        ${channelBtns}
+      </div>
+      ${funnelHtml}
       ${sectionsHtml}
     </div>`;
 }
