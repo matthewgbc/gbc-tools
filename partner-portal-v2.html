@@ -330,6 +330,8 @@ hr.sidebar-divider{border:none;border-top:1px solid var(--border);margin:6px 0;}
 .catalog-status-chip{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;}
 .catalog-status-active{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.25);}
 .catalog-status-custom{background:rgba(59,130,246,.12);color:var(--blue);border:1px solid rgba(59,130,246,.25);}
+.catalog-status-campaign{background:rgba(107,114,128,.12);color:var(--grey);border:1px solid rgba(107,114,128,.25);}
+.campaign-flag{font-size:10px;color:var(--grey);font-style:italic;margin-top:3px;}
 .catalog-status-new{background:rgba(168,85,247,.12);color:var(--purple);border:1px solid rgba(168,85,247,.25);}
 .catalog-status-material{background:rgba(107,114,128,.12);color:var(--grey);border:1px solid rgba(107,114,128,.25);}
 
@@ -1005,7 +1007,7 @@ const PIPELINE_DEALS = {
 ────────────────────────────────────────────── */
 const CATALOG = [
   {cat:"Richlite Surfaces (B2B Commercial)", products:[
-    {sku:"GBC-MC-001",name:"The Manhole Cover",size:'30" round',material:"Richlite",wholesale:"$299",retail:"$499",margin:"~32%",status:"active",partners:["q39"],desc:"Flagship SKU — 30 inch round Richlite serving surface"},
+    {sku:"GBC-MC-001",name:"The Manhole Cover",size:'30" round',material:"Richlite",wholesale:"$299",retail:"$499",margin:"~32%",status:"campaign",partners:[],desc:"ONE-TIME INFLUENCER CAMPAIGN PRODUCT — not actively sold or pitched. Do not list as flagship or include in sales decks."},
     {sku:"GBC-CATERING-001",name:'Richlite® Catering Board 24"×18"×½"',size:'24"×18"×½"',material:"Richlite",wholesale:"$265",retail:"—",margin:"—",status:"active",partners:["gates"],desc:"B2B commercial kitchen catering surface"},
     {sku:"GBC-HLB-001",name:"Richlite+Wood Catering Butcher Block w/Heat Lamp",size:"Custom",material:"Richlite+Wood",wholesale:"$498+",retail:"—",margin:"—",status:"custom",partners:["meatmitch"],desc:"Specialty heat-lamp integrated butcher block — product line candidate"},
     {sku:"GBC-MBC-001",name:"Mobile Butcher Counter | Richlite Replacement",size:"Custom",material:"Richlite",wholesale:"$350+",retail:"—",margin:"—",status:"custom",partners:["meatmitch"],desc:"Custom mobile counter surface replacement"},
@@ -1027,7 +1029,7 @@ const CATALOG = [
     {sku:"GBC-CB-9x12",name:'9"×12" Classic Cutting Board',size:'9"×12"',material:"Maple",wholesale:"$40",retail:"—",margin:"—",status:"active",partners:[],desc:"Classic proportions, wholesale ready"},
     {sku:"GBC-ARCH-9x12",name:'Arched Maple Cutting Board 9"×12"×¾" w/JG',size:'9"×12"×¾"',material:"Maple",wholesale:"$18.26",retail:"$184",margin:"—",status:"active",partners:["dallasmavs"],desc:"Signature arch profile, engraved — Dallas Mavs 50 units"},
     {sku:"GBC-CB-10x16",name:'10½"×16" Cutting Board w/JG',size:'10½"×16"',material:"Maple",wholesale:"Custom",retail:"—",margin:"—",status:"active",partners:[],desc:"Mid-large engraved board"},
-    {sku:"GBC-MANHAUL",name:"Man Haul! Cutting Board",size:"Signature",material:"Maple",wholesale:"—",retail:"Retail",margin:"—",status:"active",partners:[],desc:"Signature GBC flagship retail board"}
+    {sku:"GBC-MANHAUL",name:"Man Haul! Cutting Board",size:"Signature",material:"Maple",wholesale:"—",retail:"Retail",margin:"—",status:"active",partners:[],desc:"GBC signature retail board"}
   ]},
   {cat:"Cherry / Maple Collection (Wix Catalog)", products:[
     {sku:"MODEL 0021",name:'Cherry 6"×11"×¾"',size:'6"×11"×¾"',material:"Cherry",wholesale:"$20.85/ea",retail:"—",margin:"—",status:"active",partners:["boothcreek"],desc:"Cherry hardwood, compact"},
@@ -1900,8 +1902,8 @@ function renderCatalog() {
     if (catalogView==='table') {
       const rows=cat.products.map(prod=>{
         const partnerChips=prod.partners.map(pid=>`<span class="catalog-partner-chip" onclick="switchPartner('${pid}')">${partnerName(pid)}</span>`).join('');
-        const statusCls=prod.status==='active'?'catalog-status-active':prod.status==='custom'?'catalog-status-custom':prod.status==='new'?'catalog-status-new':prod.status==='material'?'catalog-status-material':'catalog-status-active';
-        const statusLabel=prod.status==='active'?'Active':prod.status==='custom'?'Custom':prod.status==='new'?'New':prod.status==='material'?'Material':'Active';
+        const statusCls=prod.status==='active'?'catalog-status-active':prod.status==='custom'?'catalog-status-custom':prod.status==='new'?'catalog-status-new':prod.status==='material'?'catalog-status-material':prod.status==='campaign'?'catalog-status-campaign':'catalog-status-active';
+        const statusLabel=prod.status==='active'?'Active':prod.status==='custom'?'Custom':prod.status==='new'?'New':prod.status==='material'?'Material':prod.status==='campaign'?'Campaign Only':'Active';
         return `<tr>
           <td style="font-family:monospace;font-size:11px;color:var(--text-muted)">${prod.sku||'—'}</td>
           <td style="font-weight:500">${prod.name}</td>
@@ -1924,8 +1926,8 @@ function renderCatalog() {
     } else {
       const cards=cat.products.map(prod=>{
         const partnerChips=prod.partners.map(pid=>`<span class="catalog-partner-chip" onclick="switchPartner('${pid}')">${partnerName(pid)}</span>`).join('');
-        const statusCls=prod.status==='active'?'catalog-status-active':prod.status==='custom'?'catalog-status-custom':prod.status==='new'?'catalog-status-new':prod.status==='material'?'catalog-status-material':'catalog-status-active';
-        const statusLabel=prod.status==='active'?'Active':prod.status==='custom'?'Custom':prod.status==='new'?'New':prod.status==='material'?'Material':'Active';
+        const statusCls=prod.status==='active'?'catalog-status-active':prod.status==='custom'?'catalog-status-custom':prod.status==='new'?'catalog-status-new':prod.status==='material'?'catalog-status-material':prod.status==='campaign'?'catalog-status-campaign':'catalog-status-active';
+        const statusLabel=prod.status==='active'?'Active':prod.status==='custom'?'Custom':prod.status==='new'?'New':prod.status==='material'?'Material':prod.status==='campaign'?'Campaign Only':'Active';
         return `<div class="catalog-card">
           <div class="catalog-card-sku">${prod.sku||''}</div>
           <div class="catalog-card-name">${prod.name}</div>
