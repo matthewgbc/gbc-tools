@@ -566,6 +566,12 @@ hr.sidebar-divider{border:none;border-top:1px solid var(--border);margin:6px 0;}
   <div class="nav-item" id="nav-brand" onclick="showView('brand')">
     <span class="nav-icon">🎨</span>Brand Resources
   </div>
+  <div class="nav-item" id="nav-forecast" onclick="showView('forecast')">
+    <span class="nav-icon">📈</span>Forecast 2026
+  </div>
+  <div class="nav-item" id="nav-revops" onclick="showView('revops')">
+    <span class="nav-icon">🎯</span>RevOps
+  </div>
 
   <div class="sidebar-section-label">— Client Accounts</div>
   <div id="sidebar-clients"></div>
@@ -970,6 +976,53 @@ const PARTNERS = {
       typography:[{name:"NBA Brand Font",weights:"Bold / Regular",use:"Official NBA usage only"},{name:"Clean Sans",weights:"Regular",use:"GBC internal reference"}]}
   },
 
+  pfg: {
+    id:"pfg", name:"Performance Food Group", emoji:"🚚",
+    tier:"VIP", dotColor:"#10b981", statusPill:"pill-green",
+    status:"Pipeline — HOT · Pitch Deck Due Mar 21",
+    tagline:"Foodservice Distribution — National Reach",
+    lifetimeRevenue:634, outstandingBalance:0,
+    locations:[{name:"Lee's Summit HQ",address:"290 SE Thompson Dr, Lee's Summit, MO 64082",state:"MO",type:"HQ"}],
+    invoices:[
+      {id:"PFG-001",date:"2025",amount:317,status:"Paid",desc:"Initial test order — small B2B"},
+      {id:"PFG-002",date:"2025",amount:317,status:"Paid",desc:"Follow-on test order"}
+    ],
+    contacts:[
+      {name:"Eric M. Simpson",role:"Brands Manager / Executive Chef",email:"eric.simpson2@pfgc.com",phone:"763-772-8462",primary:true},
+      {name:"Jeff Lister",role:"Key Contact",email:"",phone:"816-246-0100",primary:false},
+      {name:"Ryan Klover",role:"Requested MITM video for President + VP",email:"ryan.klover@pfgc.com",phone:"",primary:false},
+      {name:"Donna Gordon",role:"B2B Channel Contact",email:"",phone:"",primary:false},
+      {name:"Steven Kamolz",role:"Contact",email:"",phone:"816-246-0100",primary:false}
+    ],
+    intel:{
+      founded:"1950s", hq:"Richmond, VA (national) · Lee's Summit MO (regional)",
+      knownFor:"$57B national foodservice distributor. GBC board program fits their chef/restaurant client gifting and event supply chain.",
+      slogan:"Foodservice distribution at national scale",
+      story:"PFG distributes to restaurants, hotels, and institutions nationwide. Eric Simpson wants GBC to film content for PFG clients and supply custom engraved boards as corporate gifts. Pitch deck due end of March.",
+      openOpp:"Pitch deck (Mar 21) · Corporate gifting program · MITM content for PFG clients · Leads: Smokehouse BBQ (HOT via Eric) · Southern Provisions / Caitlin Campbell",
+      leads:"Smokehouse BBQ (HOT — Eric Simpson intro) · Southern Provisions / Caitlin Campbell"
+    },
+    outstandingAR:0,
+    productOpportunities:[
+      {product:"Custom Engraved Corporate Boards",why:"PFG gifts boards to restaurant/hotel clients. Logo engraving + custom sizing = premium gift tier. $150–$400/unit at volume.",contact:"Eric Simpson",value:"$10K–$105K/yr (forecast)"},
+      {product:"MITM Content for PFG Clients",why:"Ryan Klover requested MITM video for PFG President + VP. PFG wants GBC to produce video content for their restaurant clients.",contact:"Ryan Klover",value:"Sponsorship + production TBD"},
+      {product:"Institutional Board Program",why:"Large volume: restaurant chains, hotels, stadiums via PFG distribution. Unlocks bulk buy discount at 9K+ lbs.",contact:"Donna Gordon",value:"Bulk buy threshold trigger"}
+    ],
+    revenueHistory:{2025:634,2026:0},
+    milestones:[
+      {date:"2025",text:"2 small test orders — $634 total"},
+      {date:"Mar 2026",text:"Pitch deck due Mar 21 — Eric Simpson + Jeff Lister"}
+    ],
+    media:{episode:null,epStatus:"N/A"},
+    brandResources:{instagram:"@pfg_corp",website:"pfgc.com",logoOnFile:false,driveFolder:"",partnerKitStatus:"N/A — corporate B2B only",
+      voice:"Enterprise foodservice. Corporate but client-friendly. GBC is a premium vendor/content partner.",
+      logoRules:"PFG official brand only. No co-branding without legal approval.",
+      contentGate:"No co-branded content without PFG marketing approval. MITM content must be specifically commissioned by PFG.",
+      doNots:["No public mention of PFG deal until contract signed","No logo use without marketing team approval"],
+      colors:[{name:"PFG Green",hex:"#00843D",role:"Primary"},{name:"White",hex:"#FFFFFF",role:"Secondary"},{name:"Dark Gray",hex:"#333333",role:"Text"}],
+      typography:[{name:"Modern Sans",weights:"Bold / Regular",use:"Corporate sans — clean, professional"}]}
+  },
+
   gates: {
     id:"gates", rid:"R004", name:"Gates Bar-B-Q", emoji:"🚫",
     since:2025, locationsCount:1, status:"Blocked", statusPill:"pill-red",
@@ -1135,12 +1188,16 @@ const NETWORK = {
       {name:"Betty Jones",role:"Lead Editor — Critical Path",email:"crystaldaisyproductions@gmail.com",phone:"",primary:true},
       {name:"Sam Jones",role:"Camera Operator",email:"sam@crystaldaisyproductions.com",phone:"",primary:false}
     ],
-    notes:"Primary production partner for MITM series. Betty directs. Sam camera. Rate: ~$750/episode. Betty's edit deadline rules — all footage + VO must be in by Friday of week prior. No exceptions. Google Drive raw footage: https://drive.google.com/drive/folders/1gU_1NGnEGtCb5s9cp2vRiK5Zh8lL74oX. Note: Sam says Crux hires Sam day-before shoots, charges Q39 ~$10K, pays Sam ~$60/hr — do not recommend Crux internally.",
+    notes:"Primary production partner for MITM series. Betty directs. Sam camera. Rate: ~$850/episode (COGS). ⚠️ BILLING FLAG: Both GBC_1 and GBC_2 invoices bill to 'GAUNTT DESIGN COMPANY LLC' — wrong entity. Must be corrected to 'Gauntt Board Company LLC' before next payment. ⚠️ PAYMENT URGENT: GBC_1 ($1,265) 30 days overdue · GBC_2 ($1,700) due today = $2,965 total outstanding. Betty's edit deadline rules — all footage + VO must be in by Friday of week prior. No exceptions. Google Drive: https://drive.google.com/drive/folders/1gU_1NGnEGtCb5s9cp2vRiK5Zh8lL74oX. Note: Sam says Crux charges Q39 ~$10K for shoots they do for ~$60/hr — do not recommend Crux internally.",
     expenses:[
-      {id:"INV-GBC2",date:"Feb 18 2026",amount:1700,desc:"EP2 Burnt End — Lead (paid Mar 17)"},
-      {id:"EP2-750",date:"Mar 2026",amount:750,desc:"EP2 Burnt End — Short-form (pending later in March)"},
-      {id:"EP1-EST",date:"2026",amount:1250,desc:"EP1 Q39 — past invoice (TBD)"},
-      {id:"EP3-EST",date:"2026",amount:750,desc:"EP3–EP8 estimate ~$750/episode each"}
+      {id:"GBC_1",date:"2026-01-19",due:"2026-02-18",amount:1265,status:"OVERDUE",daysOverdue:30,
+        desc:"Filming: Q39 12/11 ($300) · Meat Mitch 12/18 ($300) · Intro/Outro/Shop 1/7 ($300) · Burnt End 1/25 ($300) · Editing: Dallas Mavs×Q39 Reels ($65)"},
+      {id:"GBC_2",date:"2026-02-18",due:"2026-03-20",amount:1700,status:"DUE TODAY",daysOverdue:0,
+        desc:"Editing: MITM Intro Ep ($500) · Q39 Ep ($400) · Meat Mitch Ep ($400) · Burnt End Ep ($400)"},
+      {id:"GBC_3_EST",date:"2026-03",due:"TBD",amount:750,status:"PENDING",
+        desc:"EP2 short-form clips — pending later March"},
+      {id:"FUTURE_EST",date:"2026",due:"Ongoing",amount:850,status:"FUTURE",
+        desc:"Per-episode rate $850 · EP3–EP8 estimate"}
     ],
     actions:[
       {title:"EP3 brief → Betty (footage + direction)",priority:"HOT",due:"Mar 26"},
@@ -1447,9 +1504,10 @@ const CLIENT_ACCOUNTS = {
 };
 
 const COST_DATA = {
-  monthly_burn:25922,
+  monthly_burn:26522,
   payroll_total:17672,
-  opex_total:8250,
+  opex_total:8850,
+  facilityNote:"Internet ($200) and Power ($400) are estimates NOT yet in FORECAST_2026.md model. Add to Binod's April onboarding package.",
   cash_current:73721,
   cash_date:"3/15",
   runway_mo:2.8,
@@ -1463,10 +1521,12 @@ const COST_DATA = {
       {name:"FUTA / SUTA (est.)",sub:"Federal + MO state unemployment tax · est. on $13K W-2 base",vendor:"IRS/State",monthly:120},
       {name:"Gusto Payroll Software",sub:"",vendor:"Gusto",monthly:58}
     ]},
-    {name:"Facility",color:"var(--blue)",monthly:7100,variable:false,items:[
-      {name:"Rent — Outlook Property Group",sub:"New KC facility · March 2026",vendor:"Outlook Property Group LLC",monthly:5800},
+    {name:"Facility",color:"var(--blue)",monthly:7700,variable:false,items:[
+      {name:"Rent — Outlook Property Group",sub:"New KC facility · March 2026 · 5815 Outlook Rd",vendor:"Outlook Property Group LLC",monthly:5800},
       {name:"CAMs (Common Area)",sub:"",vendor:"Outlook Property Group LLC",monthly:300},
-      {name:"Business Insurance",sub:"Estimate",vendor:"TBD",monthly:1000}
+      {name:"Business Insurance",sub:"Estimate — verify with Christian Brooks / Imperial PFS",vendor:"TBD",monthly:1000},
+      {name:"Internet / Phone ⚠ est.",sub:"Business internet + phone line · NOT yet in FORECAST_2026 model",vendor:"TBD",monthly:200},
+      {name:"Power / Utilities ⚠ est.",sub:"Electricity — CNC equipment draws significant power · NOT yet in FORECAST_2026 model",vendor:"Outlook/KCP&L",monthly:400}
     ]},
     {name:"Equipment",color:"var(--purple)",monthly:799,variable:false,items:[
       {name:"CNC Lease (Thermwood)",sub:"Scaling to ~$1,000/mo — negotiate new lease",vendor:"Thermwood",monthly:99},
@@ -1488,7 +1548,9 @@ const COST_DATA = {
     ]}
   ],
   capitalEvents:[
-    {name:"TIA (Tax Incentive Advance)",when:"Q2 2026",amount:12500,status:"Expected",notes:"Expected Q2 2026 — one-time inflow"},
+    {name:"TIA (Tax Incentive Advance)",when:"Q2 2026",amount:12500,status:"Expected",notes:"Expected Q2 2026 — one-time inflow (may need to be capitalized vs expensed — flag for Binod)"},
+    {name:"Security Camera System",when:"Q2 2026",amount:1200,status:"Planned",notes:"8 cameras connecting to police station · one-time install"},
+    {name:"Leasehold Improvements",when:"Q2 2026",amount:null,status:"TBD",notes:"Demo, sheetrock, paint, floors, electrical (<$5K est.), plumbing, architect drawings. TIA credit partially offsets."},
     {name:"Chef Thompson Investment",when:"Apr 2026 (est.)",amount:35000,status:"Expected",notes:"$35K investment NOT yet received"},
     {name:"Travis DiGirolamo Investment",when:"Received",amount:125000,status:"Received",notes:"Confirmed received"}
   ]
@@ -1538,6 +1600,76 @@ const GBC_BRAND = {
 /* ══════════════════════════════════════════════════════════════════
    KANBAN PERSISTENCE
 ══════════════════════════════════════════════════════════════════ */
+/* ══ FORECAST DATA — sourced from FORECAST_2026.md ══ */
+const FORECAST_DATA = {
+  annual:{rev:163500,cogs:54161,gp:108839,gm:66.6,opex:276487,ni:-155132,safe_target:400000,floor:30000,cashStart:73721},
+  months:[
+    {m:"Jan",rev:3500,cogs:2185,gp:1315,gm:37.6,opex:16769,ni:-15454,cashEnd:24546,status:"BREACH",note:"Est. (D01 pending)"},
+    {m:"Feb",rev:3500,cogs:2185,gp:1315,gm:37.6,opex:16769,ni:-15454,cashEnd:9092,status:"BREACH",note:"Est. (D01 pending)"},
+    {m:"Mar",rev:3500,cogs:2185,gp:1315,gm:37.6,opex:23333,ni:-22018,cashEnd:51703,status:"OK",actual:true,cashOpen:73721,note:"Confirmed $73,721 opening"},
+    {m:"Apr",rev:8000,cogs:3868,gp:4132,gm:51.7,opex:23333,ni:-19201,cashEnd:67502,status:"OK",financing:35000,note:"Chef Thompson $35K expected"},
+    {m:"May",rev:8000,cogs:3738,gp:4263,gm:53.3,opex:23333,ni:-6570,cashEnd:60931,status:"OK",oneTime:12500,note:"TIA $12,500 expected"},
+    {m:"Jun",rev:8500,cogs:3475,gp:5025,gm:59.1,opex:23333,ni:-18308,cashEnd:42623,status:"WATCH",note:"Within $40K–$70K band"},
+    {m:"Jul",rev:18500,cogs:6225,gp:12275,gm:66.3,opex:23333,ni:-11058,cashEnd:31565,status:"WATCH",note:"Within $10K of floor"},
+    {m:"Aug",rev:15000,cogs:5325,gp:9675,gm:64.5,opex:23333,ni:-13658,cashEnd:17907,status:"BREACH",note:"SAFE prep must begin"},
+    {m:"Sep",rev:15000,cogs:5325,gp:9675,gm:64.5,opex:24234,ni:-14559,cashEnd:3348,status:"BREACH",note:"CNC jumps to $1K/mo · Near zero"},
+    {m:"Oct",rev:23000,cogs:5500,gp:17500,gm:76.1,opex:26234,ni:-8734,cashEnd:-5386,status:"BREACH",note:"Negative — Crystal Daisy retainer starts"},
+    {m:"Nov",rev:26500,cogs:6375,gp:20125,gm:75.9,opex:26234,ni:-6109,cashEnd:-11495,status:"BREACH",note:"Negative — full stop without SAFE"},
+    {m:"Dec",rev:30000,cogs:7775,gp:22225,gm:74.1,opex:26234,ni:-4009,cashEnd:-15504,status:"BREACH",note:"Negative — full stop without SAFE"}
+  ],
+  quarterly:[
+    {q:"Q1",rev:10500,ni:-52926},{q:"Q2",rev:24500,ni:-44079},
+    {q:"Q3",rev:48500,ni:-39275},{q:"Q4",rev:79500,ni:-18852}
+  ],
+  pfgScenarios:[
+    {name:"Base",rev:163500,ebitda:-167632,sepCash:3348,q4viable:false},
+    {name:"PFG Light (+$35K)",rev:198500,ebitda:-144882,sepCash:13098,q4viable:false},
+    {name:"PFG Full (+$105K)",rev:268500,ebitda:-99382,sepCash:32598,q4viable:"Marginal"}
+  ],
+  runways:[
+    {s:"Base (no SAFE)",eoy:-15504,r:"~6 wks from Aug",ok:false},
+    {s:"+ PFG Light",eoy:3246,r:"~8 wks from Aug",ok:false},
+    {s:"+ PFG Full",eoy:53246,r:"~4 mo from Aug",ok:false},
+    {s:"+ SAFE $400K (Aug close)",eoy:382000,r:"12–14 months",ok:true},
+    {s:"SAFE + PFG Full",eoy:487000,r:"16+ months",ok:true}
+  ],
+  gaps:[
+    {id:"D05",gap:"SAFE valuation cap",owner:"Tim + Matt",urgency:"HIGH"},
+    {id:"D07",gap:"Chef Thompson $35K receipt date",owner:"Tim",urgency:"HIGH"},
+    {id:"D08",gap:"QuickBooks cancellation ($155/mo waste)",owner:"Matt",urgency:"HIGH"},
+    {id:"D01",gap:"Actual Jan 1 cash balance",owner:"Matt",urgency:"Medium"},
+    {id:"D12",gap:"Opening Partners' Capital (Binod)",owner:"Binod",urgency:"HIGH"}
+  ]
+};
+
+/* ══ REVOPS DATA ══ */
+const REVOPS_DATA = {
+  segments:[
+    {name:"Richlite B2C",color:"var(--amber)",target:42500,q1:6000,q2:6500,q3:7500,q4:22500,note:"Holiday spike Oct–Dec"},
+    {name:"Richlite B2B/Institutional",color:"var(--blue)",target:60000,q1:4500,q2:12000,q3:20500,q4:23000,note:"Q39, McCray, PFG, Adeo"},
+    {name:"Custom Fabrication",color:"var(--purple)",target:16000,q1:0,q2:500,q3:6500,q4:9000,note:"JE Dunn, chef boards — starts Jun"},
+    {name:"Corporate / Holiday Gifts",color:"#f59e0b",target:19500,q1:0,q2:2500,q3:4500,q4:12500,note:"Dallas Mavs reactivation Q4"},
+    {name:"MITM Sponsorship",color:"var(--green)",target:13500,q1:0,q2:3000,q3:4500,q4:6000,note:"Partner-funded production"},
+    {name:"IFrame Platform",color:"#06b6d4",target:12500,q1:0,q2:0,q3:5000,q4:7500,note:"Beta July — Warren build required"}
+  ],
+  unitEcon:[
+    {product:"Standard Board (1/2\" 18×24)",sqft:3.0,material:19.65,fab:14.00,overhead:10.00,cost:43.65,sell:65.00,margin:32.8},
+    {product:"Custom Board (1\" 18×24)",sqft:3.0,material:42.07,fab:14.00,overhead:10.00,cost:66.07,sell:100.00,margin:33.9},
+    {product:"Countertop (1/2\" standard)",sqft:"varies",material:19.65,fab:14.00,overhead:10.00,cost:43.65,sell:65.00,margin:32.8},
+    {product:"Bulk/Institutional (9K+ lb buy)",sqft:"varies",material:13.32,fab:14.00,overhead:10.00,cost:37.32,sell:65.00,margin:42.6},
+    {product:"Pre-CNC (Tim manual, Q1 2026)",sqft:3.0,material:19.65,fab:16.10,overhead:10.00,cost:45.75,sell:65.00,margin:29.6}
+  ],
+  bulkBuy:{threshold:"9,000 lbs in any 60-day window",discount:"20% off McCray standard",marginLift:"+9.8 pts",triggers:["JE Dunn commercial order (500–2,000 lbs)","PFG channel Q3+ (1,000–3,000 lbs/quarter)","Dallas Mavericks 2026 gift (300–500 lbs)"]},
+  pipeline:[
+    {name:"JE Dunn Construction",stage:"WARM",owner:"Tim",nextAction:"Precision follow-up — Logan Tallman",due:"Mar 31",potential:"$9,500 (2026 forecast)"},
+    {name:"Performance Food Group",stage:"HOT",owner:"Matt",nextAction:"Pitch deck — Eric Simpson + Jeff Lister",due:"Mar 21",potential:"$10K–$105K (scenarios)"},
+    {name:"Smokehouse BBQ",stage:"HOT",owner:"Matt",nextAction:"Eric Simpson intro — onboard by Mar 31",due:"Mar 31",potential:"TBD"},
+    {name:"Williams Sonoma",stage:"COLD",owner:"Matt",nextAction:"Initial outreach — no conversation yet",due:"Jun 2026",potential:"$10,000 (2026 forecast)"},
+    {name:"Angie Scavuzzo",stage:"WARM",owner:"Matt",nextAction:"Re-engage — holiday boards + SAFE investor convo",due:"Apr 2026",potential:"$11,500 (2026 forecast)"},
+    {name:"Dallas Mavericks",stage:"WARM",owner:"Matt",nextAction:"Rebuild pricing before re-engaging",due:"Q3 2026",potential:"$7,000 (2026 forecast)"}
+  ]
+};
+
 const KANBAN_STORAGE_KEY = 'gbc-kanban-state-v2';
 
 function loadKanbanState() {
@@ -1613,7 +1745,7 @@ function showView(view, pid, nid, cid) {
   document.querySelectorAll('.partner-item').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.client-item').forEach(el => el.classList.remove('active'));
 
-  const navMap = {command:'nav-cmd',kanban:'nav-kanban',sales:'nav-sales',pl:'nav-pl',metrics:'nav-metrics',catalog:'nav-catalog',tasks:'nav-tasks',events:'nav-events',cost:'nav-cost',brand:'nav-brand'};
+  const navMap = {command:'nav-cmd',kanban:'nav-kanban',sales:'nav-sales',pl:'nav-pl',metrics:'nav-metrics',catalog:'nav-catalog',tasks:'nav-tasks',events:'nav-events',cost:'nav-cost',brand:'nav-brand',forecast:'nav-forecast',revops:'nav-revops'};
   if (navMap[view]) document.getElementById(navMap[view]).classList.add('active');
 
   if (pid) { const el = document.getElementById('sidebar-p-'+pid); if (el) el.classList.add('active'); }
@@ -1648,6 +1780,8 @@ function renderView() {
   else if (currentView === 'events') root.innerHTML = renderEvents();
   else if (currentView === 'cost') root.innerHTML = renderCost();
   else if (currentView === 'brand') root.innerHTML = renderBrandResources();
+  else if (currentView === 'forecast') root.innerHTML = renderForecast();
+  else if (currentView === 'revops') root.innerHTML = renderRevOps();
   else if (currentView === 'client' && currentClient) root.innerHTML = renderClientAccount(CLIENT_ACCOUNTS[currentClient]);
 
   if (currentView === 'partner' || currentView === 'network') {
@@ -3099,6 +3233,306 @@ function renderCost() {
         </tr></thead>
         <tbody>${capitalRows}</tbody>
       </table>
+    </div>
+  </div>`;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   FORECAST 2026
+══════════════════════════════════════════════════════════════════ */
+function renderForecast() {
+  const FD = FORECAST_DATA;
+  const statusColor = s => s==='OK'?'var(--green)':s==='WATCH'?'var(--yellow)':'var(--red)';
+  const statusBg = s => s==='OK'?'rgba(34,197,94,.12)':s==='WATCH'?'rgba(234,179,8,.12)':'rgba(239,68,68,.12)';
+
+  // Monthly P&L table
+  const monthRows = FD.months.map(m=>{
+    const sc = statusColor(m.status); const sb = statusBg(m.status);
+    const isActual = m.actual ? '*' : '';
+    return `<tr style="border-bottom:1px solid var(--border2)${m.actual?';background:rgba(34,197,94,.04)':''}">
+      <td style="padding:8px 10px;font-weight:700;color:var(--text)">${m.m}${isActual?'<span style="color:var(--green);font-size:9px;margin-left:3px">●</span>':''}</td>
+      <td style="padding:8px 10px;color:var(--green)">${fmt$(m.rev)}</td>
+      <td style="padding:8px 10px;color:var(--text-muted)">(${fmt$(m.cogs)})</td>
+      <td style="padding:8px 10px">${fmt$(m.gp)}</td>
+      <td style="padding:8px 10px;font-size:11px;color:var(--text-muted)">${m.gm}%</td>
+      <td style="padding:8px 10px;color:var(--text-muted)">(${fmt$(m.opex)})</td>
+      <td style="padding:8px 10px;color:${m.ni>=0?'var(--green)':'var(--red)'}">(${ Math.abs(m.ni).toLocaleString()})</td>
+      <td style="padding:8px 10px">
+        <span style="background:${sb};color:${sc};padding:3px 8px;border-radius:5px;font-size:10px;font-weight:700">${m.cashEnd<0?'('+fmt$(Math.abs(m.cashEnd))+')':fmt$(m.cashEnd)}</span>
+      </td>
+      <td style="padding:8px 10px;font-size:10px;color:${sc}">${m.status}</td>
+    </tr>`;
+  }).join('');
+
+  // Cash bar chart
+  const maxCash = 80000;
+  const cashBars = FD.months.map(m=>{
+    const h = m.cashEnd > 0 ? Math.min(Math.round((m.cashEnd/maxCash)*100), 100) : 0;
+    const col = statusColor(m.status);
+    return `<div class="bar-col" style="flex:1">
+      <div class="bar-fill" style="height:${h}%;background:${col};min-height:${m.cashEnd>0?'2px':'0'};border-radius:3px 3px 0 0"></div>
+      <div style="font-size:9px;color:var(--text-muted);text-align:center;margin-top:3px">${m.m}</div>
+    </div>`;
+  }).join('');
+  const floorH = Math.round((30000/maxCash)*100);
+
+  // PFG scenarios
+  const pfgRows = FD.pfgScenarios.map(s=>`<tr style="border-bottom:1px solid var(--border2)">
+    <td style="padding:9px 12px;font-weight:600">${s.name}</td>
+    <td style="padding:9px 12px;color:var(--green)">${fmt$(s.rev)}</td>
+    <td style="padding:9px 12px;color:var(--red)">(${fmt$(Math.abs(s.ebitda))})</td>
+    <td style="padding:9px 12px;color:${s.sepCash>30000?'var(--green)':s.sepCash>10000?'var(--yellow)':'var(--red)'}">${fmt$(s.sepCash)}</td>
+    <td style="padding:9px 12px"><span style="color:${s.q4viable&&s.q4viable!==false?'var(--yellow)':'var(--red)'}">Yes${s.q4viable==='Marginal'?' (Marginal)':''}</span></td>
+  </tr>`).join('');
+
+  // Runway
+  const runwayRows = FD.runways.map(r=>`<tr style="border-bottom:1px solid var(--border2)">
+    <td style="padding:9px 12px;font-weight:600">${r.s}</td>
+    <td style="padding:9px 12px;color:${r.eoy>=0?'var(--green)':'var(--red)'}">${r.eoy<0?'('+fmt$(Math.abs(r.eoy))+')':fmt$(r.eoy)}</td>
+    <td style="padding:9px 12px;color:${r.ok?'var(--green)':'var(--yellow)'}">${r.r}</td>
+    <td style="padding:9px 12px"><span style="font-size:18px">${r.ok?'✅':'⚠️'}</span></td>
+  </tr>`).join('');
+
+  // Data gaps
+  const gapRows = FD.gaps.map(g=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border2)">
+    <div><span style="color:var(--amber);font-weight:700;font-size:11px">${g.id}</span> <span style="font-size:13px;margin-left:8px">${g.gap}</span></div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <span style="font-size:11px;color:var(--text-muted)">${g.owner}</span>
+      <span style="background:${g.urgency==='HIGH'?'rgba(239,68,68,.15)':'rgba(234,179,8,.12)'};color:${g.urgency==='HIGH'?'var(--red)':'var(--yellow)'};padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700">${g.urgency}</span>
+    </div>
+  </div>`).join('');
+
+  // Quarterly bar
+  const maxQ = 80000;
+  const qBars = FD.quarterly.map(q=>{
+    const revH = Math.round((q.rev/maxQ)*100);
+    const lossH = Math.round((Math.abs(q.ni)/maxQ)*100);
+    return `<div style="flex:1;text-align:center">
+      <div style="display:flex;align-items:flex-end;justify-content:center;gap:4px;height:80px">
+        <div style="width:24px;background:var(--green);border-radius:3px 3px 0 0;height:${revH}%" title="Rev ${fmt$(q.rev)}"></div>
+        <div style="width:24px;background:var(--red);border-radius:3px 3px 0 0;height:${lossH}%;opacity:.7" title="Loss ${fmt$(Math.abs(q.ni))}"></div>
+      </div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:4px">${q.q}</div>
+      <div style="font-size:10px;color:var(--green)">${fmt$(q.rev)}</div>
+      <div style="font-size:10px;color:var(--red)">(${fmt$(Math.abs(q.ni))})</div>
+    </div>`;
+  }).join('');
+
+  return `<div class="topbar">
+    <div class="topbar-title">📈 Forecast 2026</div>
+    <div style="display:flex;gap:20px;margin-left:auto">
+      <div style="text-align:right"><div style="font-size:15px;font-weight:800;color:var(--green)">${fmt$(FD.annual.rev)}</div><div style="font-size:10px;color:var(--text-muted);text-transform:uppercase">Target Revenue</div></div>
+      <div style="text-align:right"><div style="font-size:15px;font-weight:800;color:var(--red)">(${fmt$(Math.abs(FD.annual.ni))})</div><div style="font-size:10px;color:var(--text-muted);text-transform:uppercase">Net Loss</div></div>
+      <div style="text-align:right"><div style="font-size:15px;font-weight:800;color:var(--yellow)">Aug 2026</div><div style="font-size:10px;color:var(--text-muted);text-transform:uppercase">Floor Breach</div></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="kpi-grid" style="margin-bottom:16px">
+      <div class="kpi-card"><div class="kpi-label">2026 Revenue Target</div><div class="kpi-value green">${fmt$(FD.annual.rev)}</div><div class="kpi-sub">6 revenue segments</div></div>
+      <div class="kpi-card"><div class="kpi-label">2026 Gross Profit</div><div class="kpi-value amber">${fmt$(FD.annual.gp)}</div><div class="kpi-sub">${FD.annual.gm}% gross margin</div></div>
+      <div class="kpi-card"><div class="kpi-label">2026 Net Income</div><div class="kpi-value red">(${fmt$(Math.abs(FD.annual.ni))})</div><div class="kpi-sub">Base case — no SAFE</div></div>
+      <div class="kpi-card"><div class="kpi-label">Cash (Mar 15)</div><div class="kpi-value green">${fmt$(FD.annual.cashStart)}</div><div class="kpi-sub">Confirmed Mainstreet balance</div></div>
+      <div class="kpi-card"><div class="kpi-label">SAFE Target</div><div class="kpi-value blue">${fmt$(FD.annual.safe_target)}</div><div class="kpi-sub">Close by August 2026 — required</div></div>
+    </div>
+
+    <div class="two-col" style="margin-bottom:16px">
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title" style="text-transform:uppercase;letter-spacing:.08em;font-size:11px">Quarterly Revenue vs Loss</span></div>
+        <div style="display:flex;gap:10px;padding:16px;align-items:flex-end">${qBars}</div>
+        <div style="display:flex;gap:14px;padding:0 16px 12px;font-size:11px">
+          <span style="color:var(--green)">■ Revenue</span>
+          <span style="color:var(--red)">■ Net Loss</span>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title" style="text-transform:uppercase;letter-spacing:.08em;font-size:11px">Cash Position — Monthly Ending</span></div>
+        <div style="position:relative;height:100px;padding:12px 12px 0;display:flex;align-items:flex-end;gap:2px">
+          ${cashBars}
+          <div style="position:absolute;bottom:${floorH}%;left:12px;right:12px;border-top:1px dashed var(--red);display:flex;align-items:center">
+            <span style="font-size:9px;color:var(--red);margin-left:4px">$30K floor</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:16px">
+      <div class="panel-header"><span class="panel-title" style="text-transform:uppercase;letter-spacing:.08em;font-size:11px">Monthly P&amp;L — Jan through Dec 2026 · ● = Confirmed Actuals</span></div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;min-width:800px">
+          <thead><tr style="border-bottom:1px solid var(--border2)">
+            <th style="padding:8px 10px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">Mo</th>
+            <th style="padding:8px 10px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">Revenue</th>
+            <th style="padding:8px 10px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">COGS</th>
+            <th style="padding:8px 10px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">Gross Profit</th>
+            <th style="padding:8px 10px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">GM%</th>
+            <th style="padding:8px 10px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">OpEx</th>
+            <th style="padding:8px 10px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">Net Inc</th>
+            <th style="padding:8px 10px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">Cash End</th>
+            <th style="padding:8px 10px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">Status</th>
+          </tr></thead>
+          <tbody>${monthRows}</tbody>
+          <tfoot><tr style="border-top:2px solid var(--border2)">
+            <td style="padding:10px;font-weight:800">TOTAL</td>
+            <td style="padding:10px;color:var(--green);font-weight:800">${fmt$(FD.annual.rev)}</td>
+            <td style="padding:10px;color:var(--text-muted)">(${fmt$(FD.annual.cogs)})</td>
+            <td style="padding:10px;font-weight:700">${fmt$(FD.annual.gp)}</td>
+            <td style="padding:10px;color:var(--text-muted)">${FD.annual.gm}%</td>
+            <td style="padding:10px;color:var(--text-muted)">(${fmt$(FD.annual.opex)})</td>
+            <td style="padding:10px;color:var(--red);font-weight:800">(${fmt$(Math.abs(FD.annual.ni))})</td>
+            <td colspan="2" style="padding:10px;color:var(--text-muted);font-size:11px">EOY: $(15,504) without SAFE</td>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="two-col" style="margin-bottom:16px">
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title" style="text-transform:uppercase;letter-spacing:.08em;font-size:11px">PFG Scenarios — Revenue Impact</span></div>
+        <table style="width:100%;border-collapse:collapse">
+          <thead><tr style="border-bottom:1px solid var(--border2)">
+            <th style="padding:8px 12px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">Scenario</th>
+            <th style="padding:8px 12px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">2026 Rev</th>
+            <th style="padding:8px 12px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">EBITDA</th>
+            <th style="padding:8px 12px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">Sep Cash</th>
+            <th style="padding:8px 12px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">SAFE Still Req?</th>
+          </tr></thead>
+          <tbody>${pfgRows}</tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title" style="text-transform:uppercase;letter-spacing:.08em;font-size:11px">Runway Scenarios</span></div>
+        <table style="width:100%;border-collapse:collapse">
+          <thead><tr style="border-bottom:1px solid var(--border2)">
+            <th style="padding:8px 12px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">Scenario</th>
+            <th style="padding:8px 12px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">EOY Cash</th>
+            <th style="padding:8px 12px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">Runway</th>
+            <th style="padding:8px 12px"></th>
+          </tr></thead>
+          <tbody>${runwayRows}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title" style="text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:var(--red)">Critical Data Gaps — Resolve Before Investor Share</span></div>
+      <div style="padding:0 16px 12px">${gapRows}</div>
+    </div>
+  </div>`;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   REVOPS — REVENUE OPERATIONS VIEW
+══════════════════════════════════════════════════════════════════ */
+function renderRevOps() {
+  const RD = REVOPS_DATA;
+
+  // Revenue segment bars
+  const maxSeg = Math.max(...RD.segments.map(s=>s.target));
+  const segRows = RD.segments.map(s=>{
+    const pct = Math.round((s.target/163500)*100);
+    const w = Math.round((s.target/maxSeg)*100);
+    const qBars = [s.q1,s.q2,s.q3,s.q4].map((q,i)=>{
+      const qW = Math.round((q/maxSeg)*60);
+      const labels = ['Q1','Q2','Q3','Q4'];
+      return `<div style="flex:1;text-align:center"><div style="height:${Math.max(qW,1)}px;background:${s.color};border-radius:2px;opacity:.8"></div><div style="font-size:9px;color:var(--text-muted);margin-top:2px">${labels[i]}</div></div>`;
+    }).join('');
+    return `<div style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:13px;font-weight:600;color:${s.color}">${s.name}</span>
+        <span style="font-size:13px;font-weight:700;color:var(--text)">${fmt$(s.target)} <span style="color:var(--text-muted);font-weight:400;font-size:11px">${pct}% of total</span></span>
+      </div>
+      <div style="height:6px;background:var(--surface3);border-radius:3px;margin-bottom:6px"><div style="height:100%;width:${w}%;background:${s.color};border-radius:3px"></div></div>
+      <div style="display:flex;gap:4px;height:40px;align-items:flex-end">${qBars}</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:3px">${s.note}</div>
+    </div>`;
+  }).join('');
+
+  // Unit economics table
+  const unitRows = RD.unitEcon.map(u=>`<tr style="border-bottom:1px solid var(--border2)">
+    <td style="padding:9px 12px;font-weight:600;font-size:12px">${u.product}</td>
+    <td style="padding:9px 12px;text-align:center;font-size:12px">${u.sqft}</td>
+    <td style="padding:9px 12px;text-align:right;color:var(--red);font-size:12px">$${u.material}</td>
+    <td style="padding:9px 12px;text-align:right;color:var(--text-muted);font-size:12px">$${u.fab}</td>
+    <td style="padding:9px 12px;text-align:right;color:var(--text-muted);font-size:12px">$${u.overhead}</td>
+    <td style="padding:9px 12px;text-align:right;font-weight:700;font-size:12px">$${u.cost}</td>
+    <td style="padding:9px 12px;text-align:right;color:var(--green);font-size:12px">$${u.sell}</td>
+    <td style="padding:9px 12px;text-align:right;font-weight:700;color:${u.margin>=40?'var(--green)':u.margin>=33?'var(--yellow)':'var(--red)'};font-size:12px">${u.margin}%</td>
+  </tr>`).join('');
+
+  // Pipeline
+  const stageColor = s => s==='HOT'?'var(--red)':s==='WARM'?'var(--yellow)':'var(--text-muted)';
+  const pipeRows = RD.pipeline.map(p=>`<tr style="border-bottom:1px solid var(--border2)">
+    <td style="padding:9px 12px;font-weight:600">${p.name}</td>
+    <td style="padding:9px 12px"><span style="background:${p.stage==='HOT'?'rgba(239,68,68,.15)':p.stage==='WARM'?'rgba(234,179,8,.12)':'rgba(100,100,100,.1)'};color:${stageColor(p.stage)};padding:3px 8px;border-radius:5px;font-size:11px;font-weight:700">${p.stage}</span></td>
+    <td style="padding:9px 12px;font-size:12px">${p.nextAction}</td>
+    <td style="padding:9px 12px;font-size:11px;color:var(--text-muted)">${p.due}</td>
+    <td style="padding:9px 12px;font-size:12px;color:var(--amber)">${p.potential}</td>
+  </tr>`).join('');
+
+  // Bulk buy triggers
+  const bulkTriggers = RD.bulkBuy.triggers.map(t=>`<div style="padding:6px 0;border-bottom:1px solid var(--border2);font-size:13px">▸ ${t}</div>`).join('');
+
+  return `<div class="topbar"><div class="topbar-title">🎯 RevOps — Revenue Operations</div></div>
+  <div class="content">
+    <div class="two-col" style="margin-bottom:16px">
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title" style="text-transform:uppercase;letter-spacing:.08em;font-size:11px">2026 Revenue by Segment — $163,500 Target</span></div>
+        <div style="padding:16px">${segRows}</div>
+      </div>
+      <div>
+        <div class="panel" style="margin-bottom:14px">
+          <div class="panel-header"><span class="panel-title" style="text-transform:uppercase;letter-spacing:.08em;font-size:11px">🚀 Bulk Buy Flywheel</span></div>
+          <div style="padding:12px 16px">
+            <div style="margin-bottom:8px">
+              <div style="font-size:13px;font-weight:700;color:var(--amber)">Threshold: ${RD.bulkBuy.threshold}</div>
+              <div style="font-size:12px;color:var(--green);margin-top:3px">Discount: ${RD.bulkBuy.discount} · Margin lift: ${RD.bulkBuy.marginLift}</div>
+            </div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em">Trigger Conditions</div>
+            ${bulkTriggers}
+          </div>
+        </div>
+        <div class="kpi-card" style="border-color:rgba(239,68,68,.3)">
+          <div class="kpi-label" style="color:var(--red)">SAFE Required</div>
+          <div class="kpi-value red">Aug 2026</div>
+          <div class="kpi-sub">Close target — survival mechanism. D05 valuation cap unresolved.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:16px">
+      <div class="panel-header"><span class="panel-title" style="text-transform:uppercase;letter-spacing:.08em;font-size:11px">Active Pipeline</span></div>
+      <table style="width:100%;border-collapse:collapse">
+        <thead><tr style="border-bottom:1px solid var(--border2)">
+          <th style="padding:8px 12px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">Partner / Account</th>
+          <th style="padding:8px 12px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">Stage</th>
+          <th style="padding:8px 12px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">Next Action</th>
+          <th style="padding:8px 12px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">Due</th>
+          <th style="padding:8px 12px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">2026 Potential</th>
+        </tr></thead>
+        <tbody>${pipeRows}</tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title" style="text-transform:uppercase;letter-spacing:.08em;font-size:11px">Product Unit Economics — Per SqFt Basis (15% Waste Factor Applied)</span></div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;min-width:700px">
+          <thead><tr style="border-bottom:1px solid var(--border2)">
+            <th style="padding:8px 12px;text-align:left;font-size:10px;color:var(--text-muted);text-transform:uppercase">Product</th>
+            <th style="padding:8px 12px;text-align:center;font-size:10px;color:var(--text-muted);text-transform:uppercase">SqFt</th>
+            <th style="padding:8px 12px;text-align:right;font-size:10px;color:var(--text-muted);text-transform:uppercase">Material/SqFt</th>
+            <th style="padding:8px 12px;text-align:right;font-size:10px;color:var(--text-muted);text-transform:uppercase">Fab/SqFt</th>
+            <th style="padding:8px 12px;text-align:right;font-size:10px;color:var(--text-muted);text-transform:uppercase">Overhead</th>
+            <th style="padding:8px 12px;text-align:right;font-size:10px;color:var(--text-muted);text-transform:uppercase">Total Cost</th>
+            <th style="padding:8px 12px;text-align:right;font-size:10px;color:var(--text-muted);text-transform:uppercase">Sell Price</th>
+            <th style="padding:8px 12px;text-align:right;font-size:10px;color:var(--text-muted);text-transform:uppercase">Gross Margin</th>
+          </tr></thead>
+          <tbody>${unitRows}</tbody>
+        </table>
+      </div>
+      <div style="padding:10px 14px;font-size:11px;color:var(--text-muted);border-top:1px solid var(--border2)">
+        Bulk buy unlock (+9.8 margin pts): Requires 9,000 lbs cumulative in 60-day window — JE Dunn + PFG channel orders Q3+ are the trigger. Tim calls Brendan (Richlite) to lock order.
+      </div>
     </div>
   </div>`;
 }
