@@ -334,6 +334,25 @@ hr.sidebar-divider{border:none;border-top:1px solid var(--border);margin:6px 0;}
 .tag-later{background:rgba(107,114,128,.15);color:var(--grey);border:1px solid rgba(107,114,128,.3);font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;}
 .dot-sep{color:var(--text-dim);margin:0 2px;}
 
+/* ─── SYNC BANNER ─── */
+.sync-banner{display:flex;align-items:center;gap:12px;padding:8px 24px;background:var(--surface2);border-bottom:1px solid var(--border);font-size:12px;color:var(--text-muted);}
+.sync-banner strong{color:var(--text);}
+.sync-banner a{color:var(--amber);font-size:11px;font-weight:600;padding:3px 8px;border:1px solid var(--amber-dim);border-radius:5px;background:var(--amber-glow);text-decoration:none;}
+.sync-banner a:hover{background:rgba(224,124,36,.2);text-decoration:none;}
+.sync-banner .sep{color:var(--border2);}
+
+/* ─── DRAG AND DROP KANBAN ─── */
+.pk-col.drag-over{border-color:var(--amber);background:rgba(224,124,36,.06);}
+.pk-card.dragging{opacity:.4;border-color:var(--amber);cursor:grabbing;}
+.pk-card{cursor:grab;}
+.kanban-topbar{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.kanban-topbar-btn{font-size:11px;font-weight:600;padding:5px 12px;border-radius:6px;border:1px solid var(--border2);background:var(--surface2);color:var(--text-muted);cursor:pointer;transition:all .15s;}
+.kanban-topbar-btn:hover{border-color:var(--amber-dim);color:var(--amber);}
+
+/* ─── EDIT ON GITHUB ─── */
+.edit-gh-btn{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:5px 10px;border-radius:6px;border:1px solid var(--border2);background:var(--surface2);color:var(--text-muted);cursor:pointer;text-decoration:none;transition:all .15s;}
+.edit-gh-btn:hover{border-color:var(--amber-dim);color:var(--amber);text-decoration:none;}
+
 /* Responsive kpi */
 @media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr);}.two-col{grid-template-columns:1fr;}.kanban{grid-template-columns:repeat(2,1fr);}.overview-grid{grid-template-columns:1fr;}.catalog-grid{grid-template-columns:repeat(2,1fr);}.partner-kanban{grid-template-columns:repeat(2,1fr);}}
 </style>
@@ -396,6 +415,7 @@ hr.sidebar-divider{border:none;border-top:1px solid var(--border);margin:6px 0;}
    DATA LAYER
 ══════════════════════════════════════════════════════════════════ */
 
+// BEGIN:PARTNERS_DATA
 const PARTNERS = {
   q39: {
     id:"q39", rid:"R001", name:"Q39 BBQ", emoji:"🔥",
@@ -743,6 +763,7 @@ const LIFECYCLE = [
   {name:"Crystal Daisy",pid:null,type:"Production Partner",lastTouch:"2026-03-19",status:"active"},
   {name:"McCray Lumber",pid:null,type:"Supplier",lastTouch:"—",status:"watch",flag:"Follow-up overdue"}
 ];
+// END:PARTNERS_DATA
 
 const PIPELINE_DEALS = {
   hot:[
@@ -832,6 +853,97 @@ const CATALOG = [
     {name:"Delivery",price:"Custom",status:"active",partners:[],desc:"Local KC delivery service"}
   ]}
 ];
+
+/* ══════════════════════════════════════════════════════════════════
+   KANBAN PERSISTENCE
+══════════════════════════════════════════════════════════════════ */
+const KANBAN_STORAGE_KEY = 'gbc-kanban-state';
+
+function loadKanbanState() {
+  try {
+    const raw = localStorage.getItem(KANBAN_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch(e) { return null; }
+}
+
+function saveKanbanState(stageMap) {
+  try {
+    localStorage.setItem(KANBAN_STORAGE_KEY, JSON.stringify(stageMap));
+  } catch(e) {}
+}
+
+function resetKanbanState() {
+  localStorage.removeItem(KANBAN_STORAGE_KEY);
+  // Restore defaults from PARTNERS data
+  Object.values(PARTNERS).forEach(p => {
+    // kanbanStage defaults are already in the data
+  });
+  showView('kanban');
+}
+
+function getEffectiveKanbanStages() {
+  // Returns {pid: stageKey} map — localStorage overrides data defaults
+  const saved = loadKanbanState();
+  const stages = {};
+  Object.values(PARTNERS).forEach(p => {
+    stages[p.id] = (saved && saved[p.id]) ? saved[p.id] : (p.kanbanStage || 'vip');
+  });
+  return stages;
+}
+
+function copyKanbanJSON() {
+  const stages = getEffectiveKanbanStages();
+  const snippet = JSON.stringify(stages, null, 2);
+  navigator.clipboard.writeText(snippet).then(() => {
+    const btn = document.getElementById('copy-kanban-btn');
+    if (btn) { btn.textContent = '✓ Copied!'; setTimeout(() => { btn.textContent = '📋 Copy JSON Update'; }, 2000); }
+  }).catch(() => {
+    prompt('Copy this JSON and paste into data/partners.json (kanbanStage fields):', snippet);
+  });
+}
+
+// Drag-and-drop handlers
+let draggedPid = null;
+
+function onCardDragStart(e, pid) {
+  draggedPid = pid;
+  e.dataTransfer.effectAllowed = 'move';
+  e.currentTarget.classList.add('dragging');
+}
+
+function onCardDragEnd(e) {
+  e.currentTarget.classList.remove('dragging');
+  document.querySelectorAll('.pk-col').forEach(c => c.classList.remove('drag-over'));
+}
+
+function onColDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  e.currentTarget.classList.add('drag-over');
+}
+
+function onColDragLeave(e) {
+  e.currentTarget.classList.remove('drag-over');
+}
+
+function onColDrop(e, colKey) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if (!draggedPid) return;
+
+  // Update in-memory PARTNERS
+  if (PARTNERS[draggedPid]) {
+    PARTNERS[draggedPid].kanbanStage = colKey;
+  }
+
+  // Persist to localStorage
+  const stages = getEffectiveKanbanStages();
+  stages[draggedPid] = colKey;
+  saveKanbanState(stages);
+
+  draggedPid = null;
+  showView('kanban');
+}
 
 /* ══════════════════════════════════════════════════════════════════
    STATE + NAV
@@ -1014,11 +1126,25 @@ function renderCommandCenter() {
     }).join('');
   })();
 
+  // Build sync banner from meta (populated by update script)
+  const meta = (typeof window._portalMeta !== 'undefined') ? window._portalMeta : null;
+  const lastSync = meta && meta.lastSquareSync ? meta.lastSquareSync : null;
+  const lastUpdated = meta && meta.lastUpdated ? meta.lastUpdated : '2026-03-19';
+  const syncBanner = `<div class="sync-banner">
+    <span>Data source: <strong>partners.json</strong> · Updated: <strong>${lastUpdated}</strong></span>
+    <span class="sep">|</span>
+    <span>Last Square sync: <strong>${lastSync || 'Never — run update script'}</strong></span>
+    <span class="sep">|</span>
+    <a href="https://github.com/matthewgbc/gbc-tools/actions/workflows/update-portal.yml" target="_blank" title="Trigger Square sync on GitHub Actions">▶ Run Update</a>
+    <a href="https://github.com/matthewgbc/gbc-tools/edit/main/data/partners.json" target="_blank" title="Edit partners.json on GitHub" style="margin-left:4px">✏️ Edit Data</a>
+  </div>`;
+
   return `
     <div class="topbar">
       <div class="topbar-title">⚡ Command Center</div>
       <div style="font-size:12px;color:var(--text-muted)">Mar 19, 2026</div>
     </div>
+    ${syncBanner}
     <div class="content">
 
       <div class="alert alert-red" onclick="switchPartner('burntend','Media &amp; Campaigns')">
@@ -1090,45 +1216,77 @@ function renderCommandCenter() {
    PARTNER KANBAN VIEW
 ══════════════════════════════════════════════════════════════════ */
 function renderPartnerKanban() {
-  const cols = [
-    {key:'vip', label:'VIP Active', color:'var(--green)', partners:[
-      {pid:'q39', rev:'$29,413', lastOrder:'Feb 2026', badge:'pill-green', badgeText:'Active'},
-      {pid:'burntend', rev:'$3,012', lastOrder:'Oct 2024', badge:'pill-yellow', badgeText:'Lic Pending'}
-    ]},
-    {key:'reengage', label:'Re-Engage', color:'var(--amber)', partners:[
-      {pid:'boothcreek', rev:'$7,814', lastOrder:'Sep 2025', badge:'pill-amber', badgeText:'Re-Engage'},
-      {pid:'dallasmavs', rev:'$16,414', lastOrder:'Dec 2025', badge:'pill-grey', badgeText:'Dormant'}
-    ]},
-    {key:'mitm', label:'MITM Pipeline', color:'var(--blue)', partners:[
-      {pid:'meatmitch', rev:'$2,975', lastOrder:'Oct 2025', badge:'pill-amber', badgeText:'EP5 Pre-Prod'},
-      {pid:'gates', rev:'$1,790', lastOrder:'Jun 2025', badge:'pill-red', badgeText:'Hard Blocked'}
-    ]},
-    {key:'prospects', label:'Prospects', color:'var(--grey)', partners:[
-      {pid:null, name:'JE Dunn', rev:'—', lastOrder:'Never', badge:'pill-blue', badgeText:'Flagship Prospect', emoji:'🏗️'},
-      {pid:null, name:'Chef Thompson', rev:'Investor', lastOrder:'Active', badge:'pill-green', badgeText:'Investor+Client', emoji:'👨‍🍳'},
-      {pid:null, name:'PFG', rev:'—', lastOrder:'Never', badge:'pill-grey', badgeText:'Food Distributor', emoji:'🚚'}
-    ]}
+  // Column definitions — static prospects column + dynamic partner columns
+  const colDefs = [
+    {key:'vip', label:'VIP Active', color:'var(--green)'},
+    {key:'reengage', label:'Re-Engage', color:'var(--amber)'},
+    {key:'mitm', label:'MITM Pipeline', color:'var(--blue)'},
+    {key:'prospects', label:'Prospects', color:'var(--grey)'}
   ];
 
-  const colsHTML = cols.map(col => {
-    const cards = col.partners.map(p => {
-      const name = p.pid ? PARTNERS[p.pid].name : p.name;
-      const emoji = p.pid ? PARTNERS[p.pid].emoji : (p.emoji || '🏢');
-      const clickAttr = p.pid ? `onclick="switchPartner('${p.pid}')"` : '';
-      return `<div class="pk-card" ${clickAttr}>
-        <div class="pk-card-name">${emoji} ${name}</div>
-        <div class="pk-card-rev">${p.rev}</div>
-        <div class="pk-card-last">Last order: ${p.lastOrder}</div>
-        <div class="pk-card-meta">
-          <span class="pill ${p.badge}" style="font-size:10px">${p.badgeText}</span>
-        </div>
-      </div>`;
-    }).join('');
+  // Static prospects (not real partners)
+  const staticProspects = [
+    {pid:null, name:'JE Dunn', rev:'—', lastOrder:'Never', badge:'pill-blue', badgeText:'Flagship Prospect', emoji:'🏗️'},
+    {pid:null, name:'Chef Thompson', rev:'Investor', lastOrder:'Active', badge:'pill-green', badgeText:'Investor+Client', emoji:'👨‍🍳'},
+    {pid:null, name:'PFG', rev:'—', lastOrder:'Never', badge:'pill-grey', badgeText:'Food Distributor', emoji:'🚚'}
+  ];
 
-    return `<div class="pk-col">
+  // Get effective stage assignments (localStorage overrides data defaults)
+  const stages = getEffectiveKanbanStages();
+
+  const colsHTML = colDefs.map(col => {
+    let cards = '';
+    let count = 0;
+
+    if (col.key === 'prospects') {
+      // Static prospects — not draggable to other columns
+      count = staticProspects.length;
+      cards = staticProspects.map(p => {
+        const name = p.pid ? PARTNERS[p.pid].name : p.name;
+        const emoji = p.pid ? PARTNERS[p.pid].emoji : (p.emoji || '🏢');
+        const rev = p.pid ? fmt$(PARTNERS[p.pid].lifetimeRevenue) : p.rev;
+        const lastOrder = p.pid ? PARTNERS[p.pid].lastOrder : p.lastOrder;
+        const clickAttr = p.pid ? `onclick="switchPartner('${p.pid}')"` : '';
+        return `<div class="pk-card" ${clickAttr} style="cursor:${p.pid ? 'grab' : 'default'}">
+          <div class="pk-card-name">${emoji} ${name}</div>
+          <div class="pk-card-rev">${rev}</div>
+          <div class="pk-card-last">Last order: ${lastOrder}</div>
+          <div class="pk-card-meta">
+            <span class="pill ${p.badge}" style="font-size:10px">${p.badgeText}</span>
+          </div>
+        </div>`;
+      }).join('');
+    } else {
+      // Dynamic partners — draggable
+      const colPartners = Object.values(PARTNERS).filter(p => stages[p.id] === col.key);
+      count = colPartners.length;
+      cards = colPartners.map(p => {
+        const badge = p.statusPill;
+        const badgeText = p.status;
+        return `<div class="pk-card"
+          draggable="true"
+          ondragstart="onCardDragStart(event,'${p.id}')"
+          ondragend="onCardDragEnd(event)"
+          onclick="if(!event.defaultPrevented) switchPartner('${p.id}')">
+          <div class="pk-card-name">${p.emoji} ${p.name}</div>
+          <div class="pk-card-rev">${fmt$(p.lifetimeRevenue)}</div>
+          <div class="pk-card-last">Last order: ${p.lastOrder}</div>
+          <div class="pk-card-meta">
+            <span class="pill ${badge}" style="font-size:10px">${badgeText}</span>
+            ${p.licensingClass === 'red' ? '<span class="pill pill-red" style="font-size:10px">LIC BLOCK</span>' : ''}
+          </div>
+        </div>`;
+      }).join('') || `<div style="padding:12px;font-size:12px;color:var(--text-dim)">Drag partners here</div>`;
+    }
+
+    const dropAttrs = col.key !== 'prospects'
+      ? `ondragover="onColDragOver(event)" ondragleave="onColDragLeave(event)" ondrop="onColDrop(event,'${col.key}')"`
+      : '';
+
+    return `<div class="pk-col" ${dropAttrs}>
       <div class="pk-col-header">
         <span class="pk-col-title" style="color:${col.color}">${col.label}</span>
-        <span class="pk-col-count">${col.partners.length}</span>
+        <span class="pk-col-count">${count}</span>
       </div>
       <div class="pk-cards">${cards}</div>
     </div>`;
@@ -1137,9 +1295,14 @@ function renderPartnerKanban() {
   return `
     <div class="topbar">
       <div class="topbar-title">🗂 Partner Kanban</div>
-      <div style="font-size:12px;color:var(--text-muted)">Click any card to open partner profile</div>
+      <div style="font-size:12px;color:var(--text-muted)">Drag cards between columns · Click card to open profile</div>
     </div>
     <div class="content">
+      <div class="kanban-topbar">
+        <button class="kanban-topbar-btn" onclick="resetKanbanState()" title="Clear localStorage and reset to data defaults">↺ Reset Layout</button>
+        <button class="kanban-topbar-btn" id="copy-kanban-btn" onclick="copyKanbanJSON()" title="Copy current column assignments as JSON to paste into data/partners.json">📋 Copy JSON Update</button>
+        <span style="font-size:11px;color:var(--text-dim)">Layout saved in browser. Use Copy JSON to make permanent.</span>
+      </div>
       <div class="partner-kanban">${colsHTML}</div>
     </div>`;
 }
@@ -1289,6 +1452,7 @@ function renderPartner(p) {
         <span class="meta-chip">${p.rid}</span>
         <span class="meta-chip">Since ${p.since}</span>
         <span class="meta-chip">${p.locationsCount} location${p.locationsCount !== 1 ? 's' : ''}</span>
+        <a class="edit-gh-btn" href="https://github.com/matthewgbc/gbc-tools/edit/main/data/partners.json" target="_blank" title="Edit this partner's data on GitHub">✏️ Edit on GitHub</a>
       </div>
       <div class="partner-stats">
         <div>

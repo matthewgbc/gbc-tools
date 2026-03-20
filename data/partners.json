@@ -1,0 +1,1272 @@
+{
+  "partners": {
+    "q39": {
+      "id": "q39",
+      "rid": "R001",
+      "name": "Q39 BBQ",
+      "emoji": "🔥",
+      "since": 2023,
+      "locationsCount": 4,
+      "status": "Active",
+      "statusPill": "pill-green",
+      "tier": "VIP",
+      "dotColor": "#22c55e",
+      "testimonialGate": true,
+      "lifetimeRevenue": 29413,
+      "outstandingBalance": 4794.98,
+      "lastOrder": "Feb 2026",
+      "mitm": "S1E1 — Launched Mar 12, 2026",
+      "mitmStatus": "POST-LAUNCH",
+      "kanbanStage": "vip",
+      "licensing": "Pending (in-store display)",
+      "licensingClass": "yellow",
+      "mediaAssetsOnFile": 14,
+      "squareCustomerId": null,
+      "squareEmailDomain": "q39kc.com",
+      "notes": "30-day content gap rule. ⚠️ ($4,794.98) outstanding — #1152028 ($493.76) + #2242026_2 ($4,301.22 overdue since Feb 27). Follow up with Patrick Peluso at patrick@q39kc.com. Intro required before contacting Paige Comms or Crux Marketing. MITM in-store display approved for Lawrence; Overland Park TBD. Lee's Summit is the 4th location opening 2026 — no GBC product placed yet. Q39 starting their own YouTube channel via Crux.",
+      "contacts": [
+        {
+          "name": "Kelly McGee",
+          "role": "Owner",
+          "primary": true,
+          "email": "",
+          "phone": "",
+          "outreach": "In-person / Tim only"
+        },
+        {
+          "name": "Andrew Kneessy",
+          "role": "Brand Expansion / Liaison",
+          "primary": false,
+          "email": "andrew.kneessy@q39kc.com",
+          "phone": "913-375-4709",
+          "outreach": "Email"
+        },
+        {
+          "name": "Patrick Peluso",
+          "role": "Chef / Invoice Contact",
+          "primary": false,
+          "email": "patrick@q39kc.com",
+          "phone": "816-588-3864",
+          "outreach": "Email — invoice follow-up"
+        },
+        {
+          "name": "Joel Hatzfeld",
+          "role": "Operations / EoM Orders",
+          "primary": false,
+          "email": "Joel@q39kc.com",
+          "phone": "816-489-7732",
+          "outreach": "Email (monthly cadence)"
+        },
+        {
+          "name": "Carrie Powell",
+          "role": "Knife Orders",
+          "primary": false,
+          "email": "Carrie@q39kc.com",
+          "phone": "816-715-1454",
+          "outreach": "Email"
+        },
+        {
+          "name": "Scott Kautzi",
+          "role": "Retail Board Orders",
+          "primary": false,
+          "email": "scottk@q39kc.com",
+          "phone": "",
+          "outreach": "Email"
+        }
+      ],
+      "locations": [
+        {
+          "name": "Q39 Midtown (Flagship)",
+          "address": "1000 W 39th St, Kansas City, MO 64111",
+          "phone": "(816) 255-3753",
+          "status": "Active",
+          "products": [
+            {
+              "sku": "GBC-Q39-PLAT",
+              "name": "Q39 Sandwich Platters (custom Richlite)",
+              "qty": 9,
+              "unitPrice": null,
+              "installed": "2025",
+              "replaceBy": null
+            },
+            {
+              "sku": "GBC-Q39-FAM",
+              "name": "Q39 Family Platters (custom Richlite)",
+              "qty": 15,
+              "unitPrice": null,
+              "installed": "2025",
+              "replaceBy": null
+            },
+            {
+              "sku": "GBC-BB-EOM",
+              "name": "12\"×18\"×1¼\" Butcher Block w/JG — EoM Program",
+              "qty": 4,
+              "unitPrice": null,
+              "installed": "2025",
+              "replaceBy": null
+            },
+            {
+              "sku": "GBC-CB-001",
+              "name": "Small Cutting Board 8×12",
+              "qty": 12,
+              "unitPrice": 89,
+              "installed": "Mar 2024",
+              "replaceBy": null
+            }
+          ],
+          "flags": ["upsell"]
+        },
+        {
+          "name": "Q39 Overland Park",
+          "address": "11051 Antioch Rd, Overland Park, KS 66210",
+          "phone": "(913) 951-4500",
+          "status": "Active — MITM Display TBD",
+          "products": [
+            {
+              "sku": "GBC-Q39-PLAT",
+              "name": "Q39 Sandwich Platters (custom Richlite)",
+              "qty": 70,
+              "unitPrice": null,
+              "installed": "2025",
+              "replaceBy": null
+            }
+          ],
+          "flags": ["upsell", "new"]
+        },
+        {
+          "name": "Q39 Lawrence",
+          "address": "4821 W 6th St, Lawrence, KS 66049",
+          "phone": "",
+          "status": "Active — MITM Display Approved ✓",
+          "products": [
+            {
+              "sku": "GBC-Q39-PLAT",
+              "name": "Q39 Richlite Replacement Platter Boards",
+              "qty": 6,
+              "unitPrice": null,
+              "installed": "Feb 2026",
+              "replaceBy": null
+            },
+            {
+              "sku": "GBC-BB-EOM",
+              "name": "12\"×18\"×1¼\" Butcher Block w/JG — EoM Program",
+              "qty": 5,
+              "unitPrice": null,
+              "installed": "2025",
+              "replaceBy": null
+            }
+          ],
+          "flags": ["new", "upsell"]
+        },
+        {
+          "name": "Q39 Lee's Summit",
+          "address": "Lee's Summit, MO — Opening 2026",
+          "phone": "",
+          "status": "Opening 2026 — No GBC product yet",
+          "products": [],
+          "flags": ["new"]
+        }
+      ],
+      "invoices": [
+        {
+          "id": "#2242026_2",
+          "date": "Feb 2026",
+          "amount": 4301.22,
+          "status": "overdue",
+          "items": "Q39 Richlite Replacement Platter Boards — OVERDUE since Feb 27"
+        },
+        {
+          "id": "#1152028",
+          "date": "Feb 2026",
+          "amount": 493.76,
+          "status": "overdue",
+          "items": "Q39 Richlite Replacement Platter Boards"
+        },
+        {
+          "id": "#2242026",
+          "date": "Feb 2026",
+          "amount": 276.51,
+          "status": "paid",
+          "items": "Thrasher PD Cutting Boards (Scott Kautzi)"
+        },
+        {
+          "id": "#1032025_3",
+          "date": "Oct 2025",
+          "amount": 204.13,
+          "status": "paid",
+          "items": "Q39 Retail Boards (Scott Kautzi)"
+        },
+        {
+          "id": "#6032025",
+          "date": "Jun 2025",
+          "amount": 1234.41,
+          "status": "paid",
+          "items": "Q39 Richlite New Champion Platters — 15 × 12×15 Richlite boards w/JG"
+        },
+        {
+          "id": "#5092025",
+          "date": "May 2025",
+          "amount": 1843.38,
+          "status": "paid",
+          "items": "Q39 Richlite Sandwich Platters — 79 units"
+        },
+        {
+          "id": "#5152025_2",
+          "date": "May 2025",
+          "amount": 410.37,
+          "status": "paid",
+          "items": "Q39 Richlite Champion Platter Sauce Engravings"
+        },
+        {
+          "id": "#01212025",
+          "date": "Jan 2025",
+          "amount": 541.56,
+          "status": "paid",
+          "items": "EoM Boards & Knives — Nov+Dec (Joel Hatzfeld)"
+        },
+        {
+          "id": "#111523",
+          "date": "Nov 2023",
+          "amount": 2528.29,
+          "status": "paid",
+          "items": "November Q39 Invoice (Danielle Wilson)"
+        },
+        {
+          "id": "#Q39RLite2",
+          "date": "Sep 2023",
+          "amount": 4970.54,
+          "status": "paid",
+          "items": "Q39 Richlite Order (2/2) — flagship install"
+        }
+      ],
+      "opportunities": [
+        {
+          "type": "hot",
+          "title": "Collect Overdue Balance",
+          "desc": "($4,794.98) outstanding on #2242026_2 + #1152028. Follow up with Patrick Peluso.",
+          "value": "$4,794.98",
+          "owner": "Matt"
+        },
+        {
+          "type": "upsell",
+          "title": "Lee's Summit Opening — First Install",
+          "desc": "4th location opening 2026. Zero GBC product. Be first in — propose signature install package.",
+          "value": "$2,800 est.",
+          "owner": "Matt"
+        },
+        {
+          "type": "upsell",
+          "title": "Customized Trophy Base — EoY Award",
+          "desc": "Customized Trophy Base for Q39 EOY Award delivered (Joel Hatzfeld). Upsell opportunity for 2026 award program.",
+          "value": "Custom",
+          "owner": "Matt"
+        },
+        {
+          "type": "replace",
+          "title": "Board Refresh — Midtown (18 mo.)",
+          "desc": "Midtown boards installed Mar 2024 — approaching 18-month window. Propose refresh order.",
+          "value": "$1,068 est.",
+          "owner": "Matt"
+        }
+      ],
+      "media": {
+        "episode": "S1E1",
+        "epStatus": "LIVE",
+        "launchDate": "Mar 12 2026",
+        "url": "https://youtu.be/",
+        "assets": [
+          {
+            "type": "Full Episode",
+            "platform": "YouTube",
+            "status": "LIVE",
+            "notes": "12 min"
+          },
+          {
+            "type": "Instagram Reel",
+            "platform": "Instagram",
+            "status": "LIVE",
+            "notes": "Launched Mar 12"
+          },
+          {
+            "type": "TikTok Cut",
+            "platform": "TikTok",
+            "status": "LIVE",
+            "notes": "45s"
+          },
+          {
+            "type": "Q39 YouTube Collab",
+            "platform": "Q39 YouTube (Crux)",
+            "status": "PENDING",
+            "notes": "Q39 launching own channel — coordinate w/ Andrew Kneessy Mar 21"
+          },
+          {
+            "type": "Partner Social Kit",
+            "platform": "Q39 Social",
+            "status": "PENDING",
+            "notes": "Waiting on usage agreement from Kelly McGee"
+          },
+          {
+            "type": "MITM In-Store Display",
+            "platform": "Lawrence",
+            "status": "APPROVED",
+            "notes": "Lawrence ✓. OP pending."
+          },
+          {
+            "type": "Email Drop",
+            "platform": "GBC List",
+            "status": "PENDING",
+            "notes": "Not yet sent"
+          }
+        ]
+      }
+    },
+
+    "burntend": {
+      "id": "burntend",
+      "rid": "R005",
+      "name": "Burnt End BBQ",
+      "emoji": "🍖",
+      "since": 2023,
+      "locationsCount": 2,
+      "status": "Licensing Pending",
+      "statusPill": "pill-yellow",
+      "tier": "VIP",
+      "dotColor": "#eab308",
+      "testimonialGate": true,
+      "lifetimeRevenue": 3011.73,
+      "outstandingBalance": 0,
+      "lastOrder": "Oct 2024",
+      "mitm": "S1E2 — Live Mar 19, 2026",
+      "mitmStatus": "POST-LAUNCH",
+      "kanbanStage": "vip",
+      "licensing": "NOT SIGNED — blocks all content",
+      "licensingClass": "red",
+      "mediaAssetsOnFile": 6,
+      "squareCustomerId": null,
+      "squareEmailDomain": "eatpbj.com",
+      "notes": "45-day content gap rule. Smokey asked about ordering 20 more boards (Mar 19) — quote needed ASAP. Licensing still NOT signed — blocks ALL short-form clips and partner social from EP2. Tim must get Smokey to sign this week.",
+      "contacts": [
+        {
+          "name": "Steven \"Smokey\" Schwartz",
+          "role": "Owner / Operator",
+          "primary": true,
+          "email": "smokey@eatpbj.com",
+          "phone": "816-550-8668",
+          "outreach": "Email / Text"
+        }
+      ],
+      "locations": [
+        {
+          "name": "Burnt End BBQ — Prairie Village",
+          "address": "7539 Mission Rd, Prairie Village, KS 66208",
+          "phone": "(913) 383-2022",
+          "status": "Active",
+          "products": [
+            {
+              "sku": "GBC-BE-TRAY-CC",
+              "name": "Burnt End BBQ Tray Inserts Crown Center",
+              "qty": 1,
+              "unitPrice": 1558.97,
+              "installed": "Oct 2024",
+              "replaceBy": null
+            },
+            {
+              "sku": "GBC-BE-TRAY-DS",
+              "name": "Burnt End BBQ Tray Inserts De Soto (PB&J)",
+              "qty": 1,
+              "unitPrice": 1083.21,
+              "installed": "Aug 2024",
+              "replaceBy": null
+            },
+            {
+              "sku": "GBC-BE-TRAY",
+              "name": "Burnt End BBQ Tray Inserts",
+              "qty": 1,
+              "unitPrice": 369.55,
+              "installed": "Jun 2024",
+              "replaceBy": null
+            }
+          ],
+          "flags": ["upsell"]
+        },
+        {
+          "name": "Burnt End BBQ — Westport (New)",
+          "address": "510 Westport Rd, Kansas City, MO 64111",
+          "phone": "",
+          "status": "New Location — No GBC product yet",
+          "products": [],
+          "flags": ["new"]
+        }
+      ],
+      "invoices": [
+        {
+          "id": "#10212024_BEBBQ",
+          "date": "Oct 2024",
+          "amount": 1558.97,
+          "status": "paid",
+          "items": "Burnt End BBQ Tray Inserts | Crown Center Location"
+        },
+        {
+          "id": "#08062024",
+          "date": "Aug 2024",
+          "amount": 1083.21,
+          "status": "paid",
+          "items": "Burnt End BBQ Tray Inserts De Soto | PB&J Restaurants"
+        },
+        {
+          "id": "#6282024",
+          "date": "Jun 2024",
+          "amount": 369.55,
+          "status": "paid",
+          "items": "Burnt End BBQ Tray Inserts | PB&J Restaurants Inc."
+        },
+        {
+          "id": "#BE-QUOTE-20",
+          "date": "Mar 2026",
+          "amount": null,
+          "status": "draft",
+          "items": "Quote pending — 20 boards (Smokey request Mar 19)"
+        }
+      ],
+      "opportunities": [
+        {
+          "type": "hot",
+          "title": "Quote 20 Boards — Smokey's Request Mar 19",
+          "desc": "Smokey asked Mar 19 about 20 more boards. Build + send quote this week. VIP pricing.",
+          "value": "$5,980 est.",
+          "owner": "Matt"
+        },
+        {
+          "type": "hot",
+          "title": "MITM Licensing — Unblock All Content",
+          "desc": "EP2 LIVE but licensing unsigned. Blocks all short-form + partner social. Tim gets Smokey to sign this week.",
+          "value": "Content unlock",
+          "owner": "Tim"
+        },
+        {
+          "type": "newprod",
+          "title": "Westport Location — First Install",
+          "desc": "New Westport location = zero GBC product. Pitch install alongside licensing conversation.",
+          "value": "$2,400 est.",
+          "owner": "Matt"
+        },
+        {
+          "type": "upsell",
+          "title": "Expand Prairie Village Line",
+          "desc": "Add medium boards + engraved product at next reorder.",
+          "value": "$1,200 est.",
+          "owner": "Matt"
+        }
+      ],
+      "media": {
+        "episode": "S1E2",
+        "epStatus": "LIVE",
+        "launchDate": "Mar 19 2026",
+        "url": "https://youtu.be/2CNrRJxBfBA",
+        "assets": [
+          {
+            "type": "Full Episode",
+            "platform": "YouTube",
+            "status": "LIVE",
+            "notes": "https://youtu.be/2CNrRJxBfBA",
+            "url": "https://youtu.be/2CNrRJxBfBA"
+          },
+          {
+            "type": "Nachos Reel",
+            "platform": "Instagram",
+            "status": "LIVE",
+            "notes": "Launched 11:30AM Mar 19"
+          },
+          {
+            "type": "Short-Form Clips (8+)",
+            "platform": "All",
+            "status": "BLOCKED",
+            "notes": "⚠️ Blocked until licensing signed"
+          },
+          {
+            "type": "Partner Social Kit",
+            "platform": "Burnt End Social",
+            "status": "BLOCKED",
+            "notes": "⚠️ Blocked — Tim must get signature"
+          },
+          {
+            "type": "TikTok Cut",
+            "platform": "TikTok",
+            "status": "BLOCKED",
+            "notes": "Blocked — licensing"
+          },
+          {
+            "type": "Email Drop",
+            "platform": "GBC List",
+            "status": "PENDING",
+            "notes": "Can send without license"
+          }
+        ]
+      }
+    },
+
+    "meatmitch": {
+      "id": "meatmitch",
+      "rid": "R003",
+      "name": "Meat Mitch BBQ",
+      "emoji": "🥩",
+      "since": 2023,
+      "locationsCount": 1,
+      "status": "In Production",
+      "statusPill": "pill-amber",
+      "tier": "VIP",
+      "dotColor": "#3b82f6",
+      "testimonialGate": true,
+      "lifetimeRevenue": 2975.44,
+      "outstandingBalance": 0,
+      "lastOrder": "Oct 2025",
+      "mitm": "S1E5 — Target Apr 16, 2026",
+      "mitmStatus": "PRE-PROD",
+      "kanbanStage": "mitm",
+      "licensing": "Not yet sent",
+      "licensingClass": "yellow",
+      "mediaAssetsOnFile": 2,
+      "squareCustomerId": null,
+      "squareEmailDomain": "meatmitch.com",
+      "notes": "30-day content gap rule. Always 'MMB' — Meat Mitch Barbecue. Licensing not yet sent. Tim must decide reshoot vs. existing assets by Mar 21. Existing edit features Becca (GM) NOT Mitch Benjamin (owner). Mitch grew on YouTube — strong collab opportunity. Becca Stout (GM, Culinary Virtue) is outreach contact.",
+      "contacts": [
+        {
+          "name": "Mitch Benjamin",
+          "role": "Owner",
+          "primary": true,
+          "email": "",
+          "phone": "Tim has direct number",
+          "outreach": "Tim / Direct"
+        },
+        {
+          "name": "Becca Stout",
+          "role": "GM, Culinary Virtue",
+          "primary": false,
+          "email": "beccas@culinaryvirtue.com",
+          "phone": "",
+          "outreach": "Email"
+        },
+        {
+          "name": "Michelle Twibell",
+          "role": "Operations",
+          "primary": false,
+          "email": "michelle@meatmitch.com",
+          "phone": "",
+          "outreach": "Email"
+        }
+      ],
+      "locations": [
+        {
+          "name": "Meat Mitch BBQ — Leawood",
+          "address": "3620 W. 95th Street, Leawood, KS 66206",
+          "phone": "(913) 363-6328",
+          "status": "Active",
+          "products": [
+            {
+              "sku": "GBC-HEAT-001",
+              "name": "Richlite+Wood Catering Butcher Block w/Heat Lamp",
+              "qty": 1,
+              "unitPrice": 498,
+              "installed": "Oct 2025",
+              "replaceBy": "~Oct 2026"
+            },
+            {
+              "sku": "GBC-MOB-001",
+              "name": "Mobile Butcher Counter | Richlite Replacement",
+              "qty": 1,
+              "unitPrice": 350,
+              "installed": "Aug 2025",
+              "replaceBy": null
+            },
+            {
+              "sku": "GBC-PT-001",
+              "name": "27\" Prep Table",
+              "qty": 1,
+              "unitPrice": 164.59,
+              "installed": "Oct 2024",
+              "replaceBy": null
+            },
+            {
+              "sku": "GBC-MM-VIP",
+              "name": "MM_VIP_Block",
+              "qty": 1,
+              "unitPrice": 855,
+              "installed": "Feb 2024",
+              "replaceBy": null
+            }
+          ],
+          "flags": ["replace", "upsell"]
+        }
+      ],
+      "invoices": [
+        {
+          "id": "#1032025",
+          "date": "Oct 2025",
+          "amount": 498,
+          "status": "paid",
+          "items": "Richlite+Wood Catering Butcher Block w/Heat Lamp"
+        },
+        {
+          "id": "#8282025",
+          "date": "Aug 2025",
+          "amount": 350,
+          "status": "paid",
+          "items": "Mobile Butcher Counter | Richlite Replacement"
+        },
+        {
+          "id": "#10102024",
+          "date": "Oct 2024",
+          "amount": 164.59,
+          "status": "paid",
+          "items": "27\" Prep Table — Meat Mitch | GBC"
+        },
+        {
+          "id": "#20624_Inv#1",
+          "date": "Feb 2024",
+          "amount": 855.00,
+          "status": "paid",
+          "items": "MM_VIP_Block (Michelle Twibell)"
+        },
+        {
+          "id": "#000025",
+          "date": "Sep 2023",
+          "amount": 792.21,
+          "status": "paid",
+          "items": "Meat Mitch 9/27 Event Invoice (Becca Stout)"
+        },
+        {
+          "id": "#MMBB3",
+          "date": "Oct 2023",
+          "amount": 233.17,
+          "status": "paid",
+          "items": "G|B|C — Meat Mitch Butcher Block (Becca Stout)"
+        }
+      ],
+      "opportunities": [
+        {
+          "type": "hot",
+          "title": "Send MITM Licensing Agreement",
+          "desc": "Not sent. Must be signed before any episode posts. Send to Becca Stout — confirm with Mitch. Tim decides reshoot by Mar 21.",
+          "value": "Content unlock",
+          "owner": "Matt"
+        },
+        {
+          "type": "replace",
+          "title": "Heat Lamp Block Replacement Window",
+          "desc": "Oct 2025 install → replacement window Oct 2026. Quote proactively + pitch as catalog expansion.",
+          "value": "$600 est.",
+          "owner": "Tim + Matt"
+        },
+        {
+          "type": "upsell",
+          "title": "Man Haul! Cutting Board + Full Set — Leawood",
+          "desc": "Propose Man Haul! Cutting Board + medium boards to round out the Leawood install.",
+          "value": "$1,200 est.",
+          "owner": "Matt"
+        },
+        {
+          "type": "newprod",
+          "title": "Heat Lamp Block — Catalog Expansion",
+          "desc": "Becca commissioned the original. Use Meat Mitch as case study for full product line launch.",
+          "value": "Product line",
+          "owner": "Tim"
+        }
+      ],
+      "media": {
+        "episode": "S1E5",
+        "epStatus": "PRE-PROD",
+        "launchDate": "Target Apr 16 2026",
+        "url": null,
+        "assets": []
+      }
+    },
+
+    "boothcreek": {
+      "id": "boothcreek",
+      "rid": "R012",
+      "name": "Booth Creek Wagyu",
+      "emoji": "🐄",
+      "since": 2024,
+      "locationsCount": 3,
+      "status": "Re-Engage",
+      "statusPill": "pill-amber",
+      "tier": "VIP",
+      "dotColor": "#a855f7",
+      "testimonialGate": false,
+      "lifetimeRevenue": 7814.39,
+      "outstandingBalance": 0,
+      "lastOrder": "Sep 2025",
+      "mitm": "EP8 — Target TBD",
+      "mitmStatus": "PLANNING",
+      "kanbanStage": "reengage",
+      "licensing": "Not started",
+      "licensingClass": "yellow",
+      "mediaAssetsOnFile": 0,
+      "squareCustomerId": "XV8MWVTS310X5CQB9TR4NCX1TG",
+      "squareEmailDomain": "boothcreekwagyu.com",
+      "notes": "Texas opening announced Mar 18. Ben Fuentes said 'get through this phase then let's figure this out' — 2–3 weeks. Partnership framework email due Mar 21. World Cup FIFA 2026 window closes Mar 28. Jul 2025: $6,221.16 order (400× Tear Drop Cutouts + 10× 12×18 Butcher Block Wholesale). Sep 2025: $1,396.60 order (20× 12×18 Butcher Block). Customer ID: XV8MWVTS310X5CQB9TR4NCX1TG.",
+      "contacts": [
+        {
+          "name": "Ben Fuentes",
+          "role": "Primary Invoice Contact",
+          "primary": true,
+          "email": "Ben.Fuentes@boothcreekwagyu.com",
+          "phone": "",
+          "outreach": "Email"
+        },
+        {
+          "name": "Mike French",
+          "role": "KC Market Manager",
+          "primary": false,
+          "email": "",
+          "phone": "816-516-3294",
+          "outreach": "Phone / Text"
+        },
+        {
+          "name": "Accounting Dept",
+          "role": "Invoicing",
+          "primary": false,
+          "email": "invoices@boothcreekwagyu.com",
+          "phone": "",
+          "outreach": "Email"
+        }
+      ],
+      "locations": [
+        {
+          "name": "Booth Creek — Prairie Village",
+          "address": "Prairie Village, KS",
+          "phone": "913-295-8811",
+          "status": "Active",
+          "products": [
+            {
+              "sku": "GBC-TD-001",
+              "name": "6\"×11\" Tear Drop Cutout Wholesale",
+              "qty": 400,
+              "unitPrice": 14.06,
+              "installed": "Jul 2025",
+              "replaceBy": null
+            },
+            {
+              "sku": "GBC-BB-12x18",
+              "name": "12\"×18\" Butcher Block Wholesale",
+              "qty": 10,
+              "unitPrice": 69.83,
+              "installed": "Jul 2025",
+              "replaceBy": null
+            }
+          ],
+          "flags": []
+        },
+        {
+          "name": "Booth Creek — Overland Park",
+          "address": "Overland Park, KS",
+          "phone": "913-228-0585",
+          "status": "Active",
+          "products": [
+            {
+              "sku": "GBC-BB-12x18",
+              "name": "12\"×18\" Butcher Block Wholesale",
+              "qty": 20,
+              "unitPrice": 69.83,
+              "installed": "Sep 2025",
+              "replaceBy": null
+            },
+            {
+              "sku": "GBC-BB-1618",
+              "name": "16\"×18\"×1¾\" Maple End Grain Butcher Block",
+              "qty": 1,
+              "unitPrice": 224,
+              "installed": "Jun 2025",
+              "replaceBy": null
+            }
+          ],
+          "flags": ["upsell"]
+        },
+        {
+          "name": "Booth Creek — Texas (New)",
+          "address": "Texas — Location TBD",
+          "phone": "",
+          "status": "Opening 2026 — Announced Mar 18",
+          "products": [],
+          "flags": ["new"]
+        }
+      ],
+      "invoices": [
+        {
+          "id": "#9032025",
+          "date": "Sep 2025",
+          "amount": 1396.60,
+          "status": "paid",
+          "items": "BCW — 20× 12\"×18\" Butcher Block Wholesale"
+        },
+        {
+          "id": "#7292025",
+          "date": "Jul 2025",
+          "amount": 6221.16,
+          "status": "paid",
+          "items": "Gift Box & Boards — 400× 6\"×11\" Tear Drop Cutout + 10× 12\"×18\" Butcher Block + Cherry/Maple retail boards"
+        },
+        {
+          "id": "#6302025",
+          "date": "Jun 2025",
+          "amount": 196.63,
+          "status": "paid",
+          "items": "GBC Butcher Block | Booth Creek Events — 16\"×18\"×1¾\" Maple End Grain"
+        }
+      ],
+      "opportunities": [
+        {
+          "type": "hot",
+          "title": "Partnership Email — Due Mar 21",
+          "desc": "Send partnership framework to Ben Fuentes before Mar 21. World Cup window closes Mar 28 — tie in GBC × Booth Creek co-brand.",
+          "value": "Strategic",
+          "owner": "Matt"
+        },
+        {
+          "type": "newprod",
+          "title": "Texas Opening — Launch Partner",
+          "desc": "Texas location announced Mar 18. Clean slate — position GBC as launch partner.",
+          "value": "$4,000 est.",
+          "owner": "Matt"
+        },
+        {
+          "type": "upsell",
+          "title": "World Cup 2026 Co-Branded Boards",
+          "desc": "FIFA World Cup 2026 in KC. Booth Creek × GBC limited-edition board = premium event product. Pitch before Mar 28.",
+          "value": "$5,000+ est.",
+          "owner": "Matt"
+        },
+        {
+          "type": "upsell",
+          "title": "Cherry Collection — Retail Expansion",
+          "desc": "Jul 2025 order included multiple Cherry and Maple retail models. Expand into full Cherry Collection offering.",
+          "value": "$890 est.",
+          "owner": "Matt"
+        }
+      ],
+      "media": {
+        "episode": null,
+        "epStatus": null,
+        "launchDate": null,
+        "url": null,
+        "assets": []
+      }
+    },
+
+    "dallasmavs": {
+      "id": "dallasmavs",
+      "rid": "R008",
+      "name": "Dallas Mavericks",
+      "emoji": "🏀",
+      "since": 2025,
+      "locationsCount": 1,
+      "status": "Dormant",
+      "statusPill": "pill-grey",
+      "tier": "CORP",
+      "dotColor": "#006bb6",
+      "testimonialGate": false,
+      "lifetimeRevenue": 16413.77,
+      "outstandingBalance": 0,
+      "lastOrder": "Dec 2025",
+      "mitm": "N/A",
+      "mitmStatus": "N/A",
+      "kanbanStage": "reengage",
+      "licensing": "N/A",
+      "licensingClass": "",
+      "mediaAssetsOnFile": 0,
+      "squareCustomerId": null,
+      "squareEmailDomain": "dallasmavs.com",
+      "notes": "⚠️ Dec 2025 order was ~74% below standard pricing (gross $21,104.50, discounts ($13,625.00), net $16,413.77 paid across two invoices). Claire Gerhardt at Claire.Gerhardt@dallasmavs.com. 50-unit gift box order: 50× Arched Maple 9×12 w/JG + 50× 16×18×1¾ Maple End Grain Butcher Block + 50× Professional SS Chef Knife 8\" + 50× Urban Carpenter Conditioner + 50× Custom Built & Printed Box. DO NOT re-engage at same pricing. Rebuild at 2026 Richlite prices first.",
+      "contacts": [
+        {
+          "name": "Claire Gerhardt",
+          "role": "Corporate Procurement",
+          "primary": true,
+          "email": "Claire.Gerhardt@dallasmavs.com",
+          "phone": "214-658-7147",
+          "outreach": "Email"
+        }
+      ],
+      "locations": [
+        {
+          "name": "American Airlines Center / Corp Office",
+          "address": "Dallas, TX",
+          "phone": "",
+          "status": "One-time gift order — 2025",
+          "products": [
+            {
+              "sku": "GBC-ARCH-9x12",
+              "name": "Arched Maple Cutting Board 9\"×12\"×¾\" w/JG",
+              "qty": 50,
+              "unitPrice": 18.26,
+              "installed": "Dec 2025",
+              "replaceBy": null
+            },
+            {
+              "sku": "GBC-BB-1618",
+              "name": "16\"×18\"×1¾\" Maple End Grain Butcher Block",
+              "qty": 50,
+              "unitPrice": 250,
+              "installed": "Dec 2025",
+              "replaceBy": null
+            },
+            {
+              "sku": "GBC-KNIFE-8SS",
+              "name": "Professional Stainless Steel Chef Knife 8\"",
+              "qty": 50,
+              "unitPrice": 80,
+              "installed": "Dec 2025",
+              "replaceBy": null
+            },
+            {
+              "sku": "GBC-COND",
+              "name": "Urban Carpenter™ Wood Conditioner",
+              "qty": 50,
+              "unitPrice": 12,
+              "installed": "Dec 2025",
+              "replaceBy": null
+            },
+            {
+              "sku": "GBC-GIFTBOX",
+              "name": "Custom Built & Printed Box",
+              "qty": 50,
+              "unitPrice": 40,
+              "installed": "Dec 2025",
+              "replaceBy": null
+            }
+          ],
+          "flags": []
+        }
+      ],
+      "invoices": [
+        {
+          "id": "#10102026",
+          "date": "Dec 2025",
+          "amount": 8206.89,
+          "status": "paid",
+          "items": "Dallas Mavericks | 2025 Exclusive Gift Box Experience — Part 1 of 2"
+        },
+        {
+          "id": "#10102026_Part2",
+          "date": "Dec 2025",
+          "amount": 8206.88,
+          "status": "paid",
+          "items": "Dallas Mavericks | 2025 Exclusive Gift Box Experience — Part 2 of 2"
+        }
+      ],
+      "opportunities": [
+        {
+          "type": "hot",
+          "title": "Rebuild Quote at 2026 Pricing",
+          "desc": "Original order had ~74% discount ($13,625 off $21,104.50 gross). Rebuild at correct pricing before any re-engagement.",
+          "value": "Pricing correction",
+          "owner": "Matt"
+        },
+        {
+          "type": "upsell",
+          "title": "2026 Gift Program Re-engage",
+          "desc": "After pricing correction: reach out to Claire with MITM EP2 link and new 2026 program options.",
+          "value": "$20K+ est.",
+          "owner": "Matt"
+        }
+      ],
+      "media": {
+        "episode": null,
+        "epStatus": null,
+        "launchDate": null,
+        "url": null,
+        "assets": []
+      }
+    },
+
+    "gates": {
+      "id": "gates",
+      "rid": "R009",
+      "name": "Gates BBQ",
+      "emoji": "🚫",
+      "since": 2025,
+      "locationsCount": 1,
+      "status": "Blocked",
+      "statusPill": "pill-red",
+      "tier": "PARTNER",
+      "dotColor": "#ef4444",
+      "testimonialGate": false,
+      "lifetimeRevenue": 1789.72,
+      "outstandingBalance": 0,
+      "lastOrder": "Jun 2025",
+      "mitm": "S1E7 (was EP5) — HARD BLOCKED",
+      "mitmStatus": "BLOCKED",
+      "kanbanStage": "mitm",
+      "licensing": "UNSIGNED — HARD BLOCK",
+      "licensingClass": "red",
+      "mediaAssetsOnFile": 0,
+      "squareCustomerId": null,
+      "squareEmailDomain": "gmail.com",
+      "squareCustomerName": "Colin Shipley-Gates",
+      "notes": "HARD BLOCK — licensing agreement must be signed before any episode work proceeds. Colin Shipley-Gates is the contact. 4 invoices in 2025: 24\"×18\"×½\" Richlite Catering Board ($265) + Design Services ($30) + Omtech Co2 Laser Usage ($60) + Butcher Block orders.",
+      "contacts": [
+        {
+          "name": "Colin Shipley-Gates",
+          "role": "Owner / Contact",
+          "primary": true,
+          "email": "colinshipleygates@gmail.com",
+          "phone": "816-365-1519",
+          "outreach": "Email / Text"
+        }
+      ],
+      "locations": [
+        {
+          "name": "Gates BBQ",
+          "address": "Kansas City, MO",
+          "phone": "",
+          "status": "Active — No MITM until license signed",
+          "products": [
+            {
+              "sku": "GBC-RL-003",
+              "name": "24\"×18\"×½\" Richlite Catering Board",
+              "qty": 1,
+              "unitPrice": 265,
+              "installed": "May 2025",
+              "replaceBy": null
+            },
+            {
+              "sku": "GBC-SVC-DESIGN",
+              "name": "Design Services",
+              "qty": 1,
+              "unitPrice": 30,
+              "installed": "Apr 2025",
+              "replaceBy": null
+            },
+            {
+              "sku": "GBC-SVC-LASER",
+              "name": "Omtech Co2 Laser Usage",
+              "qty": 1,
+              "unitPrice": 60,
+              "installed": "Apr 2025",
+              "replaceBy": null
+            },
+            {
+              "sku": "GBC-BB-24x6",
+              "name": "24\"×24\"×6\" Solid Maple End Grain Butcher Block",
+              "qty": 2,
+              "unitPrice": 600,
+              "installed": "May–Jul 2025",
+              "replaceBy": null
+            }
+          ],
+          "flags": []
+        }
+      ],
+      "invoices": [
+        {
+          "id": "#4152025",
+          "date": "Apr 2025",
+          "amount": 543.14,
+          "status": "paid",
+          "items": "6\" Butcher Block | Gates BBQ"
+        },
+        {
+          "id": "#5152025",
+          "date": "May 2025",
+          "amount": 859.97,
+          "status": "paid",
+          "items": "Butcher Block | Gates BBQ | Double Sided — 24\"×24\"×6\""
+        },
+        {
+          "id": "#5302025",
+          "date": "May 2025",
+          "amount": 290.77,
+          "status": "paid",
+          "items": "24\"×18\"×½\" Richlite Catering Board"
+        },
+        {
+          "id": "#6052025",
+          "date": "Jun 2025",
+          "amount": 95.84,
+          "status": "paid",
+          "items": "Gates BBQ | Engraving for 24\"×18\" Richlite Catering Board"
+        }
+      ],
+      "opportunities": [
+        {
+          "type": "hot",
+          "title": "Get Licensing Signed — Unblock EP7",
+          "desc": "Hard block. Licensing must be signed before episode work begins. Tim to reach out to Colin.",
+          "value": "Episode unlock",
+          "owner": "Tim"
+        }
+      ],
+      "media": {
+        "episode": null,
+        "epStatus": null,
+        "launchDate": null,
+        "url": null,
+        "assets": []
+      }
+    }
+  },
+
+  "episodes": [
+    {
+      "num": "EP2",
+      "title": "Burnt End BBQ",
+      "partner": "burntend",
+      "status": "POST-LAUNCH",
+      "licensing": "UNSIGNED",
+      "licBlock": true,
+      "notes": "LIVE ✅ https://youtu.be/2CNrRJxBfBA · Licensing blocks short-form + partner social"
+    },
+    {
+      "num": "EP3",
+      "title": "GBC Origin Story",
+      "partner": "gbc",
+      "status": "PRE-PROD",
+      "licensing": "n/a",
+      "licBlock": false,
+      "notes": "No new shoot needed — facility demo footage + voiceovers. Matt sends Betty this week."
+    },
+    {
+      "num": "EP4",
+      "title": "Richlite Deep Dive",
+      "partner": "richlite",
+      "status": "PRE-PROD",
+      "licensing": "n/a",
+      "licBlock": false,
+      "notes": "Compile existing footage (Q39 Richlite interviews). Betty brief after EP3."
+    },
+    {
+      "num": "EP5",
+      "title": "Meat Mitch BBQ",
+      "partner": "meatmitch",
+      "status": "PRE-PROD",
+      "licensing": "NOT SENT",
+      "licBlock": false,
+      "notes": "Tim decides: reshoot vs. existing assets. Licensing not sent. Becca is GM contact."
+    },
+    {
+      "num": "EP6",
+      "title": "GBC Facility",
+      "partner": "gbc",
+      "status": "PLANNING",
+      "licensing": "n/a",
+      "licBlock": false,
+      "notes": "Camera-ready showroom target Jun 1."
+    },
+    {
+      "num": "EP7",
+      "title": "Gates BBQ",
+      "partner": "gates",
+      "status": "BLOCKED",
+      "licensing": "UNSIGNED",
+      "licBlock": true,
+      "notes": "HARD BLOCK — licensing must be signed before any work."
+    }
+  ],
+
+  "vendors": {
+    "richlite": {
+      "id": "richlite",
+      "name": "Richlite",
+      "emoji": "🪨",
+      "type": "Primary Material Supplier",
+      "status": "REORDER DUE",
+      "statusClass": "yellow",
+      "location": "Tacoma, WA",
+      "contacts": [
+        { "name": "Channy", "role": "Sales — Price Change Confirmation" },
+        { "name": "Brendan", "role": "Reorder Contact" }
+      ],
+      "notes": "Certified Richlite fabricator. Reorder call overdue (Brendan). Price change confirmation pending (Channy). MITM EP4 episode in production. Potential Maker Series feature. Potential Tacoma HQ trip.",
+      "actions": [
+        { "title": "Call Brendan — reorder + pricing", "priority": "HOT", "due": "OVERDUE" },
+        { "title": "Confirm price change with Channy", "priority": "HOT", "due": "OVERDUE" },
+        { "title": "EP4 Richlite brief — compile Q39 footage", "priority": "SOON", "due": "2026-04-09" },
+        { "title": "Maker Series pitch — study format", "priority": "LATER", "due": "TBD" }
+      ]
+    },
+    "jedunn": {
+      "id": "jedunn",
+      "name": "JE Dunn",
+      "emoji": "🏗️",
+      "type": "Commercial Construction — Flagship",
+      "status": "WARM",
+      "statusClass": "blue",
+      "location": "Kansas City, MO",
+      "contacts": [
+        { "name": "Logan Tallman", "role": "Contact" }
+      ],
+      "notes": "Flagship opportunity — scale comparable to Chef Thompson. Treat every touchpoint with precision. Commercial construction firm — potential for large-scale custom surface installs.",
+      "actions": [
+        { "title": "Precision outreach — Logan Tallman", "priority": "HOT", "due": "TBD" },
+        { "title": "Build commercial surface pitch deck", "priority": "HOT", "due": "TBD" }
+      ]
+    },
+    "mccray": {
+      "id": "mccray",
+      "name": "McCray Lumber",
+      "emoji": "🪵",
+      "type": "Raw Material Supplier",
+      "status": "FOLLOW-UP DUE",
+      "statusClass": "yellow",
+      "location": null,
+      "contacts": [],
+      "notes": "Hardwood supplier. Follow-up overdue.",
+      "actions": [
+        { "title": "Follow-up call — pricing + availability", "priority": "SOON", "due": "OVERDUE" }
+      ]
+    },
+    "adeo": {
+      "id": "adeo",
+      "name": "Adeo Wood",
+      "emoji": "🌲",
+      "type": "New Supplier + Richlite Distrib Candidate",
+      "status": "EVALUATING",
+      "statusClass": "blue",
+      "location": null,
+      "contacts": [],
+      "notes": "New supplier + potential Richlite distribution partner. Research + contact needed.",
+      "actions": [
+        { "title": "Research Adeo Wood — products + contact", "priority": "HOT", "due": "2026-03-21" },
+        { "title": "Evaluate Richlite distribution potential", "priority": "SOON", "due": "TBD" }
+      ]
+    },
+    "crystaldaisy": {
+      "id": "crystaldaisy",
+      "name": "Crystal Daisy",
+      "emoji": "🎥",
+      "type": "Production Partner (MITM)",
+      "status": "ACTIVE",
+      "statusClass": "green",
+      "location": "Kansas City, MO",
+      "contacts": [
+        { "name": "Betty", "role": "Lead Editor — Critical Path" },
+        { "name": "Sam", "role": "Camera Operator" }
+      ],
+      "notes": "MITM production partner. Betty directs. Sam camera. EP3 brief pending — Matt must send all footage + direction this week (Mar 26 deadline).",
+      "actions": [
+        { "title": "EP3 brief → Betty (footage + direction)", "priority": "HOT", "due": "2026-03-26" },
+        { "title": "EP4 brief after EP3", "priority": "SOON", "due": "2026-04-09" }
+      ]
+    }
+  },
+
+  "lifecycle": [
+    { "name": "Q39 BBQ", "pid": "q39", "type": "VIP Partner", "lastTouch": "2026-03-19", "status": "active" },
+    { "name": "Burnt End BBQ", "pid": "burntend", "type": "VIP Partner", "lastTouch": "2026-03-19", "status": "watch", "flag": "Licensing unsigned — content blocked" },
+    { "name": "Meat Mitch BBQ", "pid": "meatmitch", "type": "VIP Partner", "lastTouch": "—", "status": "watch", "flag": "Pre-production — licensing not sent" },
+    { "name": "Chef Thompson", "pid": null, "type": "Investor + Client", "lastTouch": "—", "status": "active" },
+    { "name": "Dallas Mavericks", "pid": "dallasmavs", "type": "Corporate", "lastTouch": "Dec 2025", "status": "inactive", "flag": "No 2026 activity — heavy discount on 2025 order" },
+    { "name": "Booth Creek Wagyu", "pid": "boothcreek", "type": "VIP Partner", "lastTouch": "Sep 2025", "status": "watch", "flag": "Partnership email due Mar 21" },
+    { "name": "Gates BBQ", "pid": "gates", "type": "Partner (Blocked)", "lastTouch": "Jun 2025", "status": "inactive", "flag": "Hard block — license not signed" },
+    { "name": "Richlite", "pid": null, "type": "Supplier", "lastTouch": "—", "status": "watch", "flag": "Reorder overdue + price change pending" },
+    { "name": "JE Dunn", "pid": null, "type": "Prospect (Flagship)", "lastTouch": "—", "status": "prospect" },
+    { "name": "Crystal Daisy", "pid": null, "type": "Production Partner", "lastTouch": "2026-03-19", "status": "active" },
+    { "name": "McCray Lumber", "pid": null, "type": "Supplier", "lastTouch": "—", "status": "watch", "flag": "Follow-up overdue" }
+  ],
+
+  "meta": {
+    "lastUpdated": "2026-03-19",
+    "lastSquareSync": null,
+    "totalLifetimeRevenue": 61418
+  }
+}
