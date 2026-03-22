@@ -21,6 +21,7 @@ jobs:
       - name: Run update script
         env:
           SQUARE_ACCESS_TOKEN: ${{ secrets.SQUARE_ACCESS_TOKEN }}
+          SQUARE_LOCATION: ${{ secrets.SQUARE_LOCATION }}
         run: python scripts/update_portal_data.py --api-only
 
       - name: Commit if changed

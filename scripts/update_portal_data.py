@@ -46,6 +46,7 @@ HTML_FILE = REPO_ROOT / "partner-portal-v2.html"
 INBOX_DIR = Path(os.environ.get("INBOX_DIR", Path.home() / "Documents" / "GBC_OS" / "_INBOX"))
 
 SQUARE_ACCESS_TOKEN = os.environ.get("SQUARE_ACCESS_TOKEN", "")
+SQUARE_LOCATION = os.environ.get("SQUARE_LOCATION", "LRFDSMWDWDW98")
 SQUARE_BASE_URL = "https://connect.squareup.com/v2"
 
 # Partner email domain → partner ID mapping
@@ -283,7 +284,7 @@ def fetch_square_invoices() -> List[dict]:
     invoices = []
     cursor = None
     while True:
-        params = {"limit": 200}
+        params = {"location_id": SQUARE_LOCATION, "limit": 200}
         if cursor:
             params["cursor"] = cursor
         query = "&".join(f"{k}={v}" for k, v in params.items())
