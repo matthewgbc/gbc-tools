@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GBC OS Review Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+--bg:#0d0d0d;--surface:#161616;--surface2:#1e1e1e;--border:#2a2a2a;
+--amber:#e07c24;--green:#22c55e;--red:#ef4444;--yellow:#eab308;
+--text:#f5f5f5;--text-muted:#737373;
+}
+html{font-size:15px;}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-top:120px;line-height:1.6;}
+
+/* Topbar */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);padding:18px 32px 14px;}
+.topbar h1{font-size:1.35rem;font-weight:800;letter-spacing:-0.03em;color:var(--text);}
+.topbar p{font-size:0.8rem;color:var(--text-muted);margin-top:2px;font-weight:400;}
+
+/* Tabs */
+.tab-bar{position:fixed;top:76px;left:0;right:0;z-index:99;background:var(--surface);border-bottom:1px solid var(--border);display:flex;gap:0;padding:0 32px;overflow-x:auto;}
+.tab-bar button{background:none;border:none;color:var(--text-muted);font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:500;padding:12px 20px;cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;white-space:nowrap;}
+.tab-bar button:hover{color:var(--text);}
+.tab-bar button.active{color:var(--amber);border-bottom-color:var(--amber);}
+
+/* Content */
+.content{max-width:1200px;margin:0 auto;padding:28px 32px 80px;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:16px;}
+.card h3{font-size:1rem;font-weight:700;margin-bottom:8px;}
+.card p{color:var(--text-muted);font-size:0.88rem;line-height:1.7;}
+
+/* Section titles */
+.section-title{font-size:1.1rem;font-weight:700;margin:28px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.section-title:first-child{margin-top:0;}
+
+/* KPI Grid */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin-bottom:24px;}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;}
+.kpi .label{font-size:0.75rem;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;}
+.kpi .value{font-size:2rem;font-weight:800;letter-spacing:-0.04em;}
+.kpi .sub{font-size:0.72rem;color:var(--text-muted);margin-top:2px;}
+.kpi.red .value{color:var(--red);}
+.kpi.yellow .value{color:var(--yellow);}
+.kpi.green .value{color:var(--green);}
+
+/* Table */
+.table-wrap{overflow-x:auto;margin-bottom:16px;}
+table{width:100%;border-collapse:collapse;font-size:0.85rem;}
+thead th{text-align:left;padding:10px 14px;background:var(--surface2);color:var(--text-muted);font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid var(--border);}
+tbody td{padding:12px 14px;border-bottom:1px solid var(--border);}
+tbody tr{transition:background .15s;}
+tbody tr:hover{background:var(--surface2);}
+td.mono{font-family:'Inter',monospace;font-size:0.82rem;font-weight:500;}
+
+/* Pills */
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;}
+.pill-red{background:rgba(239,68,68,0.15);color:var(--red);}
+.pill-amber{background:rgba(224,124,36,0.15);color:var(--amber);}
+.pill-yellow{background:rgba(234,179,8,0.15);color:var(--yellow);}
+.pill-green{background:rgba(34,197,94,0.15);color:var(--green);}
+.pill-grey{background:rgba(115,115,115,0.15);color:var(--text-muted);}
+
+/* Severity cards */
+.sev-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:14px;border-left:4px solid var(--border);}
+.sev-card.critical{border-left-color:var(--red);}
+.sev-card.high{border-left-color:var(--amber);}
+.sev-card.medium{border-left-color:var(--yellow);}
+.sev-card.low{border-left-color:var(--text-muted);}
+.sev-card .sev-header{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.sev-card .sev-header .num{font-size:0.8rem;font-weight:700;color:var(--text-muted);min-width:22px;}
+.sev-card .sev-header h4{font-size:0.95rem;font-weight:700;flex:1;}
+.sev-card p{color:var(--text-muted);font-size:0.85rem;line-height:1.7;margin-left:32px;}
+
+/* Architecture columns */
+.arch-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:16px;}
+@media(max-width:700px){.arch-grid{grid-template-columns:1fr;}}
+.arch-col{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;}
+.arch-col h3{font-size:1rem;font-weight:700;margin-bottom:14px;}
+.arch-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;font-size:0.88rem;color:var(--text-muted);line-height:1.5;}
+.arch-item .icon{flex-shrink:0;font-size:0.95rem;margin-top:1px;}
+.arch-item .icon.ok{color:var(--green);}
+.arch-item .icon.bad{color:var(--red);}
+
+/* Timeline / Roadmap */
+.timeline{position:relative;padding-left:32px;margin:20px 0;}
+.timeline::before{content:'';position:absolute;left:9px;top:8px;bottom:8px;width:2px;background:var(--border);}
+.tl-phase{position:relative;margin-bottom:32px;}
+.tl-phase:last-child{margin-bottom:0;}
+.tl-dot{position:absolute;left:-32px;top:4px;width:20px;height:20px;border-radius:50%;border:3px solid var(--border);background:var(--surface);}
+.tl-phase.p1 .tl-dot{border-color:var(--red);background:rgba(239,68,68,0.15);}
+.tl-phase.p2 .tl-dot{border-color:var(--amber);background:rgba(224,124,36,0.15);}
+.tl-phase.p3 .tl-dot{border-color:var(--yellow);background:rgba(234,179,8,0.15);}
+.tl-phase.p4 .tl-dot{border-color:var(--green);background:rgba(34,197,94,0.15);}
+.tl-phase h4{font-size:0.95rem;font-weight:700;margin-bottom:2px;}
+.tl-phase .tl-time{font-size:0.75rem;color:var(--text-muted);margin-bottom:10px;font-weight:500;}
+.tl-phase ul{list-style:none;padding:0;}
+.tl-phase ul li{font-size:0.85rem;color:var(--text-muted);padding:4px 0;padding-left:18px;position:relative;line-height:1.5;}
+.tl-phase ul li::before{content:'';position:absolute;left:0;top:11px;width:6px;height:6px;border-radius:50%;background:var(--border);}
+
+/* Data flow */
+.flow{display:flex;align-items:center;gap:0;flex-wrap:wrap;justify-content:center;padding:20px 0;}
+.flow-node{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 18px;font-size:0.82rem;font-weight:600;text-align:center;white-space:nowrap;}
+.flow-arrow{color:var(--text-muted);font-size:0.85rem;padding:0 10px;}
+
+/* Actions checklist */
+.action-item{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);}
+.action-item:last-child{border-bottom:none;}
+.action-check{flex-shrink:0;width:22px;height:22px;border:2px solid var(--border);border-radius:6px;margin-top:1px;cursor:pointer;transition:border-color .2s,background .2s;display:flex;align-items:center;justify-content:center;}
+.action-check:hover{border-color:var(--amber);}
+.action-check.checked{border-color:var(--green);background:rgba(34,197,94,0.15);}
+.action-check.checked::after{content:'\2713';color:var(--green);font-size:0.75rem;font-weight:700;}
+.action-num{font-size:0.82rem;font-weight:700;color:var(--text-muted);min-width:24px;margin-top:2px;}
+.action-body{flex:1;}
+.action-body .action-title{font-size:0.9rem;font-weight:600;margin-bottom:3px;}
+.action-body .action-meta{font-size:0.75rem;color:var(--text-muted);}
+
+/* Footer */
+.footer{text-align:center;padding:40px 32px 32px;font-size:0.75rem;color:var(--text-muted);border-top:1px solid var(--border);margin-top:40px;}
+
+/* Responsive */
+@media(max-width:600px){
+  .topbar{padding:14px 18px 10px;}
+  .tab-bar{padding:0 12px;}
+  .content{padding:20px 16px 60px;}
+  .kpi-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+  .kpi .value{font-size:1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <h1>GBC OS Review Portal</h1>
+  <p>Architecture, Security &amp; Product-Readiness Audit | April 9, 2026</p>
+</div>
+
+<!-- Tab Bar -->
+<div class="tab-bar">
+  <button class="active" data-tab="summary">Summary</button>
+  <button data-tab="inventory">Inventory</button>
+  <button data-tab="security">Security</button>
+  <button data-tab="architecture">Architecture</button>
+  <button data-tab="roadmap">Roadmap</button>
+  <button data-tab="actions">Actions</button>
+</div>
+
+<!-- Content -->
+<div class="content">
+
+  <!-- TAB 1: Summary -->
+  <div class="tab-panel active" id="tab-summary">
+    <h2 class="section-title">Key Performance Indicators</h2>
+    <div class="kpi-grid">
+      <div class="kpi yellow">
+        <div class="label">Overall Health</div>
+        <div class="value">62</div>
+        <div class="sub">/ 100</div>
+      </div>
+      <div class="kpi red">
+        <div class="label">Security</div>
+        <div class="value">35</div>
+        <div class="sub">/ 100</div>
+      </div>
+      <div class="kpi yellow">
+        <div class="label">Product Ready</div>
+        <div class="value">48</div>
+        <div class="sub">/ 100</div>
+      </div>
+      <div class="kpi green">
+        <div class="label">Code Quality</div>
+        <div class="value">72</div>
+        <div class="sub">/ 100</div>
+      </div>
+      <div class="kpi yellow">
+        <div class="label">Data Architecture</div>
+        <div class="value">65</div>
+        <div class="sub">/ 100</div>
+      </div>
+      <div class="kpi green">
+        <div class="label">UX Design</div>
+        <div class="value">85</div>
+        <div class="sub">/ 100</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Executive Summary</h3>
+      <p>GBC OS is a well-designed internal operating platform built with vanilla HTML/CSS/JS and a Python data pipeline syncing from Square API. The UI is polished and the data model is rich. However, the system has critical security gaps that must be resolved before any client-facing deployment. There is no authentication, no authorization, no input sanitization, and sensitive business data (PII, financials, strategic notes) is fully exposed in client-side source code.</p>
+      <p style="margin-top:12px;">The architecture is a strong foundation for a white-label product, but requires a backend service layer, auth system, and data isolation before it can serve external clients.</p>
+    </div>
+  </div>
+
+  <!-- TAB 2: Inventory -->
+  <div class="tab-panel" id="tab-inventory">
+    <h2 class="section-title">Asset Inventory</h2>
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Asset</th>
+              <th>Type</th>
+              <th>Lines</th>
+              <th>Status</th>
+              <th>Risk</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="mono">partner-portal-v3.html</td>
+              <td>SPA Dashboard</td>
+              <td>3,837</td>
+              <td>Production</td>
+              <td><span class="pill pill-red">HIGH</span></td>
+            </tr>
+            <tr>
+              <td class="mono">partner-portal-v2.html</td>
+              <td>Legacy Dashboard</td>
+              <td>3,469</td>
+              <td>Deprecated</td>
+              <td><span class="pill pill-yellow">MEDIUM</span></td>
+            </tr>
+            <tr>
+              <td class="mono">richlite-quote.html</td>
+              <td>Quote Calculator</td>
+              <td>2,070</td>
+              <td>Production</td>
+              <td><span class="pill pill-green">LOW</span></td>
+            </tr>
+            <tr>
+              <td class="mono">media-production-quote.html</td>
+              <td>Quote Calculator</td>
+              <td>1,188</td>
+              <td>Production</td>
+              <td><span class="pill pill-green">LOW</span></td>
+            </tr>
+            <tr>
+              <td class="mono">update_portal_data.py</td>
+              <td>Data Pipeline</td>
+              <td>650</td>
+              <td>CI/CD Active</td>
+              <td><span class="pill pill-yellow">MEDIUM</span></td>
+            </tr>
+            <tr>
+              <td class="mono">data/partners.json</td>
+              <td>JSON Database</td>
+              <td>1,828</td>
+              <td>Auto-Updated</td>
+              <td><span class="pill pill-red">HIGH</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h2 class="section-title">Data Flow</h2>
+    <div class="card">
+      <div class="flow">
+        <div class="flow-node">Square API<br><span style="font-size:0.7rem;color:var(--text-muted);font-weight:400;">daily 6AM UTC</span></div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node">GitHub Actions</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node">Python Script</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node">data/partners.json</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node">HTML Portals</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: Security -->
+  <div class="tab-panel" id="tab-security">
+    <h2 class="section-title">Critical Severity</h2>
+
+    <div class="sev-card critical">
+      <div class="sev-header">
+        <span class="num">1.</span>
+        <h4>No Authentication</h4>
+        <span class="pill pill-red">CRITICAL</span>
+      </div>
+      <p>All portals are publicly accessible static HTML files. Anyone with the URL sees all partner data, invoices, contacts, financials, and strategic notes. No login, no session management, no access control.</p>
+    </div>
+
+    <div class="sev-card critical">
+      <div class="sev-header">
+        <span class="num">2.</span>
+        <h4>PII Exposed in Source Code</h4>
+        <span class="pill pill-red">CRITICAL</span>
+      </div>
+      <p>Personal emails, phone numbers, business addresses, invoice amounts, and confidential notes embedded directly in HTML. Visible via View Source.</p>
+    </div>
+
+    <div class="sev-card critical">
+      <div class="sev-header">
+        <span class="num">3.</span>
+        <h4>Business Intelligence in Client Code</h4>
+        <span class="pill pill-red">CRITICAL</span>
+      </div>
+      <p>Strategic notes contain competitive intel, agency warnings, pricing strategies, investor targets. Devastating if accessed by competitors.</p>
+    </div>
+
+    <h2 class="section-title">High Severity</h2>
+
+    <div class="sev-card high">
+      <div class="sev-header">
+        <span class="num">4.</span>
+        <h4>XSS via innerHTML</h4>
+        <span class="pill pill-amber">HIGH</span>
+      </div>
+      <p>Multiple innerHTML assignments render data without sanitization. Functions emailLink() and phoneLink() return unescaped HTML.</p>
+    </div>
+
+    <div class="sev-card high">
+      <div class="sev-header">
+        <span class="num">5.</span>
+        <h4>No Security Headers</h4>
+        <span class="pill pill-amber">HIGH</span>
+      </div>
+      <p>No CSP, X-Frame-Options, X-Content-Type-Options. Pages can be framed by malicious sites.</p>
+    </div>
+
+    <div class="sev-card high">
+      <div class="sev-header">
+        <span class="num">6.</span>
+        <h4>Square API Token Risk</h4>
+        <span class="pill pill-amber">HIGH</span>
+      </div>
+      <p>Long-lived Bearer token with no rotation or scoped permissions.</p>
+    </div>
+
+    <div class="sev-card high">
+      <div class="sev-header">
+        <span class="num">7.</span>
+        <h4>HubSpot IDs Hardcoded</h4>
+        <span class="pill pill-amber">HIGH</span>
+      </div>
+      <p>Portal ID and form GUIDs visible in source.</p>
+    </div>
+
+    <h2 class="section-title">Medium Severity</h2>
+
+    <div class="sev-card medium">
+      <div class="sev-header">
+        <span class="num">8.</span>
+        <h4>No Server-Side Validation</h4>
+        <span class="pill pill-yellow">MEDIUM</span>
+      </div>
+      <p>Quote forms use client-side validation only.</p>
+    </div>
+
+    <div class="sev-card medium">
+      <div class="sev-header">
+        <span class="num">9.</span>
+        <h4>Silent Error Handling</h4>
+        <span class="pill pill-yellow">MEDIUM</span>
+      </div>
+      <p>HubSpot failures caught with empty catch blocks.</p>
+    </div>
+
+    <div class="sev-card medium">
+      <div class="sev-header">
+        <span class="num">10.</span>
+        <h4>CI/CD Permissions</h4>
+        <span class="pill pill-yellow">MEDIUM</span>
+      </div>
+      <p>Workflow has contents:write, bot pushes directly to main.</p>
+    </div>
+
+    <h2 class="section-title">Low Severity</h2>
+
+    <div class="sev-card low">
+      <div class="sev-header">
+        <span class="num">11.</span>
+        <h4>No HTTPS Enforcement</h4>
+        <span class="pill pill-grey">LOW</span>
+      </div>
+      <p>Static files could be served over HTTP.</p>
+    </div>
+
+    <div class="sev-card low">
+      <div class="sev-header">
+        <span class="num">12.</span>
+        <h4>No Rate Limiting</h4>
+        <span class="pill pill-grey">LOW</span>
+      </div>
+      <p>Quote submissions unlimited.</p>
+    </div>
+
+    <div class="sev-card low">
+      <div class="sev-header">
+        <span class="num">13.</span>
+        <h4>Loose Dependency Pins</h4>
+        <span class="pill pill-grey">LOW</span>
+      </div>
+      <p>requirements.txt uses >= not ==.</p>
+    </div>
+  </div>
+
+  <!-- TAB 4: Architecture -->
+  <div class="tab-panel" id="tab-architecture">
+    <h2 class="section-title">Architecture Assessment</h2>
+    <div class="arch-grid">
+      <div class="arch-col">
+        <h3 style="color:var(--green);">Strengths</h3>
+        <div class="arch-item"><span class="icon ok">&#10003;</span><span>Clean SPA pattern with 15+ views</span></div>
+        <div class="arch-item"><span class="icon ok">&#10003;</span><span>Rich data model (partners, contacts, locations, products, invoices, media, brand)</span></div>
+        <div class="arch-item"><span class="icon ok">&#10003;</span><span>Automated Square API data pipeline</span></div>
+        <div class="arch-item"><span class="icon ok">&#10003;</span><span>Drag-drop Kanban with persistence</span></div>
+        <div class="arch-item"><span class="icon ok">&#10003;</span><span>Two quote calculators with HubSpot CRM integration</span></div>
+        <div class="arch-item"><span class="icon ok">&#10003;</span><span>Polished dark UI with consistent design system</span></div>
+      </div>
+      <div class="arch-col">
+        <h3 style="color:var(--red);">Weaknesses</h3>
+        <div class="arch-item"><span class="icon bad">&#10007;</span><span>Monolithic files (3,800+ lines single HTML)</span></div>
+        <div class="arch-item"><span class="icon bad">&#10007;</span><span>All data embedded client-side</span></div>
+        <div class="arch-item"><span class="icon bad">&#10007;</span><span>No component system or build tools</span></div>
+        <div class="arch-item"><span class="icon bad">&#10007;</span><span>Duplicated logic between v2 and v3</span></div>
+        <div class="arch-item"><span class="icon bad">&#10007;</span><span>Data sync only updates v2, not v3</span></div>
+        <div class="arch-item"><span class="icon bad">&#10007;</span><span>No testing infrastructure</span></div>
+        <div class="arch-item"><span class="icon bad">&#10007;</span><span>No error monitoring or analytics</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: Roadmap -->
+  <div class="tab-panel" id="tab-roadmap">
+    <h2 class="section-title">Implementation Roadmap</h2>
+    <div class="card">
+      <div class="timeline">
+        <div class="tl-phase p1">
+          <div class="tl-dot"></div>
+          <h4>Phase 1 &mdash; Security Foundation</h4>
+          <div class="tl-time">Weeks 1&ndash;3</div>
+          <ul>
+            <li>Authentication layer (Auth0 / Clerk / Supabase Auth)</li>
+            <li>Move sensitive data behind API</li>
+            <li>Role-based access control (Admin, Manager, Viewer)</li>
+            <li>CSP headers and security headers</li>
+            <li>Input sanitization on all rendering</li>
+            <li>Server-side validation for quote forms</li>
+          </ul>
+        </div>
+        <div class="tl-phase p2">
+          <div class="tl-dot"></div>
+          <h4>Phase 2 &mdash; Architecture Modernization</h4>
+          <div class="tl-time">Weeks 4&ndash;8</div>
+          <ul>
+            <li>Backend API (FastAPI or Express)</li>
+            <li>Database migration (JSON to PostgreSQL)</li>
+            <li>Multi-tenant data isolation</li>
+            <li>Component-based frontend</li>
+            <li>Build tooling and bundling</li>
+          </ul>
+        </div>
+        <div class="tl-phase p3">
+          <div class="tl-dot"></div>
+          <h4>Phase 3 &mdash; Product Features</h4>
+          <div class="tl-time">Weeks 9&ndash;14</div>
+          <ul>
+            <li>White-label theming engine</li>
+            <li>Client self-service onboarding</li>
+            <li>Webhook integrations (Stripe, QuickBooks, Toast POS)</li>
+            <li>Email notifications and alerts</li>
+            <li>Export/reporting (PDF, CSV)</li>
+          </ul>
+        </div>
+        <div class="tl-phase p4">
+          <div class="tl-dot"></div>
+          <h4>Phase 4 &mdash; Scale and Launch</h4>
+          <div class="tl-time">Weeks 15&ndash;20</div>
+          <ul>
+            <li>Automated testing suite</li>
+            <li>CI/CD with staging environments</li>
+            <li>Error monitoring (Sentry) and analytics</li>
+            <li>Documentation and API docs</li>
+            <li>Pricing and billing integration</li>
+            <li>Beta client onboarding</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: Actions -->
+  <div class="tab-panel" id="tab-actions">
+    <h2 class="section-title">Priority Actions Checklist</h2>
+    <div class="card">
+      <div class="action-item">
+        <div class="action-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="action-num">1.</div>
+        <div class="action-body">
+          <div class="action-title">Deploy behind Cloudflare Access or auth proxy</div>
+          <div class="action-meta"><span class="pill pill-red">CRITICAL</span> &nbsp; Same day</div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="action-num">2.</div>
+        <div class="action-body">
+          <div class="action-title">Remove all PII from client-side HTML</div>
+          <div class="action-meta"><span class="pill pill-red">CRITICAL</span> &nbsp; This week</div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="action-num">3.</div>
+        <div class="action-body">
+          <div class="action-title">Add meta robots noindex/nofollow to all pages</div>
+          <div class="action-meta"><span class="pill pill-amber">HIGH</span> &nbsp; This week</div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="action-num">4.</div>
+        <div class="action-body">
+          <div class="action-title">Add Content-Security-Policy via meta tags</div>
+          <div class="action-meta"><span class="pill pill-amber">HIGH</span> &nbsp; This week</div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="action-num">5.</div>
+        <div class="action-body">
+          <div class="action-title">Sanitize all innerHTML with textContent helper</div>
+          <div class="action-meta"><span class="pill pill-amber">HIGH</span> &nbsp; Week 1</div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="action-num">6.</div>
+        <div class="action-body">
+          <div class="action-title">Move HubSpot form IDs to config object</div>
+          <div class="action-meta"><span class="pill pill-yellow">MEDIUM</span> &nbsp; Week 1</div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="action-num">7.</div>
+        <div class="action-body">
+          <div class="action-title">Add error logging to catch blocks</div>
+          <div class="action-meta"><span class="pill pill-yellow">MEDIUM</span> &nbsp; Week 1</div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="action-num">8.</div>
+        <div class="action-body">
+          <div class="action-title">Pin Python deps to exact versions</div>
+          <div class="action-meta"><span class="pill pill-grey">LOW</span> &nbsp; Week 1</div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="action-num">9.</div>
+        <div class="action-body">
+          <div class="action-title">Add branch protection on main</div>
+          <div class="action-meta"><span class="pill pill-yellow">MEDIUM</span> &nbsp; Week 1</div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="action-num">10.</div>
+        <div class="action-body">
+          <div class="action-title">Rotate Square API token</div>
+          <div class="action-meta"><span class="pill pill-amber">HIGH</span> &nbsp; Week 1</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">GBC OS Review Portal | Generated April 9, 2026 | Confidential</div>
+
+<script>
+(function(){
+  const tabs = document.querySelectorAll('.tab-bar button');
+  const panels = document.querySelectorAll('.tab-panel');
+
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t){ t.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      tab.classList.add('active');
+      var target = document.getElementById('tab-' + tab.getAttribute('data-tab'));
+      if(target) target.classList.add('active');
+    });
+  });
+})();
+</script>
+</body>
+</html>
